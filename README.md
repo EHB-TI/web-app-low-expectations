@@ -11,6 +11,7 @@ Dit gebeurd vaak vrij onorthodox en ongeorganiseerd. Personen komen vaak binnen,
 Er kan succesvol worden teruggevallen op de genereerde documenten tijdens afhaling om betwistingen.*
 
 # Threat model
+(zie pdf voor images)
 ## Data Flows 
 We bouwen een webapplicatie waarop materiaal kan gereserveerd worden. Deze applicatie bestaat uit de website die een klantvriendelijke interface voorziet, een database die al het beschikbare alsook het uitgeleende materiaal bijhoudt, en een API die de brug vormt tussen de website en de database. Hiervoor worden standaard create, read, update en delete requests gebruikt tussen client, website en api. 
 
