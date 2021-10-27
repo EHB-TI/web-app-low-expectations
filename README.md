@@ -15,6 +15,8 @@ Er kan succesvol worden teruggevallen op de genereerde documenten tijdens afhali
 ## Data Flows 
 We bouwen een webapplicatie waarop materiaal kan gereserveerd worden. Deze applicatie bestaat uit de website die een klantvriendelijke interface voorziet, een database die al het beschikbare alsook het uitgeleende materiaal bijhoudt, en een API die de brug vormt tussen de website en de database. Hiervoor worden standaard create, read, update en delete requests gebruikt tussen client, website en api. 
 
+![flow](https://raw.githubusercontent.com/EHB-TI/web-app-low-expectations/main/FLOW.jpg)
+
 ## Architectuur 
 
 Er wordt gebruik gemaakt van de AWS infrastructuur. (zie fig. 2)
@@ -29,6 +31,7 @@ Cloudwatch houdt het resourcegebruik van de EC2 instanties in het oog en verstuu
 Binnenin AWS staan er tussen alle verschillende services die met elkaar communiceren security groups. Deze zorgen ervoor dat enkel internetverkeer van bepaalde ip addressen wordt aanvaard.
 Tot slot worden er access logs opgeslaan dankzij Cloudtrail, en gebeuren er continu health checks op de EC2 instanties dankzij de Load Balancer.
 
+![architectuur](https://raw.githubusercontent.com/EHB-TI/web-app-low-expectations/main/Architecture.jpg)
 
 ## Wat kan er mis lopen & hoe wordt het opgevangen? 
 
