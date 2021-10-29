@@ -61,13 +61,6 @@ Cloudwatch monitort het resource gebruik van de EC2 instanties. Deze stuurt een 
 De AWS root account is beveiligd met MFA en wordt in principe nooit gebruikt, enkel User Accounts worden gebruikt om AWS services te beheren. 
 
 
-Element | #Spoofing | #Tampering | #Repudiation | #Information Disclosure | #Denial of Service | #Privilege escalation
---- | --- | --- | --- | --- | --- | --- 
-Website | Cognito, Cloudfront | Load Balancer, Security Groups | Cloudtrail | Security groups, application architecture | Cloudfront | Cognito
---- | --- | --- | --- | --- | --- | --- 
-API | Security Groups | Security Groups | ACCEPT | Security groups | CloudWatch | MITIGATE
---- | --- | --- | --- | --- | --- | --- 
-DB | Security groups | Security Groups | ACCEPT | Security groups | CloudWatch | MITIGATE
 
 # Deployment
 *Aan te vullen*
