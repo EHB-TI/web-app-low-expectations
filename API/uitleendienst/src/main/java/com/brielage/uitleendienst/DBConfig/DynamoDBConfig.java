@@ -7,13 +7,15 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.socialsignin.spring.data.dynamodb.repository.config.EnableDynamoDBRepositories;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableDynamoDBRepositories (basePackages = "com.brielage.uitleendienst.Repositories")
+@EnableDynamoDBRepositories (basePackages = "com.brielage.uitleendienst.repositories")
 public class DynamoDBConfig {
     @Value ("${amazon.region}")
     private String amazonRegion;
@@ -23,6 +25,8 @@ public class DynamoDBConfig {
     private String amazonAWSAccessKey;
     @Value ("${amazon.aws.secretkey}")
     private String amazonAWSSecretKey;
+
+    private static final Logger logger = LoggerFactory.getLogger(DynamoDBConfig.class.getName());
 
     @Bean
     public AmazonDynamoDB amazonDynamoDB () {

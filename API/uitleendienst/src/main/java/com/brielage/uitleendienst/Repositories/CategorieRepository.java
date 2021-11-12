@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface CategorieRepository
         extends CrudRepository<Categorie, String> {
     Optional<Categorie> findById (String id);
+
+    Optional<Categorie> findByNaam (String naam);
 }
