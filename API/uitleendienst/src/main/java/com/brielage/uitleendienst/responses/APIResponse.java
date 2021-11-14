@@ -1,10 +1,7 @@
 package com.brielage.uitleendienst.responses;
 
 import com.brielage.uitleendienst.APILogger.APILogger;
-import com.brielage.uitleendienst.models.BeschikbaarItem;
-import com.brielage.uitleendienst.models.Categorie;
-import com.brielage.uitleendienst.models.ContactHuurder;
-import com.brielage.uitleendienst.models.ContactMagazijn;
+import com.brielage.uitleendienst.models.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -87,7 +84,19 @@ public enum APIResponse {
             JsonProcessingException {
         return output(new JsonContactMagazijnResponse(true, contactMagazijns));
     }
-    
+
+    public static String respondMagazijn (Magazijn magazijn)
+            throws
+            JsonProcessingException {
+        return output(new JsonMagazijnResponse(true, magazijn));
+    }
+
+    public static String respondMagazijn (List magazijns)
+            throws
+            JsonProcessingException {
+        return output(new JsonMagazijnResponse(true, magazijns));
+    }
+
     private static String output (JsonResponse jsonResponse)
             throws
             JsonProcessingException {
