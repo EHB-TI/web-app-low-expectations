@@ -90,6 +90,7 @@ public class Organisatie {
     public String toString () {
         return "Organisatie{" +
                 "id='" + id + '\'' +
+                ", naam='" + naam + '\'' +
                 ", adres='" + adres + '\'' +
                 ", telefoon='" + telefoon + '\'' +
                 ", email='" + email + '\'' +
