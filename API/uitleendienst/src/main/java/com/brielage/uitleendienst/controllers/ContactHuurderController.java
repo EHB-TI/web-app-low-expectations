@@ -32,8 +32,10 @@ public class ContactHuurderController {
         if (contactHuurder.getPersoon() == null) fouten.put("geen_persoon", "");
         else {
             Persoon p = contactHuurder.getPersoon();
-            if (p.getNaam()
-                 .isEmpty()) fouten.put("naam_ongeldig", p.getNaam());
+            if (p.getVoornaam()
+                 .isEmpty()) fouten.put("voornaam_ongeldig", p.getVoornaam());
+            if (p.getFamilienaam()
+                    .isEmpty()) fouten.put("familienaam_ongeldig", p.getFamilienaam());
             if (p.getEmail()
                  .isEmpty()) fouten.put("email_ongeldig", p.getEmail());
         }
