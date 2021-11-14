@@ -85,10 +85,12 @@ public class CategorieController {
     }
 
     @GetMapping ("/findAll")
-    public List<Categorie> findAll () {
+    public String findAll ()
+            throws
+            JsonProcessingException {
         APILogger.logRequest("categorie.findAll");
         List<Categorie> c = categorieRepository.findAll();
         for (Categorie categorie : c) APILogger.logResult(categorie.toString());
-        return c;
+        return APIResponse.respondCategorie(c);
     }
 }

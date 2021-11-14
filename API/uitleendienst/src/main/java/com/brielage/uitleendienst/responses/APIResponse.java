@@ -6,11 +6,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public enum APIResponse {
-    INSTANCE;
-
+    ;
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static String respond (boolean success)
@@ -24,8 +24,8 @@ public enum APIResponse {
             String reden)
             throws
             JsonProcessingException {
-        if (success) return INSTANCE.output(new JsonResponse(true));
-        if (reden.isEmpty()) return INSTANCE.output(new JsonResponse(false));
+        if (success) return output(new JsonResponse(true));
+        if (reden.isEmpty()) return output(new JsonResponse(false));
 
         Map fouten = new LinkedHashMap();
         fouten.put(reden, true);
@@ -40,12 +40,21 @@ public enum APIResponse {
             JsonProcessingException {
         JsonResponse jr = new JsonResponse(false);
         jr.setErrors(fouten);
-        return output(jr);}
+        return output(jr);
+    }
 
     public static String respondCategorie (Categorie categorie)
             throws
             JsonProcessingException {
         JsonCategorieResponse jcr = new JsonCategorieResponse(true, categorie);
+        APILogger.logResult(objectMapper.writeValueAsString(jcr));
+        return output(jcr);
+    }
+
+    public static String respondCategorie (List categories)
+            throws
+            JsonProcessingException {
+        JsonCategorieResponse jcr = new JsonCategorieResponse(true, categories);
         APILogger.logResult(objectMapper.writeValueAsString(jcr));
         return output(jcr);
     }
