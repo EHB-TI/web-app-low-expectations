@@ -4,6 +4,7 @@ import com.brielage.uitleendienst.APILogger.APILogger;
 import com.brielage.uitleendienst.models.BeschikbaarItem;
 import com.brielage.uitleendienst.models.Categorie;
 import com.brielage.uitleendienst.models.ContactHuurder;
+import com.brielage.uitleendienst.models.ContactMagazijn;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -63,18 +64,30 @@ public enum APIResponse {
         return output(new JsonBeschikbaarItemResponse(true, beschikbaarItem));
     }
 
-    public static String respondContactHuurder(ContactHuurder contactHuurder)
+    public static String respondContactHuurder (ContactHuurder contactHuurder)
             throws
             JsonProcessingException {
         return output(new JsonContactHuurderResponse(true, contactHuurder));
     }
 
-    public static String respondContactHuurder(List contactHuurders)
+    public static String respondContactHuurder (List contactHuurders)
             throws
             JsonProcessingException {
         return output(new JsonContactHuurderResponse(true, contactHuurders));
     }
 
+    public static String respondContactMagazijn (ContactMagazijn contactMagazijn)
+            throws
+            JsonProcessingException {
+        return output(new JsonContactMagazijnResponse(true, contactMagazijn));
+    }
+
+    public static String respondContactMagazijn (List contactMagazijns)
+            throws
+            JsonProcessingException {
+        return output(new JsonContactMagazijnResponse(true, contactMagazijns));
+    }
+    
     private static String output (JsonResponse jsonResponse)
             throws
             JsonProcessingException {
