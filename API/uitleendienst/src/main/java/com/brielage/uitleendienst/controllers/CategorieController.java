@@ -5,13 +5,9 @@ import com.brielage.uitleendienst.repositories.CategorieRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -23,18 +19,36 @@ public class CategorieController {
     @Autowired
     private CategorieRepository categorieRepository;
 
-    @PostMapping ("/addCategorie")
-    public Categorie addCategorie (@RequestBody Categorie categorie) {
+    @PostMapping ("/add")
+    public Categorie add (@RequestBody Categorie categorie) {
         Categorie c = categorieRepository.save(categorie);
         logger.info(c.getNaam());
         return c;
     }
 
-    @GetMapping ("/findCategorie/{id}")
-    public Optional<Categorie> findCategorieById (@PathVariable String id) {
+    @GetMapping ("/findById/{id}")
+    public Optional<Categorie> findById (@PathVariable String id) {
         logger.info("\nrequest categorie by id " + id);
         Optional<Categorie> c = categorieRepository.findById(id);
         c.ifPresent(categorie -> logger.info("naam: " + categorie.getNaam()));
+        return c;
+    }
+
+    @GetMapping ("/findByNaam/{naam}")
+    public Optional<Categorie> findByNaam (@PathVariable String naam){
+        logger.info("\nrequest categorie by naam " + naam);
+        Optional<Categorie> c = categorieRepository.findByNaam(naam);
+        c.ifPresent(categorie -> logger.info("naam: " + categorie.getNaam()));
+        return c;
+    }
+
+    @GetMapping ("/findAll")
+    public List<Categorie> findAll(){
+        logger.info("\nrequest all categories");
+        List<Categorie> c = categorieRepository.findAll();
+        for (Categorie categorie : c) {
+            logger.info("naam: " + categorie.getNaam());
+        }
         return c;
     }
 }
