@@ -121,6 +121,18 @@ public enum APIResponse {
         return output(new JsonPersoonResponse(true, persoons));
     }
 
+    public static String respondRol (Rol rol)
+            throws
+            JsonProcessingException {
+        return output(new JsonRolResponse(true, rol));
+    }
+
+    public static String respondRol (List rols)
+            throws
+            JsonProcessingException {
+        return output(new JsonRolResponse(true, rols));
+    }
+
     private static String output (JsonResponse jsonResponse)
             throws
             JsonProcessingException {
