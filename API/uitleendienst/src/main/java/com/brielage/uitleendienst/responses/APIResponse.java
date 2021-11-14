@@ -133,6 +133,18 @@ public enum APIResponse {
         return output(new JsonRolResponse(true, rols));
     }
 
+    public static String respondUitleenbaarItem (UitleenbaarItem uitleenbaarItem)
+            throws
+            JsonProcessingException {
+        return output(new JsonUitleenbaarItemResponse(true, uitleenbaarItem));
+    }
+
+    public static String respondUitleenbaarItem (List uitleenbaarItems)
+            throws
+            JsonProcessingException {
+        return output(new JsonUitleenbaarItemResponse(true, uitleenbaarItems));
+    }
+
     private static String output (JsonResponse jsonResponse)
             throws
             JsonProcessingException {
