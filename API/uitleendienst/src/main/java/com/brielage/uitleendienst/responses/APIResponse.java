@@ -145,6 +145,17 @@ public enum APIResponse {
         return output(new JsonUitleenbaarItemResponse(true, uitleenbaarItems));
     }
 
+    public static String respondUitlening (Uitlening uitlening)
+            throws
+            JsonProcessingException {
+        return output(new JsonUitleningResponse(true, uitlening));
+    }
+    public static String respondUitlening (List uitlenings)
+            throws
+            JsonProcessingException {
+        return output(new JsonUitleningResponse(true, uitlenings));
+    }
+
     private static String output (JsonResponse jsonResponse)
             throws
             JsonProcessingException {
