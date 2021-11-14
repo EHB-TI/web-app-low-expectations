@@ -3,6 +3,7 @@ package com.brielage.uitleendienst.responses;
 import com.brielage.uitleendienst.APILogger.APILogger;
 import com.brielage.uitleendienst.models.BeschikbaarItem;
 import com.brielage.uitleendienst.models.Categorie;
+import com.brielage.uitleendienst.models.ContactHuurder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -47,22 +48,31 @@ public enum APIResponse {
     public static String respondCategorie (Categorie categorie)
             throws
             JsonProcessingException {
-        JsonCategorieResponse jcr = new JsonCategorieResponse(true, categorie);
-        return output(jcr);
+        return output(new JsonCategorieResponse(true, categorie));
     }
 
     public static String respondCategorie (List categories)
             throws
             JsonProcessingException {
-        JsonCategorieResponse jcr = new JsonCategorieResponse(true, categories);
-        return output(jcr);
+        return output(new JsonCategorieResponse(true, categories));
     }
 
     public static String respondBeschikbaarItem (BeschikbaarItem beschikbaarItem)
             throws
             JsonProcessingException {
-        JsonBeschikbaarItemResponse jbir = new JsonBeschikbaarItemResponse(true, beschikbaarItem);
-        return output(jbir);
+        return output(new JsonBeschikbaarItemResponse(true, beschikbaarItem));
+    }
+
+    public static String respondContactHuurder(ContactHuurder contactHuurder)
+            throws
+            JsonProcessingException {
+        return output(new JsonContactHuurderResponse(true, contactHuurder));
+    }
+
+    public static String respondContactHuurder(List contactHuurders)
+            throws
+            JsonProcessingException {
+        return output(new JsonContactHuurderResponse(true, contactHuurders));
     }
 
     private static String output (JsonResponse jsonResponse)
