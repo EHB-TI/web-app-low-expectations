@@ -12,18 +12,18 @@ public class UitleningItem {
     private String          id;
     private Uitlening       uitlening;
     private UitleenbaarItem item;
-    private Integer         aantal;
+    private int             aantal;
     private Date            teruggebrachtOp;
-    private Integer         aantalTeruggebracht;
+    private int             aantalTeruggebracht;
 
     public UitleningItem () {}
 
     public UitleningItem (
             Uitlening uitlening,
             UitleenbaarItem item,
-            Integer aantal,
+            int aantal,
             Date teruggebrachtOp,
-            Integer aantalTeruggebracht) {
+            int aantalTeruggebracht) {
         this.uitlening           = uitlening;
         this.item                = item;
         this.aantal              = aantal;
@@ -63,12 +63,12 @@ public class UitleningItem {
     }
 
     @DynamoDBAttribute
-    public Integer getAantal () {
+    public int getAantal () {
         return aantal;
     }
 
     @DynamoDBAttribute
-    public void setAantal (Integer aantal) {
+    public void setAantal (int aantal) {
         this.aantal = aantal;
     }
 
@@ -83,12 +83,12 @@ public class UitleningItem {
     }
 
     @DynamoDBAttribute
-    public Integer getAantalTeruggebracht () {
+    public int getAantalTeruggebracht () {
         return aantalTeruggebracht;
     }
 
     @DynamoDBAttribute
-    public void setAantalTeruggebracht (Integer aantalTeruggebracht) {
+    public void setAantalTeruggebracht (int aantalTeruggebracht) {
         this.aantalTeruggebracht = aantalTeruggebracht;
     }
 
