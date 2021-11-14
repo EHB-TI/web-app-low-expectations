@@ -109,6 +109,18 @@ public enum APIResponse {
         return output(new JsonOrganisatieResponse(true, organisaties));
     }
 
+    public static String respondPersoon (Persoon persoon)
+            throws
+            JsonProcessingException {
+        return output(new JsonPersoonResponse(true, persoon));
+    }
+
+    public static String respondPersoon (List persoons)
+            throws
+            JsonProcessingException {
+        return output(new JsonPersoonResponse(true, persoons));
+    }
+
     private static String output (JsonResponse jsonResponse)
             throws
             JsonProcessingException {

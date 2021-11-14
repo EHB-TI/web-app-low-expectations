@@ -8,7 +8,8 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 @DynamoDBTable (tableName = "persoon")
 public class Persoon {
     private String id;
-    private String naam;
+    private String voornaam;
+    private String familienaam;
     private String adres;
     private String telefoon;
     private String email;
@@ -17,16 +18,18 @@ public class Persoon {
     public Persoon () {}
 
     public Persoon (
-            String naam,
+            String voornaam,
+            String familienaam,
             String adres,
             String telefoon,
             String email,
             String opmerking) {
-        this.naam      = naam;
-        this.adres     = adres;
-        this.telefoon  = telefoon;
-        this.email     = email;
-        this.opmerking = opmerking;
+        this.voornaam    = voornaam;
+        this.familienaam = familienaam;
+        this.adres       = adres;
+        this.telefoon    = telefoon;
+        this.email       = email;
+        this.opmerking   = opmerking;
     }
 
     @DynamoDBHashKey
@@ -41,14 +44,16 @@ public class Persoon {
     }
 
     @DynamoDBAttribute
-    public String getNaam () {
-        return naam;
-    }
+    public String getVoornaam () {return voornaam;}
 
     @DynamoDBAttribute
-    public void setNaam (String naam) {
-        this.naam = naam;
-    }
+    public void setVoornaam (final String voornaam) {this.voornaam = voornaam;}
+
+    @DynamoDBAttribute
+    public String getFamilienaam () {return familienaam;}
+
+    @DynamoDBAttribute
+    public void setFamilienaam (final String familienaam) {this.familienaam = familienaam;}
 
     @DynamoDBAttribute
     public String getAdres () {
@@ -93,7 +98,8 @@ public class Persoon {
     public String toString () {
         return "Persoon{" +
                 "id='" + id + '\'' +
-                ", naam='" + naam + '\'' +
+                ", voornaam='" + voornaam + '\'' +
+                ", familienaam='" + familienaam + '\'' +
                 ", adres='" + adres + '\'' +
                 ", telefoon='" + telefoon + '\'' +
                 ", email='" + email + '\'' +
