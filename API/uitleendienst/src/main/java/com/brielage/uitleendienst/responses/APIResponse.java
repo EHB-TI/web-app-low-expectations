@@ -168,6 +168,18 @@ public enum APIResponse {
         return output(new JsonUitleningItemResponse(true, uitleningItems));
     }
 
+    public static String respondUser (User user)
+            throws
+            JsonProcessingException {
+        return output(new JsonUserResponse(true, user));
+    }
+
+    public static String respondUser (List users)
+            throws
+            JsonProcessingException {
+        return output(new JsonUserResponse(true, users));
+    }
+
     private static String output (JsonResponse jsonResponse)
             throws
             JsonProcessingException {
