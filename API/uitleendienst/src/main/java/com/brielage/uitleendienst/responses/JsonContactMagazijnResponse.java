@@ -3,15 +3,21 @@ package com.brielage.uitleendienst.responses;
 import com.brielage.uitleendienst.models.ContactMagazijn;
 import com.brielage.uitleendienst.models.Magazijn;
 import com.brielage.uitleendienst.models.Persoon;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.List;
 
 public class JsonContactMagazijnResponse
         extends JsonResponse {
+    @JsonInclude (JsonInclude.Include.NON_NULL)
     private String   id;
+    @JsonInclude (JsonInclude.Include.NON_NULL)
     private Persoon  persoon;
+    @JsonInclude (JsonInclude.Include.NON_NULL)
     private Magazijn magazijn;
+    @JsonInclude (JsonInclude.Include.NON_NULL)
     private String   opmerking;
+    @JsonInclude (JsonInclude.Include.NON_NULL)
     private List     contactMagazijns;
 
     public JsonContactMagazijnResponse (
