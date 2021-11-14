@@ -38,4 +38,13 @@ public class Categorie {
 
     @DynamoDBAttribute
     public void setOmschrijving (final String omschrijving) {this.omschrijving = omschrijving;}
+
+    @Override
+    public String toString () {
+        return "Categorie{" +
+                "id='" + id + '\'' +
+                ", naam='" + naam + '\'' +
+                ", omschrijving='" + omschrijving + '\'' +
+                '}';
+    }
 }

@@ -1,9 +1,8 @@
 package com.brielage.uitleendienst.controllers;
 
+import com.brielage.uitleendienst.APILogger.APILogger;
 import com.brielage.uitleendienst.models.Categorie;
 import com.brielage.uitleendienst.repositories.CategorieRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,42 +12,37 @@ import java.util.Optional;
 @RestController
 @RequestMapping (value = "/categorie")
 public class CategorieController {
-    Logger logger =
-            LoggerFactory.getLogger(CategorieController.class.getName());
-
     @Autowired
     private CategorieRepository categorieRepository;
 
     @PostMapping ("/add")
     public Categorie add (@RequestBody Categorie categorie) {
+        APILogger.logRequest("categorie.add", categorie.toString());
         Categorie c = categorieRepository.save(categorie);
-        logger.info(c.getNaam());
         return c;
     }
 
     @GetMapping ("/findById/{id}")
     public Optional<Categorie> findById (@PathVariable String id) {
-        logger.info("\nrequest categorie by id " + id);
+        APILogger.logRequest("categorie.findById", id);
         Optional<Categorie> c = categorieRepository.findById(id);
-        c.ifPresent(categorie -> logger.info("naam: " + categorie.getNaam()));
+        c.ifPresent(categorie -> APILogger.logResult(categorie.toString()));
         return c;
     }
 
     @GetMapping ("/findByNaam/{naam}")
-    public Optional<Categorie> findByNaam (@PathVariable String naam){
-        logger.info("\nrequest categorie by naam " + naam);
+    public Optional<Categorie> findByNaam (@PathVariable String naam) {
+        APILogger.logRequest("categorie.findByNaam", naam);
         Optional<Categorie> c = categorieRepository.findByNaam(naam);
-        c.ifPresent(categorie -> logger.info("naam: " + categorie.getNaam()));
+        c.ifPresent(categorie -> APILogger.logResult(categorie.toString()));
         return c;
     }
 
     @GetMapping ("/findAll")
-    public List<Categorie> findAll(){
-        logger.info("\nrequest all categories");
+    public List<Categorie> findAll () {
+        APILogger.logRequest("categorie.findAll");
         List<Categorie> c = categorieRepository.findAll();
-        for (Categorie categorie : c) {
-            logger.info("naam: " + categorie.getNaam());
-        }
+        for (Categorie categorie : c) APILogger.logResult(categorie.toString());
         return c;
     }
 }

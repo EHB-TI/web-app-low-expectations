@@ -1,0 +1,21 @@
+package com.brielage.uitleendienst.APILogger;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public enum APILogger {
+    INSTANCE;
+
+    private static final Logger       logger       = LoggerFactory.getLogger(
+            APILogger.class.getName());
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+
+    public static void logResult (String s) {logger.info("result: " + s);}
+
+    public static void logRequest (
+            String s,
+            String j) {logger.info("request " + s + ": " + j);}
+
+    public static void logRequest (String s) {logger.info("request " + s);}
+}
