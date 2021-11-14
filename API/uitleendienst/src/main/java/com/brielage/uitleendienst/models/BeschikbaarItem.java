@@ -10,9 +10,9 @@ public class BeschikbaarItem {
     private String          id;
     private UitleenbaarItem uitleenbaarItem;
     private Magazijn        magazijn;
-    private Integer         aantalTotaal;
-    private Integer         aantalBeschikbaar;
-    private Integer         aantalGereserveerd;
+    private int             aantalTotaal;
+    private int             aantalBeschikbaar;
+    private int             aantalGereserveerd;
 
     public BeschikbaarItem () {}
 

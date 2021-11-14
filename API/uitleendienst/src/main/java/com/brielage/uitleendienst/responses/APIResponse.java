@@ -1,6 +1,7 @@
 package com.brielage.uitleendienst.responses;
 
 import com.brielage.uitleendienst.APILogger.APILogger;
+import com.brielage.uitleendienst.models.BeschikbaarItem;
 import com.brielage.uitleendienst.models.Categorie;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,7 +48,6 @@ public enum APIResponse {
             throws
             JsonProcessingException {
         JsonCategorieResponse jcr = new JsonCategorieResponse(true, categorie);
-        APILogger.logResult(objectMapper.writeValueAsString(jcr));
         return output(jcr);
     }
 
@@ -55,8 +55,14 @@ public enum APIResponse {
             throws
             JsonProcessingException {
         JsonCategorieResponse jcr = new JsonCategorieResponse(true, categories);
-        APILogger.logResult(objectMapper.writeValueAsString(jcr));
         return output(jcr);
+    }
+
+    public static String respondBeschikbaarItem (BeschikbaarItem beschikbaarItem)
+            throws
+            JsonProcessingException {
+        JsonBeschikbaarItemResponse jbir = new JsonBeschikbaarItemResponse(true, beschikbaarItem);
+        return output(jbir);
     }
 
     private static String output (JsonResponse jsonResponse)
