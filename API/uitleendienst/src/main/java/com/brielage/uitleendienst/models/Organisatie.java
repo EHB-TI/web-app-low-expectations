@@ -8,6 +8,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 @DynamoDBTable (tableName = "organisatie")
 public class Organisatie {
     private String id;
+    private String naam;
     private String adres;
     private String telefoon;
     private String email;
@@ -16,10 +17,12 @@ public class Organisatie {
     public Organisatie () {}
 
     public Organisatie (
+            String naam,
             String adres,
             String telefoon,
             String email,
             String opmerking) {
+        this.naam      = naam;
         this.adres     = adres;
         this.telefoon  = telefoon;
         this.email     = email;
@@ -31,6 +34,12 @@ public class Organisatie {
     public String getId () {
         return id;
     }
+
+    @DynamoDBAttribute
+    public String getNaam () {return naam;}
+
+    @DynamoDBAttribute
+    public void setNaam (final String naam) {this.naam = naam;}
 
     @DynamoDBAttribute
     public void setId (String id) {
