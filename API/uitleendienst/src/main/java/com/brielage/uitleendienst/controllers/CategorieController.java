@@ -54,9 +54,8 @@ public class CategorieController {
         if (fouten.isEmpty()) {
             try {
                 Optional<Categorie> c = categorieRepository.findById(id);
-                c.ifPresent(categorie -> APILogger.logResult(categorie.toString()));
-                //noinspection OptionalGetWithoutIsPresent
-                return APIResponse.respondCategorie(c.get());
+                if (c.isPresent()) return APIResponse.respondCategorie(c.get());
+                return APIResponse.respond(false, "geen_categorie_gevonden");
             } catch (Exception e) {return APIResponse.respond(false, e.getMessage());}
         }
 
@@ -75,9 +74,8 @@ public class CategorieController {
         if (fouten.isEmpty()) {
             try {
                 Optional<Categorie> c = categorieRepository.findByNaam(naam);
-                c.ifPresent(categorie -> APILogger.logResult(categorie.toString()));
-                //noinspection OptionalGetWithoutIsPresent
-                return APIResponse.respondCategorie(c.get());
+                if (c.isPresent()) return APIResponse.respondCategorie(c.get());
+                return APIResponse.respond(false, "geen_categorie_gevonden");
             } catch (Exception e) {return APIResponse.respond(false, e.getMessage());}
         }
 
@@ -90,7 +88,7 @@ public class CategorieController {
             JsonProcessingException {
         APILogger.logRequest("categorie.findAll");
         List<Categorie> c = categorieRepository.findAll();
-        for (Categorie categorie : c) APILogger.logResult(categorie.toString());
+        if (c.isEmpty()) return APIResponse.respond(false, "geen_categorie_gevonden");
         return APIResponse.respondCategorie(c);
     }
 }
