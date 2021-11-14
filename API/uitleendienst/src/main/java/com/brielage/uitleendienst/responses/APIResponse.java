@@ -150,6 +150,7 @@ public enum APIResponse {
             JsonProcessingException {
         return output(new JsonUitleningResponse(true, uitlening));
     }
+
     public static String respondUitlening (List uitlenings)
             throws
             JsonProcessingException {
@@ -178,6 +179,18 @@ public enum APIResponse {
             throws
             JsonProcessingException {
         return output(new JsonUserResponse(true, users));
+    }
+
+    public static String respondVerantwoordelijkeMagazijn (VerantwoordelijkeMagazijn verantwoordelijkeMagazijn)
+            throws
+            JsonProcessingException {
+        return output(new JsonVerantwoordelijkeMagazijnResponse(true, verantwoordelijkeMagazijn));
+    }
+
+    public static String respondVerantwoordelijkeMagazijn (List verantwoordelijkeMagazijns)
+            throws
+            JsonProcessingException {
+        return output(new JsonVerantwoordelijkeMagazijnResponse(true, verantwoordelijkeMagazijns));
     }
 
     private static String output (JsonResponse jsonResponse)
