@@ -8,10 +8,14 @@ import java.util.List;
 import java.util.Optional;
 
 @EnableScan
-public interface PersoonRepository extends CrudRepository<Persoon, String> {
-    List<Persoon> findAll();
+public interface PersoonRepository
+        extends CrudRepository<Persoon, String> {
+    List<Persoon> findAll ();
 
-    Optional<Persoon> findById(String id);
-    Optional<Persoon> findByNaam(String naam);
+    Optional<Persoon> findById (String id);
+
+    Optional<Persoon> findByVoornaam (String voornaam);
+
+    Optional<Persoon> findByFamilienaam (String familienaam);
 
 }
