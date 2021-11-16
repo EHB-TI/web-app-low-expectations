@@ -11,7 +11,7 @@
   {
     "outputFileName": "wwwroot/bundles/css/assets.min.css",
     "inputFiles": [
-      "wwwroot/assets/**/*.css"
+      "wwwroot/assets/**/*.css" 
     ]
   }
 
