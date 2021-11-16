@@ -1,29 +1,42 @@
-name: CI
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
 
-on: 
+name: Build and deploy ASP.Net Core app INTEGRATION PROJECT
+
+on:
   push:
-    branches:
-    - WEB
+   branches: [ main ]
+  workflow_dispatch:
 
+    
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v1
-    - name: Setup .NET Core
+    - uses: actions/checkout@v2
+
+    - name: Set up .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '5.x.x'
         
+    - name: check version donet
+      run: dotnet --info
+ 
     - name: Build with dotnet
       run: dotnet build --configuration Release
-      working-directory: ./WEB/
+      working-directory: ./Web/
+     
+    - name: dotnet publish
+      run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp -r win10-x64 --self-contained false
+      working-directory: ./Web/
       
-    - name: Dotnet Publish
-      run: dotnet publish src -c Release -o deploy
-      working-directory: ./WEB/
+    - name: Upload artifact for deployment job
+      uses: actions/upload-artifact@v2
+      with:
+        name: .net-app
+        path: ${{env.DOTNET_ROOT}}/myapp
       
     - name: Copy via ssh
       uses: garygrossgarten/github-action-scp@v0.5.3
