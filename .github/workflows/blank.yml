@@ -17,6 +17,10 @@ jobs:
       with:
         dotnet-version: '5.x.x'
         
+    - name: Build with dotnet
+      run: dotnet build --configuration Release
+      working-directory: ./WEB/
+      
     - name: Dotnet Publish
       run: dotnet publish src -c Release -o deploy
       working-directory: ./WEB/
