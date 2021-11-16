@@ -16,8 +16,11 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '5.x.x'
+        
     - name: Dotnet Publish
       run: dotnet publish src -c Release -o deploy
+      working-directory: ./WEB/
+      
     - name: Copy via ssh
       uses: garygrossgarten/github-action-scp@v0.5.3
       with:
