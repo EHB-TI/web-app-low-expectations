@@ -26,11 +26,11 @@ jobs:
  
     - name: Build with dotnet
       run: dotnet build --configuration Release
-      working-directory: ./WEB
+      working-directory: WEB/
      
     - name: dotnet publish
       run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp -r win10-x64 --self-contained false
-      working-directory: ./WEB
+      working-directory: WEB/
       
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
