@@ -11,8 +11,8 @@ Dit gebeurd vaak vrij onorthodox en ongeorganiseerd. Personen komen vaak binnen,
 Er kan succesvol worden teruggevallen op de genereerde documenten tijdens afhaling om betwistingen.*
 
 # Rollen
-*Gebruiker: De gewone gebruiker die de toepassing gebruikt om materiaal te reserveren
-Beheerder: De beheerder van de applicatie die items, matetialen, categorieën, magazijnen en magazijnbeheerders kan toeveogen, aanpassen of verwijderen uit de database, en die rollen toe kan kennen aan gebruikers.
+*Gebruiker: De gewone gebruiker die de toepassing gebruikt om materiaal te reserveren.  
+Beheerder: De beheerder van de applicatie die items, matetialen, categorieën, magazijnen en magazijnbeheerders kan toeveogen, aanpassen of verwijderen uit de database, en die rollen toe kan kennen aan gebruikers.  
 Magazijnverantwoordelijke: kan zien welke reservaties er werden gemaakt voor items in het desbetreffende magazijn, kan items gelinked aan dit magazijn toevoegen of verwijderen, en kan verhuurdocumenten ophalen.*
 
 
