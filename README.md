@@ -10,6 +10,12 @@ Dit gebeurd vaak vrij onorthodox en ongeorganiseerd. Personen komen vaak binnen,
 *Tonen we aan dat we de ontleningsapplicatie effectief kan gebruikt worden om allerlei zaken te kunnen ontlenen. De fysieke persoon hoeft niet meer aanwezig zijn om reservaties te kunnen maken. 
 Er kan succesvol worden teruggevallen op de genereerde documenten tijdens afhaling om betwistingen.*
 
+# Rollen
+*Gebruiker: De gewone gebruiker die de toepassing gebruikt om materiaal te reserveren
+Beheerder: De beheerder van de applicatie die items, matetialen, categorieën, magazijnen en magazijnbeheerders kan toeveogen, aanpassen of verwijderen uit de database, en die rollen toe kan kennen aan gebruikers.
+Magazijnverantwoordelijke: kan zien welke reservaties er werden gemaakt voor items in het desbetreffende magazijn, kan items gelinked aan dit magazijn toevoegen of verwijderen, en kan verhuurdocumenten ophalen.*
+
+
 # User Stories
 als een gebruiker kan ik  
         een lijst van beschikbare items opvragen  
@@ -24,12 +30,16 @@ als een gebruiker kan ik
 als een gebruiker kan ik  
         beschikbare items reserveren  
 als een gebruiker kan ik  
-        beschikbare items reserveren  
+        een reservatie annuleren  
   
 als een beheerder kan ik  
         rollen toekennen aan gebruikers  
 als een beheerder kan ik  
         rollen afnemen van gebruikers  
+als een beheerder kan ik  
+        een reservatie aanpassen  
+als een beheerder kan ik  
+        een reservatie annuleren  
 als een beheerder kan ik  
         items toevoegen  
 als een beheerder kan ik  
