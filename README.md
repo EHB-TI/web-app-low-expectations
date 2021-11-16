@@ -10,8 +10,64 @@ Dit gebeurd vaak vrij onorthodox en ongeorganiseerd. Personen komen vaak binnen,
 *Tonen we aan dat we de ontleningsapplicatie effectief kan gebruikt worden om allerlei zaken te kunnen ontlenen. De fysieke persoon hoeft niet meer aanwezig zijn om reservaties te kunnen maken. 
 Er kan succesvol worden teruggevallen op de genereerde documenten tijdens afhaling om betwistingen.*
 
+# User Stories
+als een gebruiker kan ik
+        een lijst van beschikbare items opvragen
+als een gebruiker kan ik
+        een lijst van beschikbare items filteren
+als een gebruiker kan ik
+        een account registreren
+als een gebruiker kan ik
+        inloggen met email en wachtwoord
+als een gebruiker kan ik
+        mijn wachtwoord opnieuw instellen
+als een gebruiker kan ik
+        beschikbare items reserveren
+als een gebruiker kan ik
+        beschikbare items reserveren
+
+als een beheerder kan ik
+        rollen toekennen aan gebruikers
+als een beheerder kan ik
+        rollen afnemen van gebruikers
+als een beheerder kan ik
+        items toevoegen
+als een beheerder kan ik
+        items wijzigen
+als een beheerder kan ik
+        items verwijderen
+als een beheerder kan ik
+        categorieën toevoegen
+als een beheerder kan ik
+        categorieën wijzigen
+als een beheerder kan ik
+        een magazijn toevoegen
+als een beheerder kan ik
+        een magazijn wijzigen
+als een beheerder kan ik
+        een magazijn verwijderen
+als een beheerder kan ik
+        magazijncontacten/verantwoordelijken toevoegen
+als een beheerder kan ik
+        magazijncontacten/verantwoordelijken wijzigen
+als een beheerder kan ik
+        magazijncontacten/verantwoordelijken verwijderen
+
+als een magazijnverantwoordelijke kan ik
+        een reservatie voor mijn magazijn bekijken
+als een magazijnverantwoordelijke kan ik
+        items uit mijn magazijn wijzigen
+als een magazijnverantwoordelijke kan ik
+        items uit mijn magazijn verwijderen
+als een magazijnverantwoordelijke kan ik
+        een verhuurdocument ophalen
+
+
+
+
+
+
 # Threat model
-(zie pdf voor images)
 ## Data Flows 
 We bouwen een webapplicatie waarop materiaal kan gereserveerd worden. Deze applicatie bestaat uit de website die een klantvriendelijke interface voorziet, een database die al het beschikbare alsook het uitgeleende materiaal bijhoudt, en een API die de brug vormt tussen de website en de database. Hiervoor worden standaard create, read, update en delete requests gebruikt tussen client, website en api. 
 
