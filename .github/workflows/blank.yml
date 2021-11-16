@@ -5,7 +5,7 @@ name: Build and deploy ASP.Net Core app INTEGRATION PROJECT
 
 on:
   push:
-   branches: [ main ]
+   branches: [ WEB ]
   workflow_dispatch:
 
     
