@@ -392,3 +392,4 @@ C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-exp
 C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Debug\net5.0\ref\WebApplication_Uitleendienst.dll
 C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Debug\net5.0\WebApplication_Uitleendienst.pdb
 C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Debug\net5.0\WebApplication_Uitleendienst.genruntimeconfig.cache
+C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\bin\Debug\net5.0\bundleconfig.json
