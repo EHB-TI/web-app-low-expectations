@@ -12,4 +12,8 @@ public interface ContactMagazijnRepository extends CrudRepository<ContactMagazij
     List<ContactMagazijn> findAll();
 
     Optional<ContactMagazijn> findById (String id);
+
+    Optional<ContactMagazijn> findByPersoonId (String id);
+
+    List<ContactMagazijn> findAllByMagazijnId (String id);
 }

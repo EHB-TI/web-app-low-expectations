@@ -12,4 +12,12 @@ public interface MagazijnRepository extends CrudRepository<Magazijn, String> {
     List<Magazijn> findAll();
 
     Optional<Magazijn> findById (String id);
+
+    Optional<Magazijn> findByNaam (String naam);
+
+    Optional<Magazijn> findByAdres (String adres);
+
+    Optional<Magazijn> findByTelefoon (String telefoon);
+
+    Optional<Magazijn> findByEmail (String email);
 }

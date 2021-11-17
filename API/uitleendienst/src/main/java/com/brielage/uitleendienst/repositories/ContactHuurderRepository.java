@@ -12,4 +12,8 @@ public interface ContactHuurderRepository extends CrudRepository<ContactHuurder,
     List<ContactHuurder> findAll();
 
     Optional<ContactHuurder> findById (String id);
+
+    Optional<ContactHuurder> findByPersoonId (String id);
+
+    List<ContactHuurder> findAllByOrganisatieId (String id);
 }

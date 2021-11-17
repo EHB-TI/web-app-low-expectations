@@ -12,4 +12,6 @@ public interface RolRepository extends CrudRepository<Rol, String> {
     List<Rol> findAll();
 
     Optional<Rol> findById (String id);
+
+    Optional<Rol> findByNaam (String naam);
 }

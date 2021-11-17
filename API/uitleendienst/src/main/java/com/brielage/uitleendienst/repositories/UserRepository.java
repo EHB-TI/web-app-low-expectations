@@ -12,4 +12,10 @@ public interface UserRepository extends CrudRepository<User, String> {
     List<User> findAll();
 
     Optional<User> findById (String id);
+
+    Optional<User> findByUsername (String username);
+
+    Optional<User> findByPersoonId (String id);
+
+    List<User> findAllByRolId (String id);
 }

@@ -12,4 +12,8 @@ public interface BeschikbaarItemRepository extends CrudRepository<BeschikbaarIte
     List<BeschikbaarItem> findAll();
 
     Optional<BeschikbaarItem> findById (String id);
+
+    List<BeschikbaarItem> findAllByUitleenbaarItemId (String id);
+
+    List<BeschikbaarItem> findAllByMagazijnId (String id);
 }

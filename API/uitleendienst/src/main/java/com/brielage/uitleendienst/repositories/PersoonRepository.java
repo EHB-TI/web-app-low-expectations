@@ -14,8 +14,13 @@ public interface PersoonRepository
 
     Optional<Persoon> findById (String id);
 
-    Optional<Persoon> findByVoornaam (String voornaam);
+    List<Persoon> findAllByVoornaam (String voornaam);
 
-    Optional<Persoon> findByFamilienaam (String familienaam);
+    List<Persoon> findAllByFamilienaam (String familienaam);
 
+    Optional<Persoon> findByAdres (String adres);
+
+    Optional<Persoon> findByTelefoon (String telefoon);
+
+    Optional<Persoon> findByEmail (String email);
 }

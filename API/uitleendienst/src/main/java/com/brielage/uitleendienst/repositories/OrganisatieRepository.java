@@ -12,4 +12,12 @@ public interface OrganisatieRepository extends CrudRepository<Organisatie, Strin
     List<Organisatie> findAll();
 
     Optional<Organisatie> findById (String id);
+
+    Optional<Organisatie> findByNaam (String naam);
+
+    Optional<Organisatie> findByAdres(String adres);
+
+    Optional<Organisatie> findByTelefoon (String telefoon);
+
+    Optional<Organisatie> findByEmail (String email);
 }

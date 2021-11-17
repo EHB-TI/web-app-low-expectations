@@ -75,6 +75,7 @@ public class Persoon {
         this.telefoon = telefoon;
     }
 
+    @DynamoDBAttribute
     public String getEmail () {
         return email;
     }
