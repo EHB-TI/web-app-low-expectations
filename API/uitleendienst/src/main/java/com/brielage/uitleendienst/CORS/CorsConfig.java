@@ -20,7 +20,8 @@ public class CorsConfig
 
                 registry.addMapping("/exmpl")
                         .allowedMethods("GET", "OPTIONS");
-
+                registry.addMapping("/categorie")
+                        .allowedMethods("GET", "OPTIONS");
             }
         };
     }

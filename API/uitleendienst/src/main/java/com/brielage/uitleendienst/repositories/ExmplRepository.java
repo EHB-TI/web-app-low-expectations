@@ -40,10 +40,12 @@ public class ExmplRepository {
                  .equals("fail"))
             throw new Exception();
 
-        if (exmpl.getId()
-                 .isEmpty())
+        if (exmpl.getId() == null ||
+                exmpl.getId()
+                     .isEmpty())
             exmpl.setId(generateId());
 
+        APILogger.logResult("testt");
 
         alleExmpls.removeIf(e -> e.getId()
                                   .equals(exmpl.getId()));
