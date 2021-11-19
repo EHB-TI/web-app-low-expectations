@@ -45,8 +45,6 @@ public class ExmplRepository {
                      .isEmpty())
             exmpl.setId(generateId());
 
-        APILogger.logResult("testt");
-
         alleExmpls.removeIf(e -> e.getId()
                                   .equals(exmpl.getId()));
         alleExmpls.add(exmpl);
