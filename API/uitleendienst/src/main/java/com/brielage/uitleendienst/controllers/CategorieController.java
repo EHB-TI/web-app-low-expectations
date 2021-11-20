@@ -37,7 +37,7 @@ public class CategorieController {
 
     @PostMapping (value = { "/", "" })
     public ResponseEntity create(@RequestBody Categorie categorie) {
-        APILogger.logRequest("categorie.add", categorie.getId());
+        APILogger.logRequest("categorie.create", categorie.toString());
         try {
             if (!validateCategorie(categorie))
                 return ResponseEntity.badRequest().build();

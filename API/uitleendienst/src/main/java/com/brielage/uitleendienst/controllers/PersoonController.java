@@ -3,72 +3,100 @@ package com.brielage.uitleendienst.controllers;
 import com.brielage.uitleendienst.APILogger.APILogger;
 import com.brielage.uitleendienst.models.Persoon;
 import com.brielage.uitleendienst.repositories.PersoonRepository;
-import com.brielage.uitleendienst.responses.APIResponse;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin("http://localhost:8080")
 @RequestMapping (value = "/persoon")
 public class PersoonController {
     @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
     @Autowired
     private PersoonRepository persoonRepository;
 
-    @PostMapping ("/add")
-    public String add (@RequestBody Persoon persoon)
-            throws
-            JsonProcessingException {
-        APILogger.logRequest("persoon.add", persoon.toString());
-        Map fouten = new LinkedHashMap();
-
-        if (persoon.getVoornaam()
-                   .isEmpty()) fouten.put("voornaam_leeg", "");
-        if (persoon.getFamilienaam()
-                   .isEmpty()) fouten.put("familienaam_leeg", "");
-        if (persoon.getEmail()
-                   .isEmpty()) fouten.put("email_leeg", "");
-
-        if (fouten.isEmpty()) {
-            try {
-                Persoon p = persoonRepository.save(persoon);
-                return APIResponse.respondPersoon(p);
-            } catch (Exception e) {return APIResponse.respond(false, e.getMessage());}
-        }
-
-        return APIResponse.respondErrors(fouten);
-    }
-
-    @GetMapping (value = "/findById/{id}")
-    public String findById(@PathVariable String id) throws JsonProcessingException {
-        APILogger.logRequest("persoon.findById", id);
-        Map fouten = new LinkedHashMap();
-
-        if (id.isEmpty()) fouten.put("id_leeg", "");
-
-        if (fouten.isEmpty()) {
-            try {
-                Optional<Persoon> p = persoonRepository.findById(id);
-                if (p.isPresent()) return APIResponse.respondPersoon(p.get());
-                return APIResponse.respond(false, "geen_persoon_gevonden");
-            } catch (Exception e){
-                return APIResponse.respond(false, e.getMessage());
-            }
-        }
-
-        return APIResponse.respondErrors(fouten);
-    }
-
-    @GetMapping ("/findAll")
-    public String findAll () throws JsonProcessingException {
+    @RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
+    public List<Persoon> findAll () {
         APILogger.logRequest("persoon.findAll");
-        List<Persoon> p = persoonRepository.findAll();
-        if (p.isEmpty()) return APIResponse.respond(false, "geen_persoon_gevonden");
-        return APIResponse.respondPersoon(p);
+        return persoonRepository.findAll();
+    }
+
+    @GetMapping ("/{id}")
+    public ResponseEntity findById(@PathVariable String id) {
+        APILogger.logRequest("persoon.findById", id);
+        Optional<Persoon> p = persoonRepository.findById(id);
+
+        if (p.isPresent())
+            return ResponseEntity.ok().body(p.get());
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping (value = { "/", "" })
+    public ResponseEntity create (@RequestBody Persoon persoon) {
+        APILogger.logRequest("persoon.create", persoon.toString());
+        try {
+            if (!validatePersoon(persoon))
+                return ResponseEntity.badRequest().build();
+
+            Persoon p = persoonRepository.save(persoon);
+
+            return new ResponseEntity(p, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PutMapping (value = "/{id}")
+    public ResponseEntity put (@PathVariable String id, @RequestBody Persoon persoon) {
+        APILogger.logRequest("persoon.put", id);
+        try {
+            if (!validatePersoonId(persoon))
+                return ResponseEntity.badRequest().build();
+
+            Optional<Persoon> p = persoonRepository.findById(id);
+
+            if (p.isEmpty())
+                return ResponseEntity.notFound().build();
+
+            persoon.setId(p.get().getId());
+            Persoon result = persoonRepository.save(persoon);
+            return new ResponseEntity(result, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @DeleteMapping (value = "/{id}")
+    public ResponseEntity delete (@PathVariable String id) {
+        APILogger.logRequest("persoon.delete", id);
+        try {
+            Optional<Persoon> p = persoonRepository.findById(id);
+
+            if (p.isEmpty())
+                return ResponseEntity.badRequest().build();
+
+            persoonRepository.delete(p.get());
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    private boolean validatePersoonId (Persoon p) {
+        if (p.getId().isEmpty())
+            return false;
+        return validatePersoon(p);
+    }
+
+    private boolean validatePersoon (Persoon p) {
+        return !p.getVoornaam().isEmpty()
+                && !p.getFamilienaam().isEmpty()
+                && !p.getAdres().isEmpty()
+                && !p.getTelefoon().isEmpty()
+                && !p.getEmail().isEmpty();
     }
 }
