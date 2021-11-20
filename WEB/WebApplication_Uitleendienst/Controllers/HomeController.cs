@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -18,6 +20,20 @@ namespace WebApplication_Uitleendienst.Controllers {
 
         public IActionResult Index() {
             var model = new HomeViewModel();
+
+            return View();
+        }
+
+        [Authorize]
+        public IActionResult Login() {
+            var model = new HomeViewModel();
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Logout() {
+            await HttpContext.SignOutAsync();
 
             return View();
         }

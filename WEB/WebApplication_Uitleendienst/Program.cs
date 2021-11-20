@@ -1,3 +1,4 @@
+using Amazon.CognitoIdentityProvider;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -11,6 +12,14 @@ namespace WebApplication_Uitleendienst {
     public class Program {
         public static void Main(string[] args) {
             CreateHostBuilder(args).Build().Run();
+            string appPoolid = "";
+            string clientId = "";
+            string identityPoolId = "";
+            string username = "";
+            string password = "";
+
+
+            AmazonCognitoIdentityProviderClient provider = new AmazonCognitoIdentityProviderClient();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

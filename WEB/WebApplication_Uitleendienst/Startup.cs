@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -30,7 +32,27 @@ namespace WebApplication_Uitleendienst {
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
             services.AddControllersWithViews();
+            services.AddRazorPages();
+
+            services.AddAuthentication(options => {
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+            })
+            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddOpenIdConnect(options => {
+                options.ResponseType = Configuration["Authentication:Cognito:ResponseType"];
+                 // options.MetadataAddress = Configuration["Authentication:Cognito:MetadataAddress"];
+                options.ClientId = Configuration["Authentication:Cognito:ClientId"];
+                options.ClientSecret = Configuration["Authentication:Cognito:ClientSecret"];
+                options.Authority = "https://cognito-idp.eu-west-3.amazonaws.com/eu-west-3_tfZBfcN7X";
+                options.Scope.Add("profile");
+                options.Scope.Add("openid");
+                options.Scope.Add("email");
+
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
