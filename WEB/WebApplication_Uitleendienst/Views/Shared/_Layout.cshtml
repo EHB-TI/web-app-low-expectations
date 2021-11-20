@@ -50,7 +50,9 @@
                         </a>
 
                     </div>
-                    <partial name="_LoginPartial" />
+
+                    @await Component.InvokeAsync("Authentication")
+
                 </div>
             </div>
         </nav>
