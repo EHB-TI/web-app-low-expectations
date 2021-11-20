@@ -44,14 +44,13 @@ namespace WebApplication_Uitleendienst {
             .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddOpenIdConnect(options => {
                 options.ResponseType = Configuration["Authentication:Cognito:ResponseType"];
-                 // options.MetadataAddress = Configuration["Authentication:Cognito:MetadataAddress"];
+                // options.MetadataAddress = Configuration["Authentication:Cognito:MetadataAddress"];
                 options.ClientId = Configuration["Authentication:Cognito:ClientId"];
                 options.ClientSecret = Configuration["Authentication:Cognito:ClientSecret"];
                 options.Authority = "https://cognito-idp.eu-west-3.amazonaws.com/eu-west-3_tfZBfcN7X";
                 options.Scope.Add("profile");
                 options.Scope.Add("openid");
                 options.Scope.Add("email");
-
             });
         }
 

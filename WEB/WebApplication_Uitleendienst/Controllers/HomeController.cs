@@ -20,7 +20,7 @@ namespace WebApplication_Uitleendienst.Controllers {
 
         public IActionResult Index() {
             var model = new HomeViewModel();
-            return View();
+            return View(model);
         }
 
         [Authorize]
