@@ -3,49 +3,100 @@ package com.brielage.uitleendienst.controllers;
 import com.brielage.uitleendienst.APILogger.APILogger;
 import com.brielage.uitleendienst.models.BeschikbaarItem;
 import com.brielage.uitleendienst.repositories.BeschikbaarItemRepository;
-import com.brielage.uitleendienst.responses.APIResponse;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
+@CrossOrigin("http://localhost:8080")
 @RequestMapping (value = "/beschikbaarItem")
 public class BeschikbaarItemController {
     @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
     @Autowired
     private BeschikbaarItemRepository beschikbaarItemRepository;
 
-    @PostMapping ("/add")
-    public String add (@RequestBody BeschikbaarItem beschikbaarItem)
-            throws
-            JsonProcessingException {
-        APILogger.logRequest("beschikbaarItem.add", beschikbaarItem.toString());
-        Map fouten = new LinkedHashMap();
+    @RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
+    public List<BeschikbaarItem> findAll() {
+        APILogger.logRequest("beschikbaarItem.findAll");
+        return beschikbaarItemRepository.findAll();
+    }
 
-        if (beschikbaarItem.getUitleenbaarItem() == null) fouten.put("geen_uitleenbaarItem", "");
-        if (beschikbaarItem.getMagazijn() == null) fouten.put("geen_magazijn", "");
-        if (beschikbaarItem.getAantalTotaal() == null || beschikbaarItem.getAantalTotaal() < 0)
-            fouten.put("ongeldig_aantalTotaal", String.valueOf(beschikbaarItem.getAantalTotaal()));
-        if (beschikbaarItem.getAantalBeschikbaar() == null || beschikbaarItem.getAantalBeschikbaar() < 0)
-            fouten.put("ongeldig_aantalBeschikbaar",
-                       String.valueOf(beschikbaarItem.getAantalBeschikbaar()));
-        if (beschikbaarItem.getAantalGereserveerd() == null || beschikbaarItem.getAantalGereserveerd() < 0)
-            fouten.put("ongeldig_aantalGereserveerd",
-                       String.valueOf(beschikbaarItem.getAantalGereserveerd()));
+    @GetMapping("/{id}")
+    public ResponseEntity findById(@PathVariable String id) {
+        APILogger.logRequest("beschikbaarItem.findById", id);
+        Optional<BeschikbaarItem> b = beschikbaarItemRepository.findById(id);
 
-        if (fouten.isEmpty()) {
-            try {
-                BeschikbaarItem bi = beschikbaarItemRepository.save(beschikbaarItem);
-                return APIResponse.respondBeschikbaarItem(bi);
-            } catch (Exception e) {return APIResponse.respond(false, e.getMessage());}
+        if (b.isPresent())
+            return ResponseEntity.ok().body(b.get());
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping (value = { "/", "" })
+    public ResponseEntity create (@RequestBody BeschikbaarItem beschikbaarItem) {
+        APILogger.logRequest("beschikbaarItem.create", beschikbaarItem.toString());
+        try {
+            if (!validateBeschikbaarItem(beschikbaarItem))
+                return ResponseEntity.badRequest().build();
+
+            BeschikbaarItem b = beschikbaarItemRepository.save(beschikbaarItem);
+
+            return new ResponseEntity(b, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
+    }
 
-        return APIResponse.respondErrors(fouten);
+    @PutMapping (value = "/{id}")
+    public ResponseEntity put (@PathVariable String id, @RequestBody BeschikbaarItem beschikbaarItem) {
+        APILogger.logRequest("beschikbaarItem.put", id);
+        try {
+            if (!validateBeschikbaarItemId(beschikbaarItem))
+                return ResponseEntity.badRequest().build();
+
+            Optional<BeschikbaarItem> b = beschikbaarItemRepository.findById(id);
+
+            if (b.isEmpty())
+                return ResponseEntity.notFound().build();
+
+            beschikbaarItem.setId(b.get().getId());
+            BeschikbaarItem result = beschikbaarItemRepository.save(beschikbaarItem);
+            return new ResponseEntity(result, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @DeleteMapping (value = "/{id}")
+    public ResponseEntity delete (@PathVariable String id) {
+        APILogger.logRequest("beschikbaarItem.delete", id);
+        try {
+            Optional<BeschikbaarItem> b = beschikbaarItemRepository.findById(id);
+
+            if (b.isEmpty())
+                return ResponseEntity.badRequest().build();
+
+            beschikbaarItemRepository.delete(b.get());
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    private boolean validateBeschikbaarItemId(BeschikbaarItem b) {
+        if (b.getId().isEmpty())
+            return false;
+        return validateBeschikbaarItem(b);
+    }
+
+    private boolean validateBeschikbaarItem(BeschikbaarItem b) {
+        return b.getMagazijn() != null
+                && b.getUitleenbaarItem() != null
+                && b.getAantalTotaal() != null
+                && b.getAantalBeschikbaar() != null
+                && b.getAantalGereserveerd() != null;
     }
 }
