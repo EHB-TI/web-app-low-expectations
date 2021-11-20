@@ -5,5 +5,6 @@ using System.Threading.Tasks;
 
 namespace WebApplication_Uitleendienst.Models.ViewModels {
     public class HomeViewModel {
+        IEnumerable<UitleenbaarItem> uitleenbaarItems { get; set; }
     }
 }
