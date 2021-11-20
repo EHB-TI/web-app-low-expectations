@@ -20,22 +20,19 @@ namespace WebApplication_Uitleendienst.Controllers {
 
         public IActionResult Index() {
             var model = new HomeViewModel();
-
             return View();
         }
 
         [Authorize]
         public IActionResult Login() {
             var model = new HomeViewModel();
-
-            return View();
+            return RedirectToAction("Index");
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> Logout() {
             await HttpContext.SignOutAsync();
-
-            return View();
+            return RedirectToAction("Index");
         }
 
         public IActionResult Privacy() {
