@@ -5,6 +5,13 @@ using System.Threading.Tasks;
 
 namespace WebApplication_Uitleendienst.Models.ViewModels.Identity {
     public class BaseViewModel {
-       public UserInfoPageModel UserInfo { get { return new UserInfoPageModel(); } }
+        private static UserInfoPageModel instance = null;
+        public UserInfoPageModel UserInfo {
+            get {
+                if (instance == null)
+                    instance = new UserInfoPageModel();
+                return instance;
+            }
+        }
     }
 }
