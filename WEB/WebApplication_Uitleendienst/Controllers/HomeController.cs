@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApplication_Uitleendienst.Models;
+using WebApplication_Uitleendienst.Models.ViewModels;
 
 namespace WebApplication_Uitleendienst.Controllers {
     public class HomeController : Controller {
@@ -16,6 +17,8 @@ namespace WebApplication_Uitleendienst.Controllers {
         }
 
         public IActionResult Index() {
+            var model = new HomeViewModel();
+
             return View();
         }
 
