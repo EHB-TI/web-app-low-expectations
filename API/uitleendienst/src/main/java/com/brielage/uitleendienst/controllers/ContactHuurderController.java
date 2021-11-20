@@ -2,51 +2,98 @@ package com.brielage.uitleendienst.controllers;
 
 import com.brielage.uitleendienst.APILogger.APILogger;
 import com.brielage.uitleendienst.models.ContactHuurder;
-import com.brielage.uitleendienst.models.Persoon;
 import com.brielage.uitleendienst.repositories.ContactHuurderRepository;
-import com.brielage.uitleendienst.responses.APIResponse;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
+@CrossOrigin("http://localhost:8080")
 @RequestMapping (value = "/contactHuurder")
 public class ContactHuurderController {
     @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
     @Autowired
     private ContactHuurderRepository contactHuurderRepository;
 
-    @PostMapping ("/add")
-    public String add (@RequestBody ContactHuurder contactHuurder)
-            throws
-            JsonProcessingException {
-        APILogger.logRequest("contactHuurder.add", contactHuurder.toString());
-        Map fouten = new LinkedHashMap();
+    @RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
+    public List<ContactHuurder> findAll() {
+        APILogger.logRequest("contactHuurder.findAll");
+        return contactHuurderRepository.findAll();
+    }
 
-        if (contactHuurder.getPersoon() == null) fouten.put("geen_persoon", "");
-        else {
-            Persoon p = contactHuurder.getPersoon();
-            if (p.getVoornaam()
-                 .isEmpty()) fouten.put("voornaam_ongeldig", p.getVoornaam());
-            if (p.getFamilienaam()
-                    .isEmpty()) fouten.put("familienaam_ongeldig", p.getFamilienaam());
-            if (p.getEmail()
-                 .isEmpty()) fouten.put("email_ongeldig", p.getEmail());
+    @GetMapping("/{id}")
+    public ResponseEntity findById(@PathVariable String id) {
+        APILogger.logRequest("contactHuurder.findById", id);
+        Optional<ContactHuurder> c = contactHuurderRepository.findById(id);
+
+        if (c.isPresent())
+            return ResponseEntity.ok().body(c.get());
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping (value = { "/", "" })
+    public ResponseEntity create (@RequestBody ContactHuurder contactHuurder) {
+        APILogger.logRequest("contactHuurder.create", contactHuurder.toString());
+        try {
+            if (!validateContactHuurder(contactHuurder))
+                return ResponseEntity.badRequest().build();
+
+            ContactHuurder c = contactHuurderRepository.save(contactHuurder);
+
+            return new ResponseEntity(c, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
+    }
 
-        if (fouten.isEmpty()) {
-            try {
-                ContactHuurder ch = contactHuurderRepository.save(contactHuurder);
-                return APIResponse.respondContactHuurder(ch);
-            } catch (Exception e) {return APIResponse.respond(false, e.getMessage());}
+    @PutMapping (value = "/{id}")
+    public ResponseEntity put (@PathVariable String id, @RequestBody ContactHuurder contactHuurder) {
+        APILogger.logRequest("contactHuurder.put", id);
+        try {
+            if (!validateContactHuurderId(contactHuurder))
+                return ResponseEntity.badRequest().build();
+
+            Optional<ContactHuurder> c = contactHuurderRepository.findById(id);
+
+            if (c.isEmpty())
+                return ResponseEntity.notFound().build();
+
+            contactHuurder.setId(c.get().getId());
+            ContactHuurder result = contactHuurderRepository.save(contactHuurder);
+            return new ResponseEntity(result, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
+    }
 
-        return APIResponse.respondErrors(fouten);
+    @DeleteMapping (value = "/{id}")
+    public ResponseEntity delete (@PathVariable String id) {
+        APILogger.logRequest("contactHuurder.delete", id);
+        try {
+            Optional<ContactHuurder> c = contactHuurderRepository.findById(id);
+
+            if (c.isEmpty())
+                return ResponseEntity.badRequest().build();
+
+            contactHuurderRepository.delete(c.get());
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    private boolean validateContactHuurderId(ContactHuurder c) {
+        if (c.getId().isEmpty())
+            return false;
+        return validateContactHuurder(c);
+    }
+
+    private boolean validateContactHuurder(ContactHuurder c) {
+        return c.getPersoon() != null
+                && c.getOrganisatie() != null;
     }
 }
