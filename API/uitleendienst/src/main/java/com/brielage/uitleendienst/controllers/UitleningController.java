@@ -3,49 +3,100 @@ package com.brielage.uitleendienst.controllers;
 import com.brielage.uitleendienst.APILogger.APILogger;
 import com.brielage.uitleendienst.models.Uitlening;
 import com.brielage.uitleendienst.repositories.UitleningRepository;
-import com.brielage.uitleendienst.responses.APIResponse;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
+@CrossOrigin("http://localhost:8080")
 @RequestMapping (value = "/uitlening")
 public class UitleningController {
     @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
     @Autowired
     private UitleningRepository uitleningRepository;
 
-    @PostMapping ("/add")
-    public String add (@RequestBody Uitlening uitlening)
-            throws
-            JsonProcessingException {
-        APILogger.logRequest("uitlening.add", uitlening.toString());
-        Map fouten = new LinkedHashMap();
+    @RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
+    public List<Uitlening> findAll() {
+        APILogger.logRequest("uitlening.findAll");
+        return uitleningRepository.findAll();
+    }
 
-        if (uitlening.getStart() == null) fouten.put("start_leeg", "");
-        if (uitlening.getEind() == null) fouten.put("eind_leeg", "");
-        if (uitlening.getStart()
-                     .after(uitlening.getEind())) fouten.put(
-                "startdatum_later_dan_einddatum",
-                uitlening.getStart() + "; " + uitlening.getEind());
-        if (uitlening.getTeruggebrachtOp() != null && uitlening.getTeruggebrachtOp()
-                                                               .before(uitlening.getStart()))
-            fouten.put("teruggebrachtdatum_vroeger_dan_startdatum",
-                       uitlening.getTeruggebrachtOp() + "; " + uitlening.getStart());
+    @GetMapping("/{id}")
+    public ResponseEntity findById(@PathVariable String id) {
+        APILogger.logRequest("uitlening.findById", id);
+        Optional<Uitlening> u = uitleningRepository.findById(id);
 
-        if (fouten.isEmpty()) {
-            try {
-                Uitlening u = uitleningRepository.save(uitlening);
-                return APIResponse.respondUitlening(u);
-            } catch (Exception e) {APIResponse.respond(false, e.getMessage());}
+        if (u.isPresent())
+            return ResponseEntity.ok().body(u.get());
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping (value = { "/", "" })
+    public ResponseEntity create (@RequestBody Uitlening uitlening) {
+        APILogger.logRequest("uitlening.create", uitlening.toString());
+        try {
+            if (!validateUitlening(uitlening))
+                return ResponseEntity.badRequest().build();
+
+            Uitlening u = uitleningRepository.save(uitlening);
+
+            return new ResponseEntity(u, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
+    }
 
-        return APIResponse.respondErrors(fouten);
+    @PutMapping(value = "/{id}")
+    public ResponseEntity put (@PathVariable String id, @RequestBody Uitlening uitlening) {
+        APILogger.logRequest("uitlening.put", id);
+        try {
+            if (!validateUitleningId(uitlening))
+                return ResponseEntity.badRequest().build();
+
+            Optional<Uitlening> u = uitleningRepository.findById(id);
+
+            if (u.isEmpty())
+                return ResponseEntity.notFound().build();
+
+            uitlening.setId(u.get().getId());
+            Uitlening result = uitleningRepository.save(uitlening);
+            return new ResponseEntity(result, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @DeleteMapping (value = "/{id}")
+    public ResponseEntity delete (@PathVariable String id) {
+        APILogger.logRequest("uitlening.delete", id);
+        try {
+            Optional<Uitlening> u = uitleningRepository.findById(id);
+
+            if (u.isEmpty())
+                return ResponseEntity.badRequest().build();
+
+            uitleningRepository.delete(u.get());
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    private boolean validateUitleningId(Uitlening u) {
+        if (u.getId().isEmpty())
+            return false;
+        return validateUitlening(u);
+    }
+
+    private boolean validateUitlening(Uitlening u) {
+        return u.getOrganisatie() != null
+                && u.getMagazijn() != null
+                && u.getStart() != null
+                && u.getEind() != null
+                && u.getTeruggebrachtOp() != null;
     }
 }
