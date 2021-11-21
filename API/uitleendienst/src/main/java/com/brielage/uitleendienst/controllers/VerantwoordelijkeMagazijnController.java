@@ -1,58 +1,99 @@
 package com.brielage.uitleendienst.controllers;
 
 import com.brielage.uitleendienst.APILogger.APILogger;
-import com.brielage.uitleendienst.models.Persoon;
 import com.brielage.uitleendienst.models.VerantwoordelijkeMagazijn;
 import com.brielage.uitleendienst.repositories.VerantwoordelijkeMagazijnRepository;
-import com.brielage.uitleendienst.responses.APIResponse;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
+@CrossOrigin("http://localhost:8080")
 @RequestMapping (value = "verantwoordelijkeMagazijn")
 public class VerantwoordelijkeMagazijnController {
     @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
     @Autowired
     private VerantwoordelijkeMagazijnRepository verantwoordelijkeMagazijnRepository;
 
-    @PostMapping ("/add")
-    public String add (@RequestBody VerantwoordelijkeMagazijn verantwoordelijkeMagazijn)
-            throws
-            JsonProcessingException {
-        APILogger.logRequest("verantwoordelijkeMagazijn.add", verantwoordelijkeMagazijn.toString());
-        Map fouten = new LinkedHashMap();
+    @RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
+    public List<VerantwoordelijkeMagazijn> findAll() {
+        APILogger.logRequest("verantwoordelijkeMagazijn.findAll");
+        return verantwoordelijkeMagazijnRepository.findAll();
+    }
 
-        if (verantwoordelijkeMagazijn.getMagazijn()
-                                     .getNaam()
-                                     .isEmpty())
-            fouten.put("magazijn_naam_leeg", "");
-        if (verantwoordelijkeMagazijn.getPersoon() == null)
-            fouten.put("persoon_leeg", "");
-        else {
-            Persoon p = verantwoordelijkeMagazijn.getPersoon();
-            if (p.getVoornaam()
-                 .isEmpty()) fouten.put("persoon_voornaam_leeg", "");
-            if (p.getFamilienaam()
-                 .isEmpty()) fouten.put("persoon_familienaam_leeg", "");
-            if (p.getEmail()
-                 .isEmpty()) fouten.put("persoon_email_leeg", "");
+    @GetMapping("/{id}")
+    public ResponseEntity findById(@PathVariable String id) {
+        APILogger.logRequest("verantwoordelijkeMagazijn.findById", id);
+        Optional<VerantwoordelijkeMagazijn> vm = verantwoordelijkeMagazijnRepository.findById(id);
+
+        if (vm.isPresent())
+            return ResponseEntity.ok().body(vm.get());
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping (value = { "/", "" })
+    public ResponseEntity create (@RequestBody VerantwoordelijkeMagazijn verantwoordelijkeMagazijn) {
+        APILogger.logRequest("verantwoordelijkeMagazijn.create", verantwoordelijkeMagazijn.toString());
+        try {
+            if (!validateVerantwoordelijkeMagazijn(verantwoordelijkeMagazijn))
+                return ResponseEntity.badRequest().build();
+
+            VerantwoordelijkeMagazijn vm = verantwoordelijkeMagazijnRepository.save(verantwoordelijkeMagazijn);
+
+            return new ResponseEntity(vm, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
+    }
 
-        if (fouten.isEmpty()) {
-            try {
-                VerantwoordelijkeMagazijn vm = verantwoordelijkeMagazijnRepository.save(
-                        verantwoordelijkeMagazijn);
-                return APIResponse.respondVerantwoordelijkeMagazijn(vm);
-            } catch (Exception e) {return APIResponse.respond(false, e.getMessage());}
+    @PutMapping (value = "/{id}")
+    public ResponseEntity put (@PathVariable String id, @RequestBody VerantwoordelijkeMagazijn verantwoordelijkeMagazijn) {
+        APILogger.logRequest("verantwoordelijkeMagazijn.put", id);
+        try {
+            if (!validateVerantwoordelijkeMagazijnId(verantwoordelijkeMagazijn))
+                return ResponseEntity.badRequest().build();
+
+            Optional<VerantwoordelijkeMagazijn> vm = verantwoordelijkeMagazijnRepository.findById(id);
+
+            if (vm.isEmpty())
+                return ResponseEntity.notFound().build();
+
+            verantwoordelijkeMagazijn.setId(vm.get().getId());
+            VerantwoordelijkeMagazijn result = verantwoordelijkeMagazijnRepository.save(verantwoordelijkeMagazijn);
+            return new ResponseEntity(result, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
+    }
 
-        return APIResponse.respondErrors(fouten);
+    @DeleteMapping (value = "/{id}")
+    public ResponseEntity delete (@PathVariable String id) {
+        APILogger.logRequest("verantwoordelijkeMagazijn.delete", id);
+        try {
+            Optional<VerantwoordelijkeMagazijn> vm = verantwoordelijkeMagazijnRepository.findById(id);
+
+            if (vm.isEmpty())
+                return ResponseEntity.badRequest().build();
+
+            verantwoordelijkeMagazijnRepository.delete(vm.get());
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    private boolean validateVerantwoordelijkeMagazijnId(VerantwoordelijkeMagazijn vm) {
+        if (vm.getId().isEmpty())
+            return false;
+        return validateVerantwoordelijkeMagazijn(vm);
+    }
+
+    private boolean validateVerantwoordelijkeMagazijn(VerantwoordelijkeMagazijn vm) {
+        return vm.getPersoon() != null
+                && vm.getMagazijn() != null;
     }
 }
