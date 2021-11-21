@@ -3,43 +3,99 @@ package com.brielage.uitleendienst.controllers;
 import com.brielage.uitleendienst.APILogger.APILogger;
 import com.brielage.uitleendienst.models.Magazijn;
 import com.brielage.uitleendienst.repositories.MagazijnRepository;
-import com.brielage.uitleendienst.responses.APIResponse;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
+@CrossOrigin("http://localhost:8080")
 @RequestMapping (value = "/magazijn")
 public class MagazijnController {
     @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
     @Autowired
     private MagazijnRepository magazijnRepository;
 
-    @PostMapping ("/add")
-    public String add (@RequestBody Magazijn magazijn)
-            throws
-            JsonProcessingException {
-        APILogger.logRequest("magazijn.add", magazijn.toString());
-        Map fouten = new LinkedHashMap();
+    @RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
+    public List<Magazijn> findAll() {
+        APILogger.logRequest("categorie.findAll");
+        return magazijnRepository.findAll();
+    }
 
-        if (magazijn.getNaam()
-                    .isEmpty()) fouten.put("naam_leeg", "");
-        if (magazijn.getAdres()
-                    .isEmpty()) fouten.put("adres_leeg", "");
+    @GetMapping("/{id}")
+    public ResponseEntity findById(@PathVariable String id) {
+        APILogger.logRequest("categorie.findById", id);
+        Optional<Magazijn> m = magazijnRepository.findById(id);
 
-        if (fouten.isEmpty()) {
-            try {
-                Magazijn m = magazijnRepository.save(magazijn);
-                return APIResponse.respondMagazijn(m);
-            } catch (Exception e) {return APIResponse.respond(false, e.getMessage());}
+        if (m.isPresent())
+            return ResponseEntity.ok().body(m.get());
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping ("/create")
+    public ResponseEntity create (@RequestBody Magazijn magazijn) {
+        APILogger.logRequest("magazijn.create", magazijn.toString());
+        try {
+            if (!validateMagazijn(magazijn))
+                return ResponseEntity.badRequest().build();
+
+            Magazijn m = magazijnRepository.save(magazijn);
+
+            return new ResponseEntity(m, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
+    }
 
-        return APIResponse.respondErrors(fouten);
+    @PutMapping (value = "/{id}")
+    public ResponseEntity put (@PathVariable String id, @RequestBody Magazijn magazijn) {
+        APILogger.logRequest("categorie.put", id);
+        try {
+            if (!validateMagazijnId(magazijn))
+                return ResponseEntity.badRequest().build();
+
+            Optional<Magazijn> m = magazijnRepository.findById(id);
+
+            if (m.isEmpty())
+                return ResponseEntity.notFound().build();
+
+            magazijn.setId(m.get().getId());
+            Magazijn result = magazijnRepository.save(magazijn);
+            return new ResponseEntity(result, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @DeleteMapping (value = "/{id}")
+    public ResponseEntity delete (@PathVariable String id) {
+        APILogger.logRequest("categorie.delete", id);
+        try {
+            Optional<Magazijn> m = magazijnRepository.findById(id);
+
+            if (m.isEmpty())
+                return ResponseEntity.badRequest().build();
+
+            magazijnRepository.delete(m.get());
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    private boolean validateMagazijnId(Magazijn m) {
+        if (m.getId().isEmpty())
+            return false;
+        return validateMagazijn(m);
+    }
+
+    private boolean validateMagazijn(Magazijn m) {
+        return !m.getNaam().isEmpty()
+                && !m.getAdres().isEmpty()
+                && !m.getTelefoon().isEmpty()
+                && !m.getEmail().isEmpty();
     }
 }
