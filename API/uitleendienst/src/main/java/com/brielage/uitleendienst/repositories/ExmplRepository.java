@@ -57,6 +57,28 @@ public class ExmplRepository {
                                   .equals(exmpl.getId()));
     }
 
+    public List<Exmpl> findByNameIsIn (List<String> names) {
+        List<Exmpl> list = new ArrayList<>();
+
+        for (Exmpl e : alleExmpls)
+            for (String n : names)
+                if (e.getName()
+                     .equals(n)) list.add(e);
+
+        return list;
+    }
+
+    public List<Exmpl> findByTestIsIn (List<String> tests) {
+        List<Exmpl> list = new ArrayList<>();
+
+        for (Exmpl e : alleExmpls)
+            for (String t : tests)
+                if (e.getTest()
+                     .equals(t)) list.add(e);
+
+        return list;
+    }
+
     private String generateId () {
         String[] allowed = {
                 "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n",

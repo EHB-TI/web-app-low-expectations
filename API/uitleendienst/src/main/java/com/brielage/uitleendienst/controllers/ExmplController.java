@@ -6,18 +6,47 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin ("http://localhost:8080")
 @RequestMapping (value = "/exmpl")
 public class ExmplController {
     private ExmplRepository exmplRepository = new ExmplRepository();
 
-    @RequestMapping (value = { "/", "" }, method = RequestMethod.GET)
-    public List<Exmpl> exmpl () {
-        return exmplRepository.findAll();
+    @GetMapping (value = { "/", "" })
+    public List<Exmpl> findByProperties (
+            @RequestParam (required = false) List<String> name,
+            @RequestParam (required = false) List<String> test) {
+        List<Exmpl> list1 = new ArrayList<>();
+        List<Exmpl> list2 = new ArrayList<>();
+
+        if ((name == null || name.isEmpty())
+                && (test == null || test.isEmpty()))
+            return exmplRepository.findAll();
+
+        if (name != null && !name.isEmpty())
+            list1 = exmplRepository.findByNameIsIn(name);
+        if (test != null && !test.isEmpty())
+            list2 = exmplRepository.findByTestIsIn(test);
+
+        List<Exmpl> ret = new ArrayList<>(list1);
+
+        if (ret.isEmpty() && !list2.isEmpty())
+            return list2;
+
+        for (Exmpl e1 : list2) {
+            boolean alreadyExists = false;
+            for (Exmpl e2 : ret)
+                if (e1.equals(e2)) {
+                    alreadyExists = true;
+                    break;
+                }
+            if (!alreadyExists) ret.add(e1);
+        }
+
+        return ret;
     }
 
     // return http code 200 with object if success
