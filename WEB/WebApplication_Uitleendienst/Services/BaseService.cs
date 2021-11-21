@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using WebApplication_Uitleendienst.Models;
 using WebApplication_Uitleendienst.Services.Interfaces;
@@ -35,7 +36,7 @@ namespace WebApplication_Uitleendienst.Services {
             var url = BaseUrl + typeof(TEntity).Name.ToLower();
             var key = typeof(TEntity).Name + "_GetAll_" + DateTime.Now.ToString("yy-MM-dd");
 
-            if (!_cache.TryGetValue(key, out IEnumerable<TEntity> items )|| !cache){
+            if (!_cache.TryGetValue(key, out IEnumerable<TEntity> items) || !cache) {
                 var request = WebRequest.Create(url);
                 request.Method = "GET";
                 var response = request.GetResponse();
@@ -53,7 +54,35 @@ namespace WebApplication_Uitleendienst.Services {
         }
 
         public TEntity Save(TEntity item) {
-            throw new NotImplementedException();
+            var url = BaseUrl + typeof(TEntity).Name.ToLower();
+            var request = WebRequest.Create(url);
+            request.Method = "POST";
+
+            // Create POST data and convert it to a byte array.
+            string postData = JsonConvert.SerializeObject(item);
+            byte[] byteArray = Encoding.UTF8.GetBytes(postData);
+
+            // Set the ContentType property of the WebRequest.
+            request.ContentType = "application/x-www-form-urlencoded";
+            // Set the ContentLength property of the WebRequest.
+            request.ContentLength = byteArray.Length;
+            // Get the request stream.
+            Stream dataStream = request.GetRequestStream();
+            // Write the data to the request stream.
+            dataStream.Write(byteArray, 0, byteArray.Length);
+            // Close the Stream object.
+            dataStream.Close();
+
+            var response = request.GetResponse();
+            using (Stream stream = response.GetResponseStream()) {
+                // Open the stream using a StreamReader for easy access.
+                var reader = new StreamReader(stream);
+                // Read the content.
+                var responseFromServer = reader.ReadToEnd();
+                // convert to entity
+                return JsonConvert.DeserializeObject<TEntity>(responseFromServer);
+            }
+            return null;
         }
 
         public void Save(IEnumerable<TEntity> Items) {
