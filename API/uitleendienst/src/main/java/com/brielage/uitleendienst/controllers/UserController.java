@@ -1,54 +1,101 @@
 package com.brielage.uitleendienst.controllers;
 
 import com.brielage.uitleendienst.APILogger.APILogger;
-import com.brielage.uitleendienst.models.Persoon;
 import com.brielage.uitleendienst.models.User;
 import com.brielage.uitleendienst.repositories.UserRepository;
-import com.brielage.uitleendienst.responses.APIResponse;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
+@CrossOrigin("http://localhost:8080")
 @RequestMapping (value = "/user")
 public class UserController {
     @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping ("/add")
-    public String add (@RequestBody User user)
-            throws
-            JsonProcessingException {
-        APILogger.logRequest(user.toString());
-        Map fouten = new LinkedHashMap();
+    @RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
+    public List<User> findAll() {
+        APILogger.logRequest("user.findAll");
+        return userRepository.findAll();
+    }
 
-        if (user.getUsername()
-                .isEmpty()) fouten.put("username_leeg", "");
-        if (user.getPersoon() == null) fouten.put("persoon_leeg", "");
-        else {
-            Persoon p = user.getPersoon();
-            if (p.getVoornaam()
-                 .isEmpty()) fouten.put("persoon_voornaam_leeg", "");
-            if (p.getFamilienaam()
-                 .isEmpty()) fouten.put("persoon_familienaam_leeg", "");
-            if (p.getEmail()
-                 .isEmpty()) fouten.put("persoon_email_leeg", "");
+    @GetMapping("/{id}")
+    public ResponseEntity findById(@PathVariable String id) {
+        APILogger.logRequest("user.findById", id);
+        Optional<User> u = userRepository.findById(id);
+
+        if (u.isPresent())
+            return ResponseEntity.ok().body(u.get());
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping (value = { "/", "" })
+    public ResponseEntity create (@RequestBody User user) {
+        APILogger.logRequest("user.create",user.toString());
+        try {
+            if (!validateUser(user))
+                return ResponseEntity.badRequest().build();
+
+            User u = userRepository.save(user);
+
+            return new ResponseEntity(u, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
+    }
 
-        if (fouten.isEmpty()) {
-            try {
-                User u = userRepository.save(user);
-                APIResponse.respondUser(u);
-            } catch (Exception e) {return APIResponse.respond(false, e.getMessage());}
+    @PutMapping (value = "/{id}")
+    public ResponseEntity put (@PathVariable String id, @RequestBody User user) {
+        APILogger.logRequest("user.put", id);
+        try {
+            if (!validateUserId(user))
+                return ResponseEntity.badRequest().build();
+
+            Optional<User> u = userRepository.findById(id);
+
+            if (u.isEmpty())
+                return ResponseEntity.notFound().build();
+
+            user.setId(u.get().getId());
+            User result = userRepository.save(user);
+            return new ResponseEntity(result, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
+    }
 
-        return APIResponse.respondErrors(fouten);
+    @DeleteMapping (value = "/{id}")
+    public ResponseEntity delete (@PathVariable String id) {
+        APILogger.logRequest("user.delete", id);
+        try {
+            Optional<User> u = userRepository.findById(id);
+
+            if (u.isEmpty())
+                return ResponseEntity.badRequest().build();
+
+            userRepository.delete(u.get());
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    private boolean validateUserId(User u) {
+        if (u.getId().isEmpty())
+            return false;
+        return validateUser(u);
+    }
+
+    private boolean validateUser(User u) {
+        return !u.getUsername().isEmpty()
+                && !u.getPassword().isEmpty()
+                && u.getRol() != null
+                && u.getPersoon() != null;
     }
 }
