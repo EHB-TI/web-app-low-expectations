@@ -21,13 +21,13 @@ public class MagazijnController {
 
     @RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
     public List<Magazijn> findAll() {
-        APILogger.logRequest("categorie.findAll");
+        APILogger.logRequest("magazijn.findAll");
         return magazijnRepository.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity findById(@PathVariable String id) {
-        APILogger.logRequest("categorie.findById", id);
+        APILogger.logRequest("magazijn.findById", id);
         Optional<Magazijn> m = magazijnRepository.findById(id);
 
         if (m.isPresent())
@@ -35,7 +35,7 @@ public class MagazijnController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping ("/create")
+    @PostMapping (value = { "/", "" })
     public ResponseEntity create (@RequestBody Magazijn magazijn) {
         APILogger.logRequest("magazijn.create", magazijn.toString());
         try {
@@ -52,7 +52,7 @@ public class MagazijnController {
 
     @PutMapping (value = "/{id}")
     public ResponseEntity put (@PathVariable String id, @RequestBody Magazijn magazijn) {
-        APILogger.logRequest("categorie.put", id);
+        APILogger.logRequest("magazijn.put", id);
         try {
             if (!validateMagazijnId(magazijn))
                 return ResponseEntity.badRequest().build();
@@ -72,7 +72,7 @@ public class MagazijnController {
 
     @DeleteMapping (value = "/{id}")
     public ResponseEntity delete (@PathVariable String id) {
-        APILogger.logRequest("categorie.delete", id);
+        APILogger.logRequest("magazijn.delete", id);
         try {
             Optional<Magazijn> m = magazijnRepository.findById(id);
 
