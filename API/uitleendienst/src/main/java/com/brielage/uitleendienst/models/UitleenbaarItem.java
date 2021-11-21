@@ -11,8 +11,8 @@ import java.util.Date;
 public class UitleenbaarItem {
     private String    id;
     private String    naam;
-    private Integer   eenheid;
-    private Float     prijs;
+    private int   eenheid;
+    private float     prijs;
     private Date      periode;
     private Categorie categorie;
 
@@ -20,8 +20,8 @@ public class UitleenbaarItem {
 
     public UitleenbaarItem (
             String naam,
-            Integer eenheid,
-            Float prijs,
+            int eenheid,
+            float prijs,
             Date periode,
             Categorie categorie) {
         this.naam      = naam;
@@ -53,22 +53,22 @@ public class UitleenbaarItem {
     }
 
     @DynamoDBAttribute
-    public Integer getEenheid () {
+    public int getEenheid () {
         return eenheid;
     }
 
     @DynamoDBAttribute
-    public void setEenheid (Integer eenheid) {
+    public void setEenheid (int eenheid) {
         this.eenheid = eenheid;
     }
 
     @DynamoDBAttribute
-    public Float getPrijs () {
+    public float getPrijs () {
         return prijs;
     }
 
     @DynamoDBAttribute
-    public void setPrijs (Float prijs) {
+    public void setPrijs (float prijs) {
         this.prijs = prijs;
     }
 
