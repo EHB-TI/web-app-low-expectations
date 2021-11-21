@@ -14,20 +14,18 @@ using WebApplication_Uitleendienst.Models.ViewModels;
 namespace WebApplication_Uitleendienst.Controllers {
     public class HomeController : Controller {
         private readonly ILogger<HomeController> _logger;
-        private readonly IHttpContextAccessor _httpContext;
-        public HomeController(ILogger<HomeController> logger, IHttpContextAccessor context) {
+        public HomeController(ILogger<HomeController> logger) {
             _logger = logger;
-            _httpContext = context;
         }
 
         public IActionResult Index() {
-            var model = new HomeViewModel(_httpContext);
+            var model = new HomeViewModel(HttpContext);
             return View(model);
         }
 
         [Authorize]
         public IActionResult Login() {
-            var model = new HomeViewModel(_httpContext);
+            var model = new HomeViewModel(HttpContext);
             return RedirectToAction("Index");
         }
 

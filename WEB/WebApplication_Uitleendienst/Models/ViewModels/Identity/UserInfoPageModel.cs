@@ -11,17 +11,17 @@ namespace WebApplication_Uitleendienst.Models.ViewModels.Identity {
     public class UserInfoPageModel : PageModel {
 
 
-        private readonly IHttpContextAccessor httpContextAccessor;
-        public UserInfoPageModel(IHttpContextAccessor httpContextAccessor) {
+        private  HttpContext httpContextAccessor;
+        public UserInfoPageModel(HttpContext httpContextAccessor) {
             this.httpContextAccessor = httpContextAccessor;
         }
         public string Email {
             get {
-                return httpContextAccessor.HttpContext.User?.Claims.FirstOrDefault(c => c.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"))?.Value;
+                return httpContextAccessor.User?.Claims.FirstOrDefault(c => c.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"))?.Value;
             }
         }
 
-        public string Name { get { return httpContextAccessor.HttpContext.User?.Claims.FirstOrDefault(c => c.Type.Equals("name"))?.Value; } }
+        public string Name { get { return httpContextAccessor.User?.Claims.FirstOrDefault(c => c.Type.Equals("name"))?.Value; } }
     }
 
 }

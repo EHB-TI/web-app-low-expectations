@@ -8,14 +8,13 @@ using WebApplication_Uitleendienst.Models.ViewModels;
 
 namespace WebApplication_Uitleendienst.ViewComponents {
     public class AuthenticationViewComponent : ViewComponent {
-        private readonly IHttpContextAccessor _httpContext;
 
-        public AuthenticationViewComponent(IHttpContextAccessor httpContextAccessor){
-            _httpContext = httpContextAccessor;
+        public AuthenticationViewComponent(){
+
         }
 
         public async Task<IViewComponentResult> InvokeAsync(){
-           var model = new HomeViewModel(_httpContext);          
+            var model = new HomeViewModel(HttpContext);          
             return View("_LoginPartial", model);
         }
     }

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace WebApplication_Uitleendienst.Models.ViewModels.Identity {
     public class BaseViewModel {
-        private readonly IHttpContextAccessor httpContextAccessor;
-        public BaseViewModel(IHttpContextAccessor httpContextAccessor) {
+        private HttpContext httpContextAccessor;
+        public BaseViewModel(HttpContext httpContextAccessor) {
             this.httpContextAccessor = httpContextAccessor;
         }
         private static UserInfoPageModel instance = null;
