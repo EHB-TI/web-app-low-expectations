@@ -16,15 +16,22 @@ public class ExmplController {
     private ExmplRepository exmplRepository = new ExmplRepository();
 
     @GetMapping (value = { "/", "" })
-    public List<Exmpl> findByProperties (
+    public ResponseEntity findByProperties (
             @RequestParam (required = false) List<String> name,
             @RequestParam (required = false) List<String> test) {
         List<Exmpl> list1 = new ArrayList<>();
         List<Exmpl> list2 = new ArrayList<>();
 
         if ((name == null || name.isEmpty())
-                && (test == null || test.isEmpty()))
-            return exmplRepository.findAll();
+                && (test == null || test.isEmpty())) {
+            List<Exmpl> ret = exmplRepository.findAll();
+            if (ret.isEmpty())
+                ResponseEntity.notFound()
+                              .build();
+
+            return ResponseEntity.ok()
+                                 .body(ret);
+        }
 
         if (name != null && !name.isEmpty())
             list1 = exmplRepository.findByNameIsIn(name);
@@ -34,7 +41,8 @@ public class ExmplController {
         List<Exmpl> ret = new ArrayList<>(list1);
 
         if (ret.isEmpty() && !list2.isEmpty())
-            return list2;
+            return ResponseEntity.ok()
+                                 .body(list2);
 
         for (Exmpl e1 : list2) {
             boolean alreadyExists = false;
@@ -46,7 +54,12 @@ public class ExmplController {
             if (!alreadyExists) ret.add(e1);
         }
 
-        return ret;
+        if (ret.isEmpty())
+            return ResponseEntity.notFound()
+                                 .build();
+
+        return ResponseEntity.ok()
+                             .body(ret);
     }
 
     // return http code 200 with object if success
