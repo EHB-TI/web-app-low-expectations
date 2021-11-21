@@ -14,12 +14,37 @@ using WebApplication_Uitleendienst.Models.ViewModels;
 namespace WebApplication_Uitleendienst.Controllers {
     public class HomeController : Controller {
         private readonly ILogger<HomeController> _logger;
+        private IEnumerable<Categorie> _categories => new List<Categorie>() {
+                new Categorie {
+                    Naam = "Geluid", 
+                    Omschrijving = "Luidsprekers, Mengpanelen, Afspeelapparatuur, Microfoons, ...",
+                    Image = "/images/categories/Geluid.jpg"
+                },
+                new Categorie {
+                    Naam = "Licht", 
+                    Omschrijving = "Conventionele spots, Ledspots, Lichteffecten, Dimmers, Sturingen/tafels",
+                    Image = "/images/categories/licht.jpg"
+                },
+                new Categorie {
+                    Naam = "Video",
+                    Omschrijving = "Camera's, Afspeelapparatuur, Mengpanelen, Projectoren, Projectieschermen",
+                    Image = "/images/categories/video.jpg"
+                },
+                new Categorie {
+                    Naam="Kabels", 
+                    Omschrijving = "XLR (licht/ geluid), Geluid, Licht, Video, Stroom",
+                    Image = "/images/categories/kabels.jpg"
+                }
+            };
+        
+        
         public HomeController(ILogger<HomeController> logger) {
             _logger = logger;
         }
 
         public IActionResult Index() {
             var model = new HomeViewModel(HttpContext);
+            model.Categories = _categories;
             return View(model);
         }
 
