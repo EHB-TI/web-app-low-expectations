@@ -2,52 +2,98 @@ package com.brielage.uitleendienst.controllers;
 
 import com.brielage.uitleendienst.APILogger.APILogger;
 import com.brielage.uitleendienst.models.ContactMagazijn;
-import com.brielage.uitleendienst.models.Persoon;
 import com.brielage.uitleendienst.repositories.ContactMagazijnRepository;
-import com.brielage.uitleendienst.responses.APIResponse;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
+@CrossOrigin("http://localhost:8080")
 @RequestMapping (value = "/contactMagazijn")
 public class ContactMagazijnController {
     @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
     @Autowired
     private ContactMagazijnRepository contactMagazijnRepository;
 
-    @PostMapping ("/add")
-    public String add (@RequestBody ContactMagazijn contactMagazijn)
-            throws
-            JsonProcessingException {
-        APILogger.logRequest("contactMagazijn.add", contactMagazijn.toString());
-        Map fouten = new LinkedHashMap();
+    @RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
+    public List<ContactMagazijn> findAll() {
+        APILogger.logRequest("contactMagazijn.findAll");
+        return contactMagazijnRepository.findAll();
+    }
 
-        if (contactMagazijn.getPersoon() == null) fouten.put("geen_persoon", "");
-        else {
-            Persoon p = contactMagazijn.getPersoon();
-            if (p.getVoornaam()
-                 .isEmpty()) fouten.put("voornaam_ongeldig", p.getVoornaam());
-            if (p.getFamilienaam()
-                    .isEmpty()) fouten.put("familienaam_ongeldig", p.getFamilienaam());
-            if (p.getEmail()
-                 .isEmpty()) fouten.put("email_ongeldig", p.getEmail());
+    @GetMapping("/{id}")
+    public ResponseEntity findById(@PathVariable String id) {
+        APILogger.logRequest("contactMagazijn.findById", id);
+        Optional<ContactMagazijn> c = contactMagazijnRepository.findById(id);
+
+        if (c.isPresent())
+            return ResponseEntity.ok().body(c.get());
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping (value = { "/", "" })
+    public ResponseEntity create (@RequestBody ContactMagazijn contactMagazijn) {
+        APILogger.logRequest("contactMagazijn.create", contactMagazijn.toString());
+        try {
+            if (!validateContactMagazijn(contactMagazijn))
+                return ResponseEntity.badRequest().build();
+
+            ContactMagazijn c = contactMagazijnRepository.save(contactMagazijn);
+
+            return new ResponseEntity(c, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
-        if (contactMagazijn.getMagazijn() == null) fouten.put("geen_magazijn", "");
+    }
 
-        if (fouten.isEmpty()) {
-            try {
-                ContactMagazijn cm = contactMagazijnRepository.save(contactMagazijn);
-                return APIResponse.respondContactMagazijn(cm);
-            } catch (Exception e) {return APIResponse.respond(false, e.getMessage());}
+    @PutMapping (value = "/{id}")
+    public ResponseEntity put (@PathVariable String id, @RequestBody ContactMagazijn contactMagazijn) {
+        APILogger.logRequest("contactMagazijn.put", id);
+        try {
+            if (!validateContactMagazijnId(contactMagazijn))
+                return ResponseEntity.badRequest().build();
+
+            Optional<ContactMagazijn> c = contactMagazijnRepository.findById(id);
+
+            if (c.isEmpty())
+                return ResponseEntity.notFound().build();
+
+            contactMagazijn.setId(c.get().getId());
+            ContactMagazijn result = contactMagazijnRepository.save(contactMagazijn);
+            return new ResponseEntity(result, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
+    }
 
-        return APIResponse.respondErrors(fouten);
+    @DeleteMapping (value = "/{id}")
+    public ResponseEntity delete (@PathVariable String id) {
+        APILogger.logRequest("contactMagazijn.delete", id);
+        try {
+            Optional<ContactMagazijn> c = contactMagazijnRepository.findById(id);
+
+            if (c.isEmpty())
+                return ResponseEntity.badRequest().build();
+
+            contactMagazijnRepository.delete(c.get());
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    private boolean validateContactMagazijnId (ContactMagazijn c) {
+        if (c.getId().isEmpty())
+            return false;
+        return validateContactMagazijn(c);
+    }
+
+    private boolean validateContactMagazijn (ContactMagazijn c) {
+        return c.getPersoon() != null
+                && c.getMagazijn() != null;
     }
 }
