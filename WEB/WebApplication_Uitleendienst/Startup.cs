@@ -15,6 +15,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApplication_Uitleendienst.Data;
+using WebApplication_Uitleendienst.Services;
+using WebApplication_Uitleendienst.Services.Interfaces;
+using WebApplication_Uitleendienst.Utilities;
 using WebApplication_Uitleendienst.ViewComponents;
 
 namespace WebApplication_Uitleendienst {
@@ -28,16 +31,22 @@ namespace WebApplication_Uitleendienst {
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
 
+            ConfigurationHelper.Initialize(Configuration);
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)          
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-
+           
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+
+            services.AddTransient<IBaseService<Categorie>, BaseService<Categorie>>();
 
             services.AddAuthentication(options => {
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;

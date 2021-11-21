@@ -3,13 +3,15 @@
 
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+@inject RoleManager<IdentityRole> RoleManager
 
 @model HomeViewModel
-<ul class="navbar-nav">
+<ul class="navbar-nav d-flex align-items-center">
     @if (User.Identity.IsAuthenticated) {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><p>Name: </p>
-            @Model.UserInfo.Name
+            <a class="nav-link btn btn-dark px-2 py-1" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                <i class="fa-solid fa-user"></i>
+                @Model.UserInfo.Name
             </a>
         </li>
         <li class="nav-item">

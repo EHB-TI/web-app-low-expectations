@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 using System.Collections.Generic;
@@ -10,10 +11,15 @@ namespace WebApplication_Uitleendienst.Models.ViewModels.Identity {
     [Authorize]
     public class UserInfoPageModel : PageModel {
 
-
         private  HttpContext httpContextAccessor;
         public UserInfoPageModel(HttpContext httpContextAccessor) {
             this.httpContextAccessor = httpContextAccessor;
+        }
+
+        public bool IsAdmin {
+            get {
+                return User.IsInRole("Admins_WebApp");
+            }
         }
         public string Email {
             get {
@@ -21,7 +27,11 @@ namespace WebApplication_Uitleendienst.Models.ViewModels.Identity {
             }
         }
 
-        public string Name { get { return httpContextAccessor.User?.Claims.FirstOrDefault(c => c.Type.Equals("name"))?.Value; } }
+        public string Name { 
+            get { 
+                return httpContextAccessor.User?.Claims.FirstOrDefault(c => c.Type.Equals("name"))?.Value; 
+            } 
+        }
     }
 
 }

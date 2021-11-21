@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,6 +12,12 @@ using WebApplication_Uitleendienst.Services.Interfaces;
 
 namespace WebApplication_Uitleendienst.Services {
     public class BaseService<TEntity> : IBaseService<TEntity> where TEntity : class {
+        private string BaseUrl => "http://" + Website.API_HOST + "/";
+
+        public IMemoryCache _cache;
+        public BaseService(IMemoryCache cache) {
+            _cache = cache;
+        }
         public void Delete<TEntity1>(int id) {
             throw new NotImplementedException();
         }
@@ -24,23 +32,24 @@ namespace WebApplication_Uitleendienst.Services {
 
         public IEnumerable<TEntity> GetAll(bool cache = false) {
 
-            var url = "http://" + Website.API_HOST + "/" + typeof(TEntity).Name;
+            var url = BaseUrl + typeof(TEntity).Name.ToLower();
+            var key = typeof(TEntity).Name + "_GetAll_" + DateTime.Now.ToString("yy-MM-dd");
 
-            WebRequest request = WebRequest.Create(url);
-            request.Method = "GET";
-            WebResponse response = request.GetResponse();
-
-            using (Stream dataStream = response.GetResponseStream())
-            {
-                // Open the stream using a StreamReader for easy access.
-                StreamReader reader = new StreamReader(dataStream);
-                // Read the content.
-                string responseFromServer = reader.ReadToEnd();
-                // Display the content.
-                Console.WriteLine(responseFromServer);
+            if (!_cache.TryGetValue(key, out IEnumerable<TEntity> items )|| !cache){
+                var request = WebRequest.Create(url);
+                request.Method = "GET";
+                var response = request.GetResponse();
+                using (Stream dataStream = response.GetResponseStream()) {
+                    // Open the stream using a StreamReader for easy access.
+                    var reader = new StreamReader(dataStream);
+                    // Read the content.
+                    var responseFromServer = reader.ReadToEnd();
+                    // convert to entity
+                    _cache.Set(key, JsonConvert.DeserializeObject<IEnumerable<TEntity>>(responseFromServer));
+                }
             }
 
-            return null;
+            return _cache.Get<IEnumerable<TEntity>>(key);
         }
 
         public TEntity Save(TEntity item) {

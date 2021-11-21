@@ -8,12 +8,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApplication_Uitleendienst.AuthorizeAttributes;
 using WebApplication_Uitleendienst.Models;
 using WebApplication_Uitleendienst.Models.ViewModels;
+using WebApplication_Uitleendienst.Services.Interfaces;
 
 namespace WebApplication_Uitleendienst.Controllers {
     public class HomeController : Controller {
         private readonly ILogger<HomeController> _logger;
+        private readonly IBaseService<Categorie> _categorieService;
         private IEnumerable<Categorie> _categories => new List<Categorie>() {
                 new Categorie {
                     Naam = "Geluid", 
@@ -38,17 +41,18 @@ namespace WebApplication_Uitleendienst.Controllers {
             };
         
         
-        public HomeController(ILogger<HomeController> logger) {
+        public HomeController(ILogger<HomeController> logger, IBaseService<Categorie> catService) {
             _logger = logger;
+            _categorieService = catService;
         }
 
         public IActionResult Index() {
             var model = new HomeViewModel(HttpContext);
-            model.Categories = _categories;
+            model.Categories = _categorieService.GetAll(true);
             return View(model);
         }
 
-        [Authorize]
+        [GroupAuthorize("Admins-WebApplication")]
         public IActionResult Login() {
             var model = new HomeViewModel(HttpContext);
             return RedirectToAction("Index");
