@@ -10,12 +10,9 @@ namespace WebApplication_Uitleendienst.Models.ViewModels.Identity {
         public BaseViewModel(HttpContext httpContextAccessor) {
             this.httpContextAccessor = httpContextAccessor;
         }
-        private static UserInfoPageModel instance = null;
         public UserInfoPageModel UserInfo {
             get {
-                if (instance == null)
-                    instance = new UserInfoPageModel(httpContextAccessor);
-                return instance;
+                return new UserInfoPageModel(httpContextAccessor);
             }
         }
     }
