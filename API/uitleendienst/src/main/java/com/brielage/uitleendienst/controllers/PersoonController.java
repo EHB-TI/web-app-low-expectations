@@ -1,6 +1,7 @@
 package com.brielage.uitleendienst.controllers;
 
 import com.brielage.uitleendienst.APILogger.APILogger;
+import com.brielage.uitleendienst.models.Exmpl;
 import com.brielage.uitleendienst.models.Persoon;
 import com.brielage.uitleendienst.repositories.PersoonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,9 +22,45 @@ public class PersoonController {
     private PersoonRepository persoonRepository;
 
     @RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
-    public List<Persoon> findAll () {
-        APILogger.logRequest("persoon.findAll");
-        return persoonRepository.findAll();
+    public ResponseEntity findByProperties (
+            @RequestParam (required = false) List<String> voornaam,
+            @RequestParam (required = false) List<String> familienaam,
+            @RequestParam (required = false) List<String> adres,
+            @RequestParam (required = false) List<String> telefoon,
+            @RequestParam (required = false) List<String> email) {
+        APILogger.logRequest("persoon.findByProperties");
+        List<Persoon> returnValue = new ArrayList<>();;
+
+        //return findAll() if no properties
+        if ((voornaam == null || voornaam.isEmpty())
+                && (familienaam == null || familienaam.isEmpty())
+                && (email == null || email.isEmpty())) {
+            returnValue = persoonRepository.findAll();
+
+            if (returnValue.isEmpty())
+                return ResponseEntity.notFound().build();
+            return ResponseEntity.ok().body(returnValue);
+        }
+
+        //add all elements found by the properties to returnValue
+        if (voornaam != null && !voornaam.isEmpty())
+            returnValue.addAll(persoonRepository.findAllByVoornaamIsIn(voornaam));
+        if (familienaam != null && !familienaam.isEmpty())
+            returnValue.addAll(persoonRepository.findAllByFamilienaamIsIn(familienaam));
+        if (adres != null && !adres.isEmpty())
+            returnValue.addAll(persoonRepository.findAllByAdresIsIn(adres));
+        if (telefoon != null && !telefoon.isEmpty())
+            returnValue.addAll(persoonRepository.findAllByTelefoonIsIn(telefoon));
+        if (email != null && !email.isEmpty())
+            returnValue.addAll(persoonRepository.findAllByEmailIsIn(email));
+
+        if (returnValue.isEmpty())
+            return ResponseEntity.notFound().build();
+
+        //remove duplicates
+        returnValue = RemoveDuplicatesController.removeDuplicates(returnValue);
+
+        return ResponseEntity.ok().body(returnValue);
     }
 
     @GetMapping ("/{id}")

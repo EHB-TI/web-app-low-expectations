@@ -46,12 +46,15 @@ public class ExmplController {
 
         for (Exmpl e1 : list2) {
             boolean alreadyExists = false;
+
             for (Exmpl e2 : ret)
                 if (e1.equals(e2)) {
                     alreadyExists = true;
                     break;
                 }
-            if (!alreadyExists) ret.add(e1);
+
+            if (!alreadyExists)
+                ret.add(e1);
         }
 
         if (ret.isEmpty())

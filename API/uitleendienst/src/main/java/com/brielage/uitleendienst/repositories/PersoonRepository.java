@@ -14,13 +14,13 @@ public interface PersoonRepository
 
     Optional<Persoon> findById (String id);
 
-    List<Persoon> findAllByVoornaam (String voornaam);
+    List<Persoon> findAllByVoornaamIsIn (List<String> voornaam);
 
-    List<Persoon> findAllByFamilienaam (String familienaam);
+    List<Persoon> findAllByFamilienaamIsIn (List<String> familienaam);
 
-    Optional<Persoon> findByAdres (String adres);
+    List<Persoon> findAllByAdresIsIn (List<String> adres);
 
-    Optional<Persoon> findByTelefoon (String telefoon);
+    List<Persoon> findAllByTelefoonIsIn (List<String> telefoon);
 
-    Optional<Persoon> findByEmail (String email);
+    List<Persoon> findAllByEmailIsIn (List<String> email);
 }
