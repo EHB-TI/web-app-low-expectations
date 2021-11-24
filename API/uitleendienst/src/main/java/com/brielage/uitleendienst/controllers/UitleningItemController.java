@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin("http://localhost:8080")
 @RequestMapping (value = "/uitleningItem")
 public class UitleningItemController {
     @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
