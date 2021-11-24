@@ -11,7 +11,7 @@ import java.util.Date;
 public class UitleenbaarItem {
     private String    id;
     private String    naam;
-    private int   eenheid;
+    private int       eenheid;
     private float     prijs;
     private Date      periode;
     private Categorie categorie;
