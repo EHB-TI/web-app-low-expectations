@@ -19,10 +19,24 @@ public class CategorieController {
     @Autowired
     private CategorieRepository categorieRepository;
 
-    @RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
-    public List<Categorie> findAll() {
-        APILogger.logRequest("categorie.findAll");
-        return categorieRepository.findAll();
+    @GetMapping (value = { "/", "" })
+    public ResponseEntity findByProperties (@RequestParam (required=false) List<String> naam){
+        if (naam != null || naam.isEmpty()) {
+            list<Categorie> ret = categorieRepository.findAll();
+            if (ret.isEmpty())
+                return ResponseEntity.notFound()
+                                     .build();
+            return ResponseEntity.ok()
+                                 .body(ret);
+        }
+
+        List<Categorie> ret = categorieRepository.findByNaamIsIn(naam);
+
+        if (ret.isEmpty())
+            return ResponseEntity.notFound()
+                                 .build();
+        return ResponseEntity.ok()
+                             .body(ret);
     }
 
     @GetMapping("/{id}")
