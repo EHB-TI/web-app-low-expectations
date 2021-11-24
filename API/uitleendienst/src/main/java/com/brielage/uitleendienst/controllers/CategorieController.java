@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin("http://localhost:8080")
 @RequestMapping(value = "/categorie")
 public class CategorieController {
     @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
@@ -22,7 +21,7 @@ public class CategorieController {
     @GetMapping (value = { "/", "" })
     public ResponseEntity findByProperties (@RequestParam (required=false) List<String> naam){
         if (naam != null || naam.isEmpty()) {
-            list<Categorie> ret = categorieRepository.findAll();
+            List<Categorie> ret = categorieRepository.findAll();
             if (ret.isEmpty())
                 return ResponseEntity.notFound()
                                      .build();
