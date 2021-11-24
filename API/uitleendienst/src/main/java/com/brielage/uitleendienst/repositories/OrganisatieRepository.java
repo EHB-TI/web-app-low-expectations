@@ -8,16 +8,13 @@ import java.util.List;
 import java.util.Optional;
 
 @EnableScan
-public interface OrganisatieRepository extends CrudRepository<Organisatie, String> {
-    List<Organisatie> findAll();
+public interface OrganisatieRepository
+        extends CrudRepository<Organisatie, String> {
+    List<Organisatie> findAll ();
 
     Optional<Organisatie> findById (String id);
 
-    Optional<Organisatie> findByNaam (String naam);
+    List<Organisatie> findAllByNaamIsIn (List<String> namen);
 
-    Optional<Organisatie> findByAdres(String adres);
-
-    Optional<Organisatie> findByTelefoon (String telefoon);
-
-    Optional<Organisatie> findByEmail (String email);
+    List<Organisatie> findAllByEmailIsIn (List<String> emails);
 }
