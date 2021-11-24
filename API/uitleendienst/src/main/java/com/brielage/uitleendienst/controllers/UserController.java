@@ -31,8 +31,7 @@ public class UserController {
     public ResponseEntity findByProperties (
             @RequestParam (required = false) List<String> username,
             @RequestParam (required = false) List<String> rolId,
-            @RequestParam (required = false) List<String> persoonId
-                                           ) {
+            @RequestParam (required = false) List<String> persoonId) {
         if ((username == null || username.isEmpty())
                 && (rolId == null || rolId.isEmpty())
                 && (persoonId == null || persoonId.isEmpty())) {
