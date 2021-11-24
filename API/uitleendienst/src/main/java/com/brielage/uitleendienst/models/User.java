@@ -9,21 +9,18 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 public class User {
     private String id;
     private String username;
-    private String password;
-    private Rol rol;
-    private Persoon persoon;
+    private String rolId;
+    private String persoonId;
 
     public User () {}
 
     public User (
             String username,
-            String password,
-            Rol rol,
-            Persoon persoon) {
+            String rolId,
+            String persoonId) {
         this.username = username;
-        this.password = password;
-        this.rol      = rol;
-        this.persoon  = persoon;
+        this.rolId     = rolId;
+        this.persoonId = persoonId;
     }
 
     @DynamoDBHashKey
@@ -48,43 +45,24 @@ public class User {
     }
 
     @DynamoDBAttribute
-    public String getPassword () {
-        return password;
-    }
+    public String getRolId () {return rolId;}
 
     @DynamoDBAttribute
-    public void setPassword (String password) {
-        this.password = password;
-    }
+    public void setRolId (final String rolId) {this.rolId = rolId;}
 
     @DynamoDBAttribute
-    public Rol getRol () {
-        return rol;
-    }
+    public String getPersoonId () {return persoonId;}
 
     @DynamoDBAttribute
-    public void setRol (Rol rol) {
-        this.rol = rol;
-    }
-
-    @DynamoDBAttribute
-    public Persoon getPersoon () {
-        return persoon;
-    }
-
-    @DynamoDBAttribute
-    public void setPersoon (Persoon persoon) {
-        this.persoon = persoon;
-    }
+    public void setPersoonId (final String persoonId) {this.persoonId = persoonId;}
 
     @Override
     public String toString () {
         return "User{" +
                 "id='" + id + '\'' +
                 ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", rol=" + rol +
-                ", persoon=" + persoon +
+                ", rolId=" + rolId +
+                ", persoonId=" + persoonId +
                 '}';
     }
 }

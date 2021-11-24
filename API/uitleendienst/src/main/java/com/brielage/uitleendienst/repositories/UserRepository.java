@@ -8,8 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 @EnableScan
-public interface UserRepository extends CrudRepository<User, String> {
-    List<User> findAll();
+public interface UserRepository
+        extends CrudRepository<User, String> {
+    List<User> findAll ();
 
     Optional<User> findById (String id);
 
@@ -17,5 +18,9 @@ public interface UserRepository extends CrudRepository<User, String> {
 
     Optional<User> findByPersoonId (String id);
 
-    List<User> findAllByRolId (String id);
+    List<User> findAllByRolIdIsIn (List<String> rolId);
+
+    List<User> findAllByUsernameIsIn (List<String> usernames);
+
+    List<User> findAllByPersoonIdIsIn (List<String> persoonId);
 }
