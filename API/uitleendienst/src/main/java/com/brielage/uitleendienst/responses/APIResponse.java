@@ -1,6 +1,6 @@
 package com.brielage.uitleendienst.responses;
 
-import com.brielage.uitleendienst.APILogger.APILogger;
+import com.brielage.uitleendienst.tools.APILogger;
 import com.brielage.uitleendienst.models.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

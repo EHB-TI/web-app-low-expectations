@@ -1,6 +1,6 @@
 package com.brielage.uitleendienst.controllers;
 
-import com.brielage.uitleendienst.APILogger.APILogger;
+import com.brielage.uitleendienst.tools.APILogger;
 import com.brielage.uitleendienst.models.Magazijn;
 import com.brielage.uitleendienst.repositories.MagazijnRepository;
 import org.springframework.beans.factory.annotation.Autowired;

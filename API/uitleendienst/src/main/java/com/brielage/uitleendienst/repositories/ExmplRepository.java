@@ -1,6 +1,5 @@
 package com.brielage.uitleendienst.repositories;
 
-import com.brielage.uitleendienst.APILogger.APILogger;
 import com.brielage.uitleendienst.models.Exmpl;
 
 import java.util.ArrayList;
@@ -93,7 +92,6 @@ public class ExmplRepository {
         }
 
         String output = id.toString();
-        APILogger.logResult(output);
 
         for (Exmpl e : alleExmpls)
             if (e.getId()

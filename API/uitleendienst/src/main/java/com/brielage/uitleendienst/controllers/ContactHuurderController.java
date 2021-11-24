@@ -1,6 +1,6 @@
 package com.brielage.uitleendienst.controllers;
 
-import com.brielage.uitleendienst.APILogger.APILogger;
+import com.brielage.uitleendienst.tools.APILogger;
 import com.brielage.uitleendienst.models.ContactHuurder;
 import com.brielage.uitleendienst.repositories.ContactHuurderRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.brielage.uitleendienst.APILogger;
+package com.brielage.uitleendienst.tools;
 
 import com.brielage.uitleendienst.responses.JsonResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;

@@ -1,6 +1,6 @@
 package com.brielage.uitleendienst.controllers;
 
-import com.brielage.uitleendienst.APILogger.APILogger;
+import com.brielage.uitleendienst.tools.APILogger;
 import com.brielage.uitleendienst.models.Categorie;
 import com.brielage.uitleendienst.repositories.CategorieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,7 +109,7 @@ public class CategorieController {
                                      .build();
 
             categorieRepository.delete(c.get());
-            
+
             return ResponseEntity.noContent()
                                  .build();
         } catch (Exception e) {
