@@ -26,8 +26,8 @@ public class ExmplController {
                 && (test == null || test.isEmpty())) {
             List<Exmpl> ret = exmplRepository.findAll();
             if (ret.isEmpty())
-                ResponseEntity.notFound()
-                              .build();
+                return ResponseEntity.notFound()
+                                     .build();
 
             return ResponseEntity.ok()
                                  .body(ret);
