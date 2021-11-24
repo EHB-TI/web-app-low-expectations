@@ -8,12 +8,21 @@ import java.util.List;
 import java.util.Optional;
 
 @EnableScan
-public interface ContactMagazijnRepository extends CrudRepository<ContactMagazijn, String> {
-    List<ContactMagazijn> findAll();
+public interface ContactMagazijnRepository
+        extends CrudRepository<ContactMagazijn, String> {
+    List<ContactMagazijn> findAll ();
 
     Optional<ContactMagazijn> findById (String id);
 
-    Optional<ContactMagazijn> findByPersoonId (String id);
+    List<ContactMagazijn> findAllByPersoonIdIsIn (List<String> persoonIds);
 
-    List<ContactMagazijn> findAllByMagazijnId (String id);
+    List<ContactMagazijn> findAllByPersoonId (String persoonId);
+
+    List<ContactMagazijn> findAllByMagazijnIdIsIn (List<String> magazijnIds);
+
+    List<ContactMagazijn> findAllByMagazijnId (String magazijnId);
+
+    Optional<ContactMagazijn> findByMagazijnIdAndPersoonId (
+            String magazijnId,
+            String persoonId);
 }
