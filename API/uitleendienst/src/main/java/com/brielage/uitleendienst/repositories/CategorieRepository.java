@@ -15,4 +15,6 @@ public interface CategorieRepository
     Optional<Categorie> findById (String id);
 
     Optional<Categorie> findByNaam (String naam);
+
+    List<Categorie> findByNaamIsIn (List<String> naam);
 }
