@@ -8,16 +8,13 @@ import java.util.List;
 import java.util.Optional;
 
 @EnableScan
-public interface MagazijnRepository extends CrudRepository<Magazijn, String> {
-    List<Magazijn> findAll();
+public interface MagazijnRepository
+        extends CrudRepository<Magazijn, String> {
+    List<Magazijn> findAll ();
 
     Optional<Magazijn> findById (String id);
 
-    Optional<Magazijn> findByNaam (String naam);
+    List<Magazijn> findAllByNaamIsIn (List<String> namen);
 
-    Optional<Magazijn> findByAdres (String adres);
-
-    Optional<Magazijn> findByTelefoon (String telefoon);
-
-    Optional<Magazijn> findByEmail (String email);
+    List<Magazijn> findAllByEmailIsIn (List<String> email);
 }
