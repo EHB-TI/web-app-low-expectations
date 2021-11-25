@@ -47,4 +47,12 @@ public class Categorie {
                 ", omschrijving='" + omschrijving + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o){
+        if(o instanceof Categorie c){
+            return this.getId().equals(c.getId());
+        }
+        return false;
+    }
 }

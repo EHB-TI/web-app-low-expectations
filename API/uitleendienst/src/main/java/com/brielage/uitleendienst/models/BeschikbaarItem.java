@@ -101,4 +101,12 @@ public class BeschikbaarItem {
                 ", aantalGereserveerd=" + aantalGereserveerd +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o){
+        if(o instanceof BeschikbaarItem bi){
+            return this.getId().equals(bi.getId());
+        }
+        return false;
+    }
 }

@@ -1,7 +1,10 @@
 package com.brielage.uitleendienst.controllers;
 
+import com.brielage.uitleendienst.models.Categorie;
 import com.brielage.uitleendienst.models.UitleenbaarItem;
+import com.brielage.uitleendienst.repositories.CategorieRepository;
 import com.brielage.uitleendienst.repositories.UitleenbaarItemRepository;
+import com.brielage.uitleendienst.tools.APILogger;
 import com.brielage.uitleendienst.tools.RemoveDuplicates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +21,8 @@ public class UitleenbaarItemController {
     @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
     @Autowired
     private UitleenbaarItemRepository uitleenbaarItemRepository;
+    @Autowired
+    private CategorieRepository categorieRepository;
 
     @GetMapping (value = { "/", "" })
     public ResponseEntity findByProperties(
@@ -26,7 +31,7 @@ public class UitleenbaarItemController {
         List<UitleenbaarItem> returnValue = new ArrayList<>();
 
         //return findAll() if no properties
-        if (categorieId == null || categorieId.isEmpty()
+        if ((categorieId == null || categorieId.isEmpty())
                 && (naam == null || naam.isEmpty())) {
             returnValue = uitleenbaarItemRepository.findAll();
 
@@ -78,6 +83,7 @@ public class UitleenbaarItemController {
 
             return new ResponseEntity(u, HttpStatus.CREATED);
         } catch (Exception e) {
+            APILogger.logRequest("qsdf", e.getMessage());
             return ResponseEntity.badRequest().build();
         }
     }
@@ -124,15 +130,15 @@ public class UitleenbaarItemController {
 
     private boolean validateUitleenbaarItem(UitleenbaarItem u) {
         return !u.getNaam().isEmpty()
-                && u.getEenheid() < 0
-                && u.getPrijs() < 0
+                && u.getEenheid() > 0
+                && u.getPrijs() > 0
                 && u.getPeriode() != null
                 && validateCategorieId(u.getCategorieId());
     }
 
     private boolean validateCategorieId (String categorieId) {
         if (categorieId == null || categorieId.isEmpty()) return false;
-        List<UitleenbaarItem> u = uitleenbaarItemRepository.findAllByCategorieId(categorieId);
-        return !u.isEmpty();
+        Optional<Categorie> u = categorieRepository.findById(categorieId);
+        return u.isPresent();
     }
 }

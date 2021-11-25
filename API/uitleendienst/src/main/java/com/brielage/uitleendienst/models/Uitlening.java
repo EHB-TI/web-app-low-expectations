@@ -12,9 +12,9 @@ public class Uitlening {
     private String      id;
     private Organisatie organisatie;
     private Magazijn    magazijn;
-    private Date        start;
-    private Date        eind;
-    private Date        teruggebrachtOp;
+    private String        start;
+    private String        eind;
+    private String        teruggebrachtOp;
     private String      opmerking;
 
     public Uitlening () {}
@@ -22,9 +22,9 @@ public class Uitlening {
     public Uitlening (
             Organisatie organisatie,
             Magazijn magazijn,
-            Date start,
-            Date eind,
-            Date teruggebrachtOp,
+            String start,
+            String eind,
+            String teruggebrachtOp,
             String opmerking) {
         this.organisatie     = organisatie;
         this.magazijn        = magazijn;
@@ -66,32 +66,32 @@ public class Uitlening {
     }
 
     @DynamoDBAttribute
-    public Date getStart () {
+    public String getStart () {
         return start;
     }
 
     @DynamoDBAttribute
-    public void setStart (Date start) {
+    public void setStart (String start) {
         this.start = start;
     }
 
     @DynamoDBAttribute
-    public Date getEind () {
+    public String getEind () {
         return eind;
     }
 
     @DynamoDBAttribute
-    public void setEind (Date eind) {
+    public void setEind (String eind) {
         this.eind = eind;
     }
 
     @DynamoDBAttribute
-    public Date getTeruggebrachtOp () {
+    public String getTeruggebrachtOp () {
         return teruggebrachtOp;
     }
 
     @DynamoDBAttribute
-    public void setTeruggebrachtOp (Date teruggebrachtOp) {
+    public void setTeruggebrachtOp (String teruggebrachtOp) {
         this.teruggebrachtOp = teruggebrachtOp;
     }
 

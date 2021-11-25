@@ -1,7 +1,12 @@
 package com.brielage.uitleendienst.controllers;
 
 import com.brielage.uitleendienst.models.BeschikbaarItem;
+import com.brielage.uitleendienst.models.Categorie;
+import com.brielage.uitleendienst.models.Magazijn;
+import com.brielage.uitleendienst.models.UitleenbaarItem;
 import com.brielage.uitleendienst.repositories.BeschikbaarItemRepository;
+import com.brielage.uitleendienst.repositories.MagazijnRepository;
+import com.brielage.uitleendienst.repositories.UitleenbaarItemRepository;
 import com.brielage.uitleendienst.tools.RemoveDuplicates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +23,10 @@ public class BeschikbaarItemController {
     @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
     @Autowired
     private BeschikbaarItemRepository beschikbaarItemRepository;
+    @Autowired
+    private UitleenbaarItemRepository uitleenbaarItemRepository;
+    @Autowired
+    private MagazijnRepository magazijnRepository;
 
     @GetMapping (value = { "/", "" })
     public ResponseEntity findByProperties(
@@ -130,15 +139,15 @@ public class BeschikbaarItemController {
                 && b.getAantalGereserveerd() != null;
     }
 
-    private boolean validateMagazijnId (String magazijnId) {
-        if (magazijnId == null || magazijnId.isEmpty()) return false;
-        List<BeschikbaarItem> cm = beschikbaarItemRepository.findAllByMagazijnId(magazijnId);
-        return !cm.isEmpty();
-    }
-
     private boolean validateUitleenbaarItemId (String uitleenbaarItemId) {
         if (uitleenbaarItemId == null || uitleenbaarItemId.isEmpty()) return false;
-        List<BeschikbaarItem> cm = beschikbaarItemRepository.findAllByUitleenbaarItemId(uitleenbaarItemId);
-        return !cm.isEmpty();
+        Optional<UitleenbaarItem> ui = uitleenbaarItemRepository.findById(uitleenbaarItemId);
+        return ui.isPresent();
+    }
+
+    private boolean validateMagazijnId (String magazijnId) {
+        if (magazijnId == null || magazijnId.isEmpty()) return false;
+        Optional<Magazijn> m = magazijnRepository.findById(magazijnId);
+        return m.isPresent();
     }
 }
