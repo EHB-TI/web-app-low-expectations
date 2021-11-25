@@ -14,11 +14,13 @@ public interface UitleenbaarItemRepository extends CrudRepository<UitleenbaarIte
 
     Optional<UitleenbaarItem> findById (String id);
 
-    Optional<UitleenbaarItem> findByNaam (String naam);
+    List<UitleenbaarItem> findAllByNaamIsIn (List<String> naam);
 
     List<UitleenbaarItem> findAllByPrijs (Float prijs);
 
     List<UitleenbaarItem> findAllByPeriode (Date periode);
 
     List<UitleenbaarItem> findAllByCategorieId (String id);
+
+    List<UitleenbaarItem> findAllByCategorieIdIsIn (List<String> id);
 }

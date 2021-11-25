@@ -14,7 +14,7 @@ public class UitleenbaarItem {
     private int       eenheid;
     private float     prijs;
     private Date      periode;
-    private Categorie categorie;
+    private String categorieId;
 
     public UitleenbaarItem () {}
 
@@ -23,12 +23,12 @@ public class UitleenbaarItem {
             int eenheid,
             float prijs,
             Date periode,
-            Categorie categorie) {
+            String categorieId) {
         this.naam      = naam;
         this.eenheid   = eenheid;
         this.prijs     = prijs;
         this.periode   = periode;
-        this.categorie = categorie;
+        this.categorieId = categorieId;
     }
 
     @DynamoDBHashKey
@@ -83,13 +83,13 @@ public class UitleenbaarItem {
     }
 
     @DynamoDBAttribute
-    public Categorie getCategorie () {
-        return categorie;
+    public String getCategorieId () {
+        return categorieId;
     }
 
     @DynamoDBAttribute
-    public void setCategorie (Categorie categorie) {
-        this.categorie = categorie;
+    public void setCategorieId (String categorieId) {
+        this.categorieId = categorieId;
     }
 
     @Override
@@ -100,7 +100,7 @@ public class UitleenbaarItem {
                 ", eenheid=" + eenheid +
                 ", prijs=" + prijs +
                 ", periode=" + periode +
-                ", categorie=" + categorie +
+                ", categorieId=" + categorieId +
                 '}';
     }
 }
