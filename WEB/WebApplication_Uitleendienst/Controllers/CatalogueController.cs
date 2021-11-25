@@ -8,18 +8,69 @@ using WebApplication_Uitleendienst.Models.ViewModels.Catalogue;
 using WebApplication_Uitleendienst.Services.Interfaces;
 
 namespace WebApplication_Uitleendienst.Controllers {
-    public class CatalogueController : Controller {
+    public class CatalogueController : BaseController {
         private readonly ILogger<HomeController> _logger;
         private readonly IBaseService<Categorie> _categorieService;
-        private readonly IBaseService<UitleenbaarItem> _uitleenbaarItemService;
-        public CatalogueController(IBaseService<Categorie> catService, IBaseService<UitleenbaarItem> uitleenbaarItemService) {
+        private readonly IBaseService<BeschikbaarItem> _beschikbaarItemService;
+
+        private IEnumerable<BeschikbaarItem> ItemList = new List<BeschikbaarItem>() {
+            new BeschikbaarItem {
+                AantalBeschikbaar = 25,
+                AantalGereserveerd = 2,
+                AantalTotaal = 27,
+                Id = "25",
+                Magazijn = null,
+                UitleenbaarItem = new UitleenbaarItem {
+                    Naam="Kabel",
+                    Prijs= (float) 25.99,
+                    Categorie = new Categorie {
+                        Naam = "Geluid",
+                        Image = "~/images/default.png"
+                    }
+                }
+            },
+             new BeschikbaarItem {
+                AantalBeschikbaar = 25,
+                AantalGereserveerd = 2,
+                AantalTotaal = 27,
+                Id = "25",
+                Magazijn = null,
+                UitleenbaarItem = new UitleenbaarItem {
+                    Naam = "Juke",
+                    Prijs= (float) 29.99,
+                    Categorie = new Categorie {
+                        Naam = "Geluid",
+                        Image = "~/images/default.png"
+                    }
+                }
+            },
+             new BeschikbaarItem {
+                AantalBeschikbaar = 25,
+                AantalGereserveerd = 2,
+                AantalTotaal = 27,
+                Id = "25",
+                Magazijn = null,
+                UitleenbaarItem = new UitleenbaarItem {
+                    Naam = "Top",
+                    Prijs= (float) 155.99,
+                    Categorie = new Categorie {
+                        Naam = "Geluid",
+                        Image = "~/images/default.png"
+                    }
+                }
+            }
+        };
+
+        public CatalogueController(IBaseService<Categorie> catService, IBaseService<BeschikbaarItem> beschikbaarItemService) {
             _categorieService = catService;
-            _uitleenbaarItemService = uitleenbaarItemService;
+            _beschikbaarItemService = beschikbaarItemService;
         }
 
-        public IActionResult Catalogue(int categoryId) {
+        public IActionResult Catalogue(string categoryId) {
             var model = new CatalogueViewModel();
-            model.Products = _uitleenbaarItemService.GetAll("catId", categoryId.ToString());
+            // API / NOT IMPLEMENTED
+            //model.Products = _beschikbaarItemService.GetAll("catId", categoryId);
+            model.Products = ItemList;
             return View(model);
         }
     }
