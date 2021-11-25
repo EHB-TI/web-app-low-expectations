@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,8 +11,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApplication_Uitleendienst.Data;
@@ -38,13 +41,12 @@ namespace WebApplication_Uitleendienst {
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)          
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-           
+
             services.AddControllersWithViews();
             services.AddRazorPages();
-
 
             services.AddTransient<IBaseService<Categorie>, BaseService<Categorie>>();
 
@@ -55,6 +57,7 @@ namespace WebApplication_Uitleendienst {
             })
             .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddOpenIdConnect(options => {
+                options.SaveTokens = true;
                 options.ResponseType = Configuration["Authentication:Cognito:ResponseType"];
                 // options.MetadataAddress = Configuration["Authentication:Cognito:MetadataAddress"];
                 options.ClientId = Configuration["Authentication:Cognito:ClientId"];
@@ -64,6 +67,7 @@ namespace WebApplication_Uitleendienst {
                 options.Scope.Add("openid");
                 options.Scope.Add("email");
             });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -85,6 +89,9 @@ namespace WebApplication_Uitleendienst {
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => {
+                endpoints.MapControllerRoute(
+                name: "Admin",
+                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

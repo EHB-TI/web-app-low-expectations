@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using WebApplication_Uitleendienst.Models;
@@ -27,13 +28,36 @@ namespace WebApplication_Uitleendienst.Services {
             throw new NotImplementedException();
         }
 
-        public TEntity Get(Expression<Func<TEntity, bool>> predicate, bool cache = false) {
-            throw new NotImplementedException();
+
+        public TEntity Get(string propertyName = null, string propertyValue = null, bool cache = false) {
+            var url = BaseUrl + typeof(TEntity).Name.ToLower();
+            if (!string.IsNullOrEmpty(propertyName))
+                url += $"?{propertyName}={propertyValue}";
+            var key = typeof(TEntity).Name + "_Get_" + DateTime.Now.ToString("yy-MM-dd");
+
+            if (!_cache.TryGetValue(key, out TEntity item) || !cache) {
+                var request = WebRequest.Create(url);
+                request.Method = "GET";
+                var response = request.GetResponse();
+                using (Stream dataStream = response.GetResponseStream()) {
+                    // Open the stream using a StreamReader for easy access.
+                    var reader = new StreamReader(dataStream);
+                    // Read the content.
+                    var responseFromServer = reader.ReadToEnd();
+                    // convert to entity
+                    _cache.Set(key, JsonConvert.DeserializeObject<TEntity>(responseFromServer));
+                }
+            }
+
+            return _cache.Get<TEntity>(key);
         }
 
-        public IEnumerable<TEntity> GetAll(bool cache = false) {
+        public IEnumerable<TEntity> GetAll(string propertyName = null, string propertyValue = null, bool cache = false) {
 
             var url = BaseUrl + typeof(TEntity).Name.ToLower();
+            if (!string.IsNullOrEmpty(propertyName))
+                url += $"?{propertyName}={propertyValue}";
+
             var key = typeof(TEntity).Name + "_GetAll_" + DateTime.Now.ToString("yy-MM-dd");
 
             if (!_cache.TryGetValue(key, out IEnumerable<TEntity> items) || !cache) {
@@ -53,34 +77,20 @@ namespace WebApplication_Uitleendienst.Services {
             return _cache.Get<IEnumerable<TEntity>>(key);
         }
 
-        public TEntity Save(TEntity item) {
-            var url = BaseUrl + typeof(TEntity).Name.ToLower();
-            var request = WebRequest.Create(url);
-            request.Method = "POST";
+        public async Task<TEntity> Save(TEntity item, string customEntity = null) {
+            var url = BaseUrl;
+            if (customEntity == null)
+                url += typeof(TEntity).Name.ToLower();
+            else
+                url += customEntity;
 
-            // Create POST data and convert it to a byte array.
-            string postData = JsonConvert.SerializeObject(item);
-            byte[] byteArray = Encoding.UTF8.GetBytes(postData);
+            var JsonData = JsonConvert.SerializeObject(item);
 
-            // Set the ContentType property of the WebRequest.
-            request.ContentType = "application/x-www-form-urlencoded";
-            // Set the ContentLength property of the WebRequest.
-            request.ContentLength = byteArray.Length;
-            // Get the request stream.
-            Stream dataStream = request.GetRequestStream();
-            // Write the data to the request stream.
-            dataStream.Write(byteArray, 0, byteArray.Length);
-            // Close the Stream object.
-            dataStream.Close();
-
-            var response = request.GetResponse();
-            using (Stream stream = response.GetResponseStream()) {
-                // Open the stream using a StreamReader for easy access.
-                var reader = new StreamReader(stream);
-                // Read the content.
-                var responseFromServer = reader.ReadToEnd();
-                // convert to entity
-                return JsonConvert.DeserializeObject<TEntity>(responseFromServer);
+            using (var client = new HttpClient()) {
+                var response = await client.PostAsync(url, new StringContent(JsonData, Encoding.UTF8, "application/json"));
+                var data = await response.Content.ReadAsStringAsync();
+                if (data != null)
+                    return JsonConvert.DeserializeObject<TEntity>(data);
             }
             return null;
         }
