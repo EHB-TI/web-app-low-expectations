@@ -8,8 +8,8 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 @DynamoDBTable (tableName = "beschikbaarItem")
 public class BeschikbaarItem {
     private String          id;
-    private UitleenbaarItem uitleenbaarItem;
-    private Magazijn        magazijn;
+    private String          uitleenbaarItemId;
+    private String          magazijnId;
     private int             aantalTotaal;
     private int             aantalBeschikbaar;
     private int             aantalGereserveerd;
@@ -17,13 +17,13 @@ public class BeschikbaarItem {
     public BeschikbaarItem () {}
 
     public BeschikbaarItem (
-            UitleenbaarItem uitleenbaarItem,
-            Magazijn magazijn,
+            String uitleenbaarItemId,
+            String magazijnId,
             Integer aantalTotaal,
             Integer aantalBeschikbaar,
             Integer aantalGereserveerd) {
-        this.uitleenbaarItem    = uitleenbaarItem;
-        this.magazijn           = magazijn;
+        this.uitleenbaarItemId  = uitleenbaarItemId;
+        this.magazijnId         = magazijnId;
         this.aantalTotaal       = aantalTotaal;
         this.aantalBeschikbaar  = aantalBeschikbaar;
         this.aantalGereserveerd = aantalGereserveerd;
@@ -41,23 +41,23 @@ public class BeschikbaarItem {
     }
 
     @DynamoDBAttribute
-    public UitleenbaarItem getUitleenbaarItem () {
-        return uitleenbaarItem;
+    public String getUitleenbaarItemId () {
+        return uitleenbaarItemId;
     }
 
     @DynamoDBAttribute
-    public void setUitleenbaarItem (UitleenbaarItem uitleenbaarItem) {
-        this.uitleenbaarItem = uitleenbaarItem;
+    public void setUitleenbaarItemId (String uitleenbaarItemId) {
+        this.uitleenbaarItemId = uitleenbaarItemId;
     }
 
     @DynamoDBAttribute
-    public Magazijn getMagazijn () {
-        return magazijn;
+    public String getMagazijnId () {
+        return magazijnId;
     }
 
     @DynamoDBAttribute
-    public void setMagazijn (Magazijn magazijn) {
-        this.magazijn = magazijn;
+    public void setMagazijnId (String magazijnId) {
+        this.magazijnId = magazijnId;
     }
 
     @DynamoDBAttribute
@@ -94,8 +94,8 @@ public class BeschikbaarItem {
     public String toString () {
         return "BeschikbaarItem{" +
                 "id='" + id + '\'' +
-                ", uitleenbaarItem=" + uitleenbaarItem +
-                ", magazijn=" + magazijn +
+                ", uitleenbaarItemId=" + uitleenbaarItemId +
+                ", magazijnId=" + magazijnId +
                 ", aantalTotaal=" + aantalTotaal +
                 ", aantalBeschikbaar=" + aantalBeschikbaar +
                 ", aantalGereserveerd=" + aantalGereserveerd +

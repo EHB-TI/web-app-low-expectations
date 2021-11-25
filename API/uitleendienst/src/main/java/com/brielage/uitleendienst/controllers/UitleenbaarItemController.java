@@ -19,7 +19,7 @@ public class UitleenbaarItemController {
     @Autowired
     private UitleenbaarItemRepository uitleenbaarItemRepository;
 
-    @RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
+    @GetMapping (value = { "/", "" })
     public ResponseEntity findByProperties(
             @RequestParam (required = false) List<String> categorieId,
             @RequestParam (required = false) List<String> naam) {
