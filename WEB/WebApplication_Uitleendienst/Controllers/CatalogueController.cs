@@ -71,6 +71,7 @@ namespace WebApplication_Uitleendienst.Controllers {
             // API / NOT IMPLEMENTED
             //model.Products = _beschikbaarItemService.GetAll("catId", categoryId);
             model.Products = ItemList;
+            model.Categories = _categorieService.GetAll();
             return View(model);
         }
     }

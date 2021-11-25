@@ -6,5 +6,6 @@ using System.Threading.Tasks;
 namespace WebApplication_Uitleendienst.Models.ViewModels.Catalogue {
     public class CatalogueViewModel {
         public IEnumerable<BeschikbaarItem> Products { get; set; }
+        public IEnumerable<Categorie> Categories { get; set; }
     }
 }
