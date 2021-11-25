@@ -52,7 +52,7 @@ namespace WebApplication_Uitleendienst.Controllers {
             return View(model);
         }
 
-        [GroupAuthorize("Admins-WebApplication")]
+        [Authorize]
         public IActionResult Login() {
             var model = new HomeViewModel(HttpContext);
             return RedirectToAction("Index");

@@ -1,0 +1,14 @@
+﻿
+
+@model BeschikbaarItem
+
+<div class="categorie-card col-6 col-md-4 col-lg-3">
+    <div class="card">
+        <img class="card-img-top" src="~/images/default.png" alt="Card image cap">
+        <div class="card-body">
+            <h5 class="card-title">@Model.UitleenbaarItem.Naam</h5>
+            <p class="card-text">@Model.UitleenbaarItem.Prijs</p>
+            <a asp-action="Detail" asp-controller="Catalogue" class="btn btn-outline-dark">Detail</a>
+        </div>
+    </div>
+</div>
