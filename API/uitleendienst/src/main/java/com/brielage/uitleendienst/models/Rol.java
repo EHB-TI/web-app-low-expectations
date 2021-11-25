@@ -59,4 +59,12 @@ public class Rol {
                 ", omschrijving='" + omschrijving + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o){
+        if(o instanceof Rol r){
+            return this.getId().equals(r.getId());
+        }
+        return false;
+    }
 }

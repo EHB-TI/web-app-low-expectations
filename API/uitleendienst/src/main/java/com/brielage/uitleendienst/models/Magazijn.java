@@ -101,4 +101,12 @@ public class Magazijn {
                 ", opmerking='" + opmerking + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o){
+        if(o instanceof Magazijn m){
+            return this.getId().equals(m.getId());
+        }
+        return false;
+    }
 }

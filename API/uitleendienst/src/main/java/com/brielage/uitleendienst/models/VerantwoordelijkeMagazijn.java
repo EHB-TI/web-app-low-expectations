@@ -59,4 +59,12 @@ public class VerantwoordelijkeMagazijn {
                 ", magazijn=" + magazijn +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o){
+        if(o instanceof VerantwoordelijkeMagazijn vm){
+            return this.getId().equals(vm.getId());
+        }
+        return false;
+    }
 }

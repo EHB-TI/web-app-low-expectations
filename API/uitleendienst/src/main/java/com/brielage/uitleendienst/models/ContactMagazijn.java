@@ -57,4 +57,12 @@ public class ContactMagazijn {
                 ", opmerking='" + opmerking + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o){
+        if(o instanceof ContactMagazijn cm){
+            return this.getId().equals(cm.getId());
+        }
+        return false;
+    }
 }

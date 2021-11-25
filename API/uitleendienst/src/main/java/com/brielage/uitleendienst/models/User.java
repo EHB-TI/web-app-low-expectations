@@ -65,4 +65,12 @@ public class User {
                 ", persoonId=" + persoonId +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o){
+        if(o instanceof User u){
+            return this.getId().equals(u.getId());
+        }
+        return false;
+    }
 }

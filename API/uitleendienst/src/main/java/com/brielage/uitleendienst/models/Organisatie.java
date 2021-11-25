@@ -97,4 +97,12 @@ public class Organisatie {
                 ", opmerking='" + opmerking + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o){
+        if(o instanceof Organisatie org){
+            return this.getId().equals(org.getId());
+        }
+        return false;
+    }
 }

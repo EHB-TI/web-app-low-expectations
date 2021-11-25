@@ -103,4 +103,12 @@ public class UitleningItem {
                 ", aantalTeruggebracht=" + aantalTeruggebracht +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o){
+        if(o instanceof UitleningItem ui){
+            return this.getId().equals(ui.getId());
+        }
+        return false;
+    }
 }

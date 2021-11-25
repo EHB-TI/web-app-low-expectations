@@ -117,4 +117,12 @@ public class Uitlening {
                 ", opmerking='" + opmerking + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o){
+        if(o instanceof Uitlening u){
+            return this.getId().equals(u.getId());
+        }
+        return false;
+    }
 }

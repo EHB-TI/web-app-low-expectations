@@ -73,4 +73,12 @@ public class ContactHuurder {
                 ", opmerking='" + opmerking + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o){
+        if(o instanceof ContactHuurder ch){
+            return this.getId().equals(ch.getId());
+        }
+        return false;
+    }
 }
