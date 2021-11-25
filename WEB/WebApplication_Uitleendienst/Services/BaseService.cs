@@ -55,7 +55,7 @@ namespace WebApplication_Uitleendienst.Services {
         public IEnumerable<TEntity> GetAll(string propertyName = null, string propertyValue = null, bool cache = false) {
 
             var url = BaseUrl + typeof(TEntity).Name.ToLower();
-            if (!string.IsNullOrEmpty(propertyName))
+            if (!string.IsNullOrEmpty(propertyValue))
                 url += $"?{propertyName}={propertyValue}";
 
             var key = typeof(TEntity).Name + "_GetAll_" + DateTime.Now.ToString("yy-MM-dd");

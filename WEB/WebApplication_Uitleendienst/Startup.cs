@@ -49,6 +49,7 @@ namespace WebApplication_Uitleendienst {
             services.AddRazorPages();
 
             services.AddTransient<IBaseService<Categorie>, BaseService<Categorie>>();
+             services.AddTransient<IBaseService<BeschikbaarItem>, BaseService<BeschikbaarItem>>();
 
             services.AddAuthentication(options => {
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;

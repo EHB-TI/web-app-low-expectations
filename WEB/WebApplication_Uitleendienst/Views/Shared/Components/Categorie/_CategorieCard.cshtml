@@ -8,7 +8,7 @@
         <div class="card-body">
             <h5 class="card-title">@Model.Naam</h5>
             <p class="card-text">@Model.Omschrijving</p>
-            <a href="#" class="btn btn-outline-dark">Bekijken</a>
+            <a asp-action="Catalogue" asp-controller="Catalogue" asp-route-categoryId="@Model.Id" class="btn btn-outline-dark">Bekijken</a>
         </div>
     </div>
 </div>

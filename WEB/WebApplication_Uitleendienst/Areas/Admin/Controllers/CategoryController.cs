@@ -24,7 +24,7 @@ namespace WebApplication_Uitleendienst.Areas.Admin.Controllers {
         }
 
         public IActionResult Detail(string Id) {
-            var category = _categoryService.GetAll(true).FirstOrDefault(s => s.Id == Id);
+            var category = _categoryService.GetAll(cache: true).FirstOrDefault(s => s.Id == Id);
             return View(category);
         }
 
