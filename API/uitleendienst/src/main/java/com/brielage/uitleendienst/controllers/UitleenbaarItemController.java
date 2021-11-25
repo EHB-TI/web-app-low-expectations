@@ -66,6 +66,13 @@ public class UitleenbaarItemController {
             if (!validateUitleenbaarItem(uitleenbaarItem))
                 return ResponseEntity.badRequest().build();
 
+            Optional<UitleenbaarItem> optionalUitleenbaarItem =
+                    uitleenbaarItemRepository.findByNaamAndCategorieId(
+                            uitleenbaarItem.getNaam(), uitleenbaarItem.getCategorieId());
+
+            if (optionalUitleenbaarItem.isPresent())
+                return ResponseEntity.badRequest().build();
+
             uitleenbaarItem.setId(null);
             UitleenbaarItem u = uitleenbaarItemRepository.save(uitleenbaarItem);
 

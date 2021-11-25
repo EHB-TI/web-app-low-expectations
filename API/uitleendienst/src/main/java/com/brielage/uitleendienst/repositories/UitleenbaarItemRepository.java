@@ -18,7 +18,7 @@ public interface UitleenbaarItemRepository extends CrudRepository<UitleenbaarIte
 
     List<UitleenbaarItem> findAllByPrijs (Float prijs);
 
-    List<UitleenbaarItem> findAllByPeriode (Date periode);
+    Optional<UitleenbaarItem> findByNaamAndCategorieId (String naam, String categorieId);
 
     List<UitleenbaarItem> findAllByCategorieId (String id);
 
