@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping (value = "/beschikbaarItem")
@@ -30,12 +31,14 @@ public class BeschikbaarItemController {
     @GetMapping (value = { "/", "" })
     public ResponseEntity findByProperties(
             @RequestParam (required = false) List<String> uitleenbaarItemId,
-            @RequestParam (required = false) List<String> magazijnId) {
+            @RequestParam (required = false) List<String> magazijnId,
+            @RequestParam (required = false) List<String> categorieId) {
         List<BeschikbaarItem> returnValue = new ArrayList<>();
 
         //return findAll() if no properties
-        if (uitleenbaarItemId == null || uitleenbaarItemId.isEmpty()
-                && (magazijnId == null || magazijnId.isEmpty())) {
+        if ((uitleenbaarItemId == null || uitleenbaarItemId.isEmpty())
+                && (magazijnId == null || magazijnId.isEmpty())
+                && (categorieId == null || categorieId.isEmpty())) {
             returnValue = beschikbaarItemRepository.findAll();
 
             if (returnValue.isEmpty())
@@ -43,12 +46,21 @@ public class BeschikbaarItemController {
 
             return ResponseEntity.ok().body(returnValue);
         }
+        List<UitleenbaarItem> uitleenbaarItems;
+        List<String> uitleenbaarItemIds;
 
         //add all elements found by the properties to returnValue
         if (uitleenbaarItemId != null && !uitleenbaarItemId.isEmpty())
             returnValue.addAll(beschikbaarItemRepository.findAllByUitleenbaarItemIdIsIn(uitleenbaarItemId));
+
         if (magazijnId != null && !magazijnId.isEmpty())
             returnValue.addAll(beschikbaarItemRepository.findAllByMagazijnIdIsIn(magazijnId));
+
+        if (categorieId != null && !categorieId.isEmpty()) {
+            uitleenbaarItems = uitleenbaarItemRepository.findAllByCategorieIdIsIn(categorieId);
+            uitleenbaarItemIds = uitleenbaarItems.stream().map(UitleenbaarItem::getId).collect(Collectors.toList());
+            returnValue.addAll(beschikbaarItemRepository.findAllByUitleenbaarItemIdIsIn(uitleenbaarItemIds));
+        }
 
         if (returnValue.isEmpty())
             return ResponseEntity.notFound().build();
