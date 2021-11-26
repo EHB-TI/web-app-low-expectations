@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping (value = "verantwoordelijkeMagazijn")
+@RequestMapping (value = "verantwoordelijkemagazijn")
 public class VerantwoordelijkeMagazijnController {
     @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
     @Autowired

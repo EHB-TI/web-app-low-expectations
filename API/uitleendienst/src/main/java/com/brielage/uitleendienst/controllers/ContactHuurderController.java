@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping (value = "/contactHuurder")
+@RequestMapping (value = "/contacthuurder")
 public class ContactHuurderController {
     @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
     @Autowired
