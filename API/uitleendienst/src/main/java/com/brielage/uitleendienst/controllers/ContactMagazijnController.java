@@ -1,7 +1,11 @@
 package com.brielage.uitleendienst.controllers;
 
 import com.brielage.uitleendienst.models.ContactMagazijn;
+import com.brielage.uitleendienst.models.Magazijn;
+import com.brielage.uitleendienst.models.Persoon;
 import com.brielage.uitleendienst.repositories.ContactMagazijnRepository;
+import com.brielage.uitleendienst.repositories.MagazijnRepository;
+import com.brielage.uitleendienst.repositories.PersoonRepository;
 import com.brielage.uitleendienst.tools.RemoveDuplicates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +22,10 @@ public class ContactMagazijnController {
     @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
     @Autowired
     private ContactMagazijnRepository contactMagazijnRepository;
+    @Autowired
+    private PersoonRepository persoonRepository;
+    @Autowired
+    private MagazijnRepository magazijnRepository;
 
     @GetMapping (value = { "/", "" })
     public ResponseEntity findByProperties (
@@ -151,14 +159,14 @@ public class ContactMagazijnController {
 
     private boolean validatePersoonId (String persoonId) {
         if (persoonId == null || persoonId.isEmpty()) return false;
-        List<ContactMagazijn> cm = contactMagazijnRepository.findAllByPersoonId(persoonId);
-        return !cm.isEmpty();
+        Optional<Persoon> p = persoonRepository.findById(persoonId);
+        return p.isPresent();
     }
 
     private boolean validateMagazijnId (String magazijnId) {
         if (magazijnId == null || magazijnId.isEmpty()) return false;
-        List<ContactMagazijn> cm = contactMagazijnRepository.findAllByMagazijnId(magazijnId);
-        return !cm.isEmpty();
+        Optional<Magazijn> m = magazijnRepository.findById(magazijnId);
+        return m.isPresent();
     }
 
     private boolean validateOpmerking (String opmerking) {
