@@ -1,0 +1,44 @@
+﻿@model WebApplication_Uitleendienst.Models.ViewModels.Catalogue.CatalogueDetailViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <div class="wrapper row">
+        <div class="preview col-md-6">
+
+            <div class="preview-pic tab-content">
+                <div class="tab-pane active" id="pic-1"><img src="~/images/default.png" /></div>
+                <div class="tab-pane" id="pic-2"><img src="~/images/default.png" /></div>
+                <div class="tab-pane" id="pic-3"><img src="~/images/default.png" /></div>
+                <div class="tab-pane" id="pic-4"><img src="~/images/default.png" /></div>
+                <div class="tab-pane" id="pic-5"><img src="~/images/default.png" /></div>
+            </div>
+            <ul class="preview-thumbnail nav nav-tabs">
+                <li class="active"><a data-target="#pic-1" data-toggle="tab"><img src="~/images/default.png" /></a></li>
+                <li><a data-target="#pic-2" data-toggle="tab"><img src="~/images/default.png" /></a></li>
+                <li><a data-target="#pic-3" data-toggle="tab"><img src="~/images/default.png" /></a></li>
+                <li><a data-target="#pic-4" data-toggle="tab"><img src="~/images/default.png" /></a></li>
+                <li><a data-target="#pic-5" data-toggle="tab"><img src="~/images/default.png" /></a></li>
+            </ul>
+
+        </div>
+        <div class="details col-md-6">
+            <h3 class="product-title">@Model.Product.Naam</h3>
+            <div class="stock">
+                <h6><span>Totale stock: </span> @Model.TotalStock</h6>
+                @foreach (var magazijn in Model.Magazijnen) {
+                    <p><span>Magazijn @magazijn.Naam:</span>@(Model.BeschikbareItems.Where(s => s.MagazijnId == magazijn.Id).FirstOrDefault().AantalBeschikbaar > 0 ? Html.Raw("<span class='beschikbaar'>Beschikbaar</span>") : Html.Raw("<span class='niet-beschikbaar'Niet beschikaar</span>"))</p>
+                 }
+            </div>
+            <p class="product-description">Suspendisse quos? Tempus cras iure temporibus? Eu laudantium cubilia sem sem! Repudiandae et! Massa senectus enim minim sociosqu delectus posuere.</p>
+            <h4 class="price">Prijs: <span>€@Model.Product.Prijs</span></h4>           
+            <div class="action">
+                <button class="add-to-cart m-0 btn btn-dark" type="button">Toevoegen aan winkelmandje</button>
+                <button class="like btn btn-dark" type="button"><span class="fa fa-heart"></span></button>
+            </div>
+        </div>
+    </div>
+
+</div>
+

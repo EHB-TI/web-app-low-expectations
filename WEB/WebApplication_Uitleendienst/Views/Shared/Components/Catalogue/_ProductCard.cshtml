@@ -1,14 +1,14 @@
 ﻿
 
-@model BeschikbaarItem
+@model UitleenbaarItem
 
 <div class="categorie-card col-6 col-md-4 col-lg-3">
     <div class="card">
         <img class="card-img-top" src="~/images/default.png" alt="Card image cap">
         <div class="card-body">
-            <h5 class="card-title">@Model.UitleenbaarItem.Naam</h5>
-            <p class="card-text">@Model.UitleenbaarItem.Prijs</p>
-            <a asp-action="Detail" asp-controller="Catalogue" class="btn btn-outline-dark">Detail</a>
+            <h5 class="card-title">@Model.Naam</h5>
+            <p class="card-text">€@Model.Prijs</p>
+            <a asp-action="Detail" asp-controller="Catalogue" asp-route-Id="@Model.Id" asp-route-Naam="@Model.Naam" asp-route-Categorie="@Model.Categorie" asp-route-Periode="@Model.Periode" asp-route-Prijs="@Model.Prijs"  class="btn btn-outline-dark">Detail</a>
         </div>
     </div>
 </div>

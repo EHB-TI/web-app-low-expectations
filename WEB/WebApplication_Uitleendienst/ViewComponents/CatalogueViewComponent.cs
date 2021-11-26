@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace WebApplication_Uitleendienst.ViewComponents {
     public class CatalogueViewComponent : ViewComponent {
-        public async Task<IViewComponentResult> InvokeAsync(BeschikbaarItem beschikbaarItem){      
-            return View("_ProductCard", beschikbaarItem);
+        public async Task<IViewComponentResult> InvokeAsync(UitleenbaarItem uitleenbaarItem){      
+            return View("_ProductCard", uitleenbaarItem);
         }
     }
 }

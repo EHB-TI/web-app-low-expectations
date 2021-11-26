@@ -10,18 +10,20 @@
             <h2>FILTER</h2>
             <hr />
             <h6>Category</h6>
-            @foreach (var cat in Model.Categories) {
-                <p>
-                    <input type="checkbox" name="@cat.Naam" onclick="alert('TODO/Some Event')" />
-                    @cat.Naam
-                </p>
-            }
+            <form method="GET" id="formFilters">
+                @foreach (var cat in Model.Categories) {
+                    <p>
+                        <input type="checkbox" name="@cat.Naam" onclick="reloadPartial(" />
+                        @cat.Naam
+                    </p>
+                }
+            </form>
         </div>
         <div class="col-12 col-md-10 products">
             <!-- Catalogue -->
             <div class="row">
                 @foreach (var product in Model.Products) {
-                    @await Component.InvokeAsync("Catalogue", new { beschikbaarItem = product });
+                    @await Component.InvokeAsync("Catalogue", new { uitleenbaarItem = product });
                 }
             </div>
         </div>

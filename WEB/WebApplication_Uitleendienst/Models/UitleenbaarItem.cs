@@ -8,14 +8,14 @@ namespace WebApplication_Uitleendienst
 		private string naam;
 		private int? eenheid;
 		private float? prijs;
-		private DateTime periode;
+		private string periode;
 		private Categorie categorie;
 
 		public UitleenbaarItem()
 		{
 		}
 
-		public UitleenbaarItem(string naam, int? eenheid, float? prijs, DateTime periode, Categorie categorie)
+		public UitleenbaarItem(string naam, int? eenheid, float? prijs, string periode, Categorie categorie)
 		{
 			this.naam = naam;
 			this.eenheid = eenheid;
@@ -76,7 +76,7 @@ namespace WebApplication_Uitleendienst
 		}
 
 
-		public virtual DateTime Periode
+		public virtual string Periode
 		{
 			get
 			{

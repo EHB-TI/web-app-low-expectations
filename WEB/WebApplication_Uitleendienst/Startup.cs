@@ -49,7 +49,9 @@ namespace WebApplication_Uitleendienst {
             services.AddRazorPages();
 
             services.AddTransient<IBaseService<Categorie>, BaseService<Categorie>>();
-             services.AddTransient<IBaseService<BeschikbaarItem>, BaseService<BeschikbaarItem>>();
+            services.AddTransient<IBaseService<BeschikbaarItem>, BaseService<BeschikbaarItem>>();
+            services.AddTransient<IBaseService<UitleenbaarItem>, BaseService<UitleenbaarItem>>();
+            services.AddTransient<IBaseService<Magazijn>, BaseService<Magazijn>>();
 
             services.AddAuthentication(options => {
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -69,6 +71,8 @@ namespace WebApplication_Uitleendienst {
                 options.Scope.Add("email");
             });
 
+            services.AddMvc().AddJsonOptions(options =>
+                    options.JsonSerializerOptions.IgnoreNullValues = true);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

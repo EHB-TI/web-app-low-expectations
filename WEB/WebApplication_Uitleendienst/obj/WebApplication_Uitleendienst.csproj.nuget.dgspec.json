@@ -28,7 +28,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "http://ciserver:8080/httpAuth/app/nuget/feed/BecosoftCore/default/v2": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {

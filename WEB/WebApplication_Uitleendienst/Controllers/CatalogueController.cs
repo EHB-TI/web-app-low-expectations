@@ -12,65 +12,33 @@ namespace WebApplication_Uitleendienst.Controllers {
         private readonly ILogger<HomeController> _logger;
         private readonly IBaseService<Categorie> _categorieService;
         private readonly IBaseService<BeschikbaarItem> _beschikbaarItemService;
+        private readonly IBaseService<UitleenbaarItem> _uitleenbaarItemService;
+        private readonly IBaseService<Magazijn> _magazijnService;
 
-        private IEnumerable<BeschikbaarItem> ItemList = new List<BeschikbaarItem>() {
-            new BeschikbaarItem {
-                AantalBeschikbaar = 25,
-                AantalGereserveerd = 2,
-                AantalTotaal = 27,
-                Id = "25",
-                Magazijn = null,
-                UitleenbaarItem = new UitleenbaarItem {
-                    Naam="Kabel",
-                    Prijs= (float) 25.99,
-                    Categorie = new Categorie {
-                        Naam = "Geluid",
-                        Image = "~/images/default.png"
-                    }
-                }
-            },
-             new BeschikbaarItem {
-                AantalBeschikbaar = 25,
-                AantalGereserveerd = 2,
-                AantalTotaal = 27,
-                Id = "25",
-                Magazijn = null,
-                UitleenbaarItem = new UitleenbaarItem {
-                    Naam = "Juke",
-                    Prijs= (float) 29.99,
-                    Categorie = new Categorie {
-                        Naam = "Geluid",
-                        Image = "~/images/default.png"
-                    }
-                }
-            },
-             new BeschikbaarItem {
-                AantalBeschikbaar = 25,
-                AantalGereserveerd = 2,
-                AantalTotaal = 27,
-                Id = "25",
-                Magazijn = null,
-                UitleenbaarItem = new UitleenbaarItem {
-                    Naam = "Top",
-                    Prijs= (float) 155.99,
-                    Categorie = new Categorie {
-                        Naam = "Geluid",
-                        Image = "~/images/default.png"
-                    }
-                }
-            }
-        };
 
-        public CatalogueController(IBaseService<Categorie> catService, IBaseService<BeschikbaarItem> beschikbaarItemService) {
+        public CatalogueController(IBaseService<Categorie> catService, IBaseService<Magazijn> magazijnService, IBaseService<BeschikbaarItem> beschikbaarItemService, IBaseService<UitleenbaarItem> uitleenbaarItemService) {
             _categorieService = catService;
             _beschikbaarItemService = beschikbaarItemService;
+            _uitleenbaarItemService = uitleenbaarItemService;
+            _magazijnService = magazijnService;
         }
 
+        public IActionResult Detail(UitleenbaarItem item) {
+            var model = new CatalogueDetailViewModel();
+            model.Product = item;
+            model.Magazijnen = new List<Magazijn>();
+            model.BeschikbareItems = _beschikbaarItemService.GetAll("uitleenbaarItemId", item.Id);
+            model.BeschikbareItems.ToList().ForEach(s => {
+                model.TotalStock += (int)s.AantalTotaal;
+                model.Magazijnen.Add( _magazijnService.Get(s.MagazijnId));
+            });
+
+            return View(model);
+        }
         public IActionResult Catalogue(string categoryId) {
             var model = new CatalogueViewModel();
-            // API / NOT IMPLEMENTED
-            //model.Products = _beschikbaarItemService.GetAll("catId", categoryId);
-            model.Products = ItemList;
+            model.Products = _uitleenbaarItemService.GetAll("categorieId", categoryId);
+            //TEST model.Products = ItemList;
             model.Categories = _categorieService.GetAll();
             return View(model);
         }

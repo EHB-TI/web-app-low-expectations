@@ -29,10 +29,10 @@ namespace WebApplication_Uitleendienst.Services {
         }
 
 
-        public TEntity Get(string propertyName = null, string propertyValue = null, bool cache = false) {
+        public TEntity Get(string propertyValue = null, bool cache = false) {
             var url = BaseUrl + typeof(TEntity).Name.ToLower();
-            if (!string.IsNullOrEmpty(propertyName))
-                url += $"?{propertyName}={propertyValue}";
+            if (!string.IsNullOrEmpty(propertyValue))
+                url += $"/{propertyValue}";
             var key = typeof(TEntity).Name + "_Get_" + DateTime.Now.ToString("yy-MM-dd");
 
             if (!_cache.TryGetValue(key, out TEntity item) || !cache) {

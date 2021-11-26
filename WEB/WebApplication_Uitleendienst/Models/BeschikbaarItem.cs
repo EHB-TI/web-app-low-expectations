@@ -4,8 +4,8 @@
 	public class BeschikbaarItem
 	{
 		private string id;
-		private UitleenbaarItem uitleenbaarItem;
-		private Magazijn magazijn;
+		private string uitleenbaarItemId;
+		private string magazijnId;
 		private int aantalTotaal;
 		private int aantalBeschikbaar;
 		private int aantalGereserveerd;
@@ -14,10 +14,10 @@
 		{
 		}
 
-		public BeschikbaarItem(UitleenbaarItem uitleenbaarItem, Magazijn magazijn, int? aantalTotaal, int? aantalBeschikbaar, int? aantalGereserveerd)
+		public BeschikbaarItem(string UitleenbaarItemId, string magazijnId, int? aantalTotaal, int? aantalBeschikbaar, int? aantalGereserveerd)
 		{
-			this.uitleenbaarItem = uitleenbaarItem;
-			this.magazijn = magazijn;
+			this.uitleenbaarItemId = UitleenbaarItemId;
+			this.magazijnId = magazijnId;
 			this.aantalTotaal = aantalTotaal.Value;
 			this.aantalBeschikbaar = aantalBeschikbaar.Value;
 			this.aantalGereserveerd = aantalGereserveerd.Value;
@@ -35,28 +35,28 @@
 			}
 		}
 
-		public virtual UitleenbaarItem UitleenbaarItem
+		public virtual string UitleenbaarItem
 		{
 			get
 			{
-				return uitleenbaarItem;
+				return uitleenbaarItemId;
 			}
 			set
 			{
-				this.uitleenbaarItem = value;
+				this.uitleenbaarItemId = value;
 			}
 		}
 
 
-		public virtual Magazijn Magazijn
+		public virtual string MagazijnId
 		{
 			get
 			{
-				return magazijn;
+				return magazijnId;
 			}
 			set
 			{
-				this.magazijn = value;
+				this.magazijnId = value;
 			}
 		}
 
@@ -100,7 +100,7 @@
 
 		public override string ToString()
 		{
-			return "BeschikbaarItem{" + "id='" + id + '\'' + ", uitleenbaarItem=" + uitleenbaarItem + ", magazijn=" + magazijn + ", aantalTotaal=" + aantalTotaal + ", aantalBeschikbaar=" + aantalBeschikbaar + ", aantalGereserveerd=" + aantalGereserveerd + '}';
+			return "BeschikbaarItem{" + "id='" + id + '\'' + ", uitleenbaarItem=" + uitleenbaarItemId + ", magazijn=" + magazijnId + ", aantalTotaal=" + aantalTotaal + ", aantalBeschikbaar=" + aantalBeschikbaar + ", aantalGereserveerd=" + aantalGereserveerd + '}';
 		}
 	}
 
