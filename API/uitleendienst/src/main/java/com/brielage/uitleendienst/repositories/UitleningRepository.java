@@ -23,4 +23,10 @@ public interface UitleningRepository extends CrudRepository<Uitlening, String> {
     List<Uitlening> findAllByEind (Date eind);
 
     List<Uitlening> findAllByTeruggebrachtOp (Date teruggebrachtOp);
+
+    List<Uitlening> findAllByOrganisatieIdIsIn (List<String> organisatieId);
+
+    List<Uitlening> findAllByMagazijnIdIsIn (List<String> magazijnId);
+
+    Optional<Uitlening> findByOrganisatieIdAndMagazijnId (String organisatieId, String magazijnId);
 }

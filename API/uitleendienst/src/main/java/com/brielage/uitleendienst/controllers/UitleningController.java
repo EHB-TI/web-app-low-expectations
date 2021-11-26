@@ -1,13 +1,17 @@
 package com.brielage.uitleendienst.controllers;
 
+import com.brielage.uitleendienst.models.*;
+import com.brielage.uitleendienst.repositories.MagazijnRepository;
+import com.brielage.uitleendienst.repositories.OrganisatieRepository;
 import com.brielage.uitleendienst.tools.APILogger;
-import com.brielage.uitleendienst.models.Uitlening;
 import com.brielage.uitleendienst.repositories.UitleningRepository;
+import com.brielage.uitleendienst.tools.RemoveDuplicates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,11 +21,40 @@ public class UitleningController {
     @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
     @Autowired
     private UitleningRepository uitleningRepository;
+    @Autowired
+    private OrganisatieRepository organisatieRepository;
+    @Autowired
+    private MagazijnRepository magazijnRepository;
 
-    @RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
-    public List<Uitlening> findAll() {
-        APILogger.logRequest("uitlening.findAll");
-        return uitleningRepository.findAll();
+    @GetMapping (value = { "/", "" })
+    public ResponseEntity findByProperties (
+            @RequestParam (required = false) List<String> organisatieId,
+            @RequestParam (required = false) List<String> magazijnId) {
+        List<Uitlening> returnValue = new ArrayList<>();
+
+        //return findAll() if no properties
+        if ((organisatieId == null || organisatieId.isEmpty())
+                && (magazijnId == null || magazijnId.isEmpty())) {
+            returnValue = uitleningRepository.findAll();
+
+            if (returnValue.isEmpty())
+                return ResponseEntity.notFound().build();
+            return ResponseEntity.ok().body(returnValue);
+        }
+
+        //add all elements found by the properties to returnValue
+        if (organisatieId != null && !organisatieId.isEmpty())
+            returnValue.addAll(uitleningRepository.findAllByOrganisatieIdIsIn(organisatieId));
+        if (magazijnId != null && !magazijnId.isEmpty())
+            returnValue.addAll(uitleningRepository.findAllByMagazijnIdIsIn(magazijnId));
+
+        if (returnValue.isEmpty())
+            return ResponseEntity.notFound().build();
+
+        //remove duplicates
+        returnValue = RemoveDuplicates.removeDuplicates(returnValue);
+
+        return ResponseEntity.ok().body(returnValue);
     }
 
     @GetMapping("/{id}")
@@ -41,6 +74,7 @@ public class UitleningController {
             if (!validateUitlening(uitlening))
                 return ResponseEntity.badRequest().build();
 
+            uitlening.setId(null);
             Uitlening u = uitleningRepository.save(uitlening);
 
             return new ResponseEntity(u, HttpStatus.CREATED);
@@ -92,10 +126,22 @@ public class UitleningController {
     }
 
     private boolean validateUitlening(Uitlening u) {
-        return u.getOrganisatie() != null
-                && u.getMagazijn() != null
-                && u.getStart() != null
-                && u.getEind() != null
-                && u.getTeruggebrachtOp() != null;
+        return validateOrganisatieId(u.getOrganisatieId())
+                && validateMagazijnId(u.getMagazijnId())
+                && (u.getStart() != null && !u.getStart().isEmpty())
+                && (u.getEind() != null && !u.getEind().isEmpty())
+                && (u.getTeruggebrachtOp() != null && !u.getTeruggebrachtOp().isEmpty());
+    }
+
+    private boolean validateOrganisatieId (String organisatieId) {
+        if (organisatieId == null || organisatieId.isEmpty()) return false;
+        Optional<Organisatie> o = organisatieRepository.findById(organisatieId);
+        return o.isPresent();
+    }
+
+    private boolean validateMagazijnId (String magazijnId) {
+        if (magazijnId == null || magazijnId.isEmpty()) return false;
+        Optional<Magazijn> m = magazijnRepository.findById(magazijnId);
+        return m.isPresent();
     }
 }
