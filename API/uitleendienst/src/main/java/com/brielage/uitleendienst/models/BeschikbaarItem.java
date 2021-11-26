@@ -19,9 +19,9 @@ public class BeschikbaarItem {
     public BeschikbaarItem (
             String uitleenbaarItemId,
             String magazijnId,
-            Integer aantalTotaal,
-            Integer aantalBeschikbaar,
-            Integer aantalGereserveerd) {
+            int aantalTotaal,
+            int aantalBeschikbaar,
+            int aantalGereserveerd) {
         this.uitleenbaarItemId  = uitleenbaarItemId;
         this.magazijnId         = magazijnId;
         this.aantalTotaal       = aantalTotaal;
@@ -61,32 +61,32 @@ public class BeschikbaarItem {
     }
 
     @DynamoDBAttribute
-    public Integer getAantalTotaal () {
+    public int getAantalTotaal () {
         return aantalTotaal;
     }
 
     @DynamoDBAttribute
-    public void setAantalTotaal (Integer aantalTotaal) {
+    public void setAantalTotaal (int aantalTotaal) {
         this.aantalTotaal = aantalTotaal;
     }
 
     @DynamoDBAttribute
-    public Integer getAantalBeschikbaar () {
+    public int getAantalBeschikbaar () {
         return aantalBeschikbaar;
     }
 
     @DynamoDBAttribute
-    public void setAantalBeschikbaar (Integer aantalBeschikbaar) {
+    public void setAantalBeschikbaar (int aantalBeschikbaar) {
         this.aantalBeschikbaar = aantalBeschikbaar;
     }
 
     @DynamoDBAttribute
-    public Integer getAantalGereserveerd () {
+    public int getAantalGereserveerd () {
         return aantalGereserveerd;
     }
 
     @DynamoDBAttribute
-    public void setAantalGereserveerd (Integer aantalGereserveerd) {
+    public void setAantalGereserveerd (int aantalGereserveerd) {
         this.aantalGereserveerd = aantalGereserveerd;
     }
 

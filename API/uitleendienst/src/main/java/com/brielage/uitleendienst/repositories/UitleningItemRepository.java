@@ -14,9 +14,13 @@ public interface UitleningItemRepository extends CrudRepository<UitleningItem, S
 
     Optional<UitleningItem> findById (String id);
 
-    List<UitleningItem> findAllByUitleningId (String id);
+    List<UitleningItem> findAllByUitleningId (String uitleningId);
 
-    List<UitleningItem> findAllByItemId (String id);
+    List<UitleningItem> findAllByUitleenbaarItemId (String uitleenbaarItemId);
 
-    List<UitleningItem> findAllByTeruggebrachtOp (Date teruggebrachtOp);
+    List<UitleningItem> findAllByUitleenbaarItemIdIsIn (List<String> uitleenbaarItemId);
+
+    List<UitleningItem> findAllByUitleningIdIsIn (List<String> uitleningId);
+
+    Optional<UitleningItem> findByUitleenbaarItemIdAndUitleningId (String uitleenbaarItemId, String uitleningId);
 }

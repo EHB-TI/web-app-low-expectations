@@ -1,7 +1,6 @@
 package com.brielage.uitleendienst.controllers;
 
 import com.brielage.uitleendienst.models.BeschikbaarItem;
-import com.brielage.uitleendienst.models.Categorie;
 import com.brielage.uitleendienst.models.Magazijn;
 import com.brielage.uitleendienst.models.UitleenbaarItem;
 import com.brielage.uitleendienst.repositories.BeschikbaarItemRepository;
@@ -134,9 +133,9 @@ public class BeschikbaarItemController {
     private boolean validateBeschikbaarItem(BeschikbaarItem b) {
         return validateMagazijnId(b.getMagazijnId())
                 && validateUitleenbaarItemId(b.getUitleenbaarItemId())
-                && b.getAantalTotaal() != null
-                && b.getAantalBeschikbaar() != null
-                && b.getAantalGereserveerd() != null;
+                && b.getAantalTotaal() > 0
+                && b.getAantalBeschikbaar() > 0
+                && b.getAantalGereserveerd() > 0;
     }
 
     private boolean validateUitleenbaarItemId (String uitleenbaarItemId) {

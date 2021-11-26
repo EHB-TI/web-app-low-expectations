@@ -1,13 +1,19 @@
 package com.brielage.uitleendienst.controllers;
 
+import com.brielage.uitleendienst.models.UitleenbaarItem;
+import com.brielage.uitleendienst.models.Uitlening;
+import com.brielage.uitleendienst.repositories.UitleenbaarItemRepository;
+import com.brielage.uitleendienst.repositories.UitleningRepository;
 import com.brielage.uitleendienst.tools.APILogger;
 import com.brielage.uitleendienst.models.UitleningItem;
 import com.brielage.uitleendienst.repositories.UitleningItemRepository;
+import com.brielage.uitleendienst.tools.RemoveDuplicates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,11 +23,41 @@ public class UitleningItemController {
     @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
     @Autowired
     private UitleningItemRepository uitleningItemRepository;
+    @Autowired
+    private UitleenbaarItemRepository uitleenbaarItemRepository;
+    @Autowired
+    private UitleningRepository uitleningRepository;
 
-    @RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
-    public List<UitleningItem> findAll() {
-        APILogger.logRequest("uitleningItem.findAll");
-        return uitleningItemRepository.findAll();
+    @GetMapping (value = { "/", "" })
+    public ResponseEntity findByProperties(
+            @RequestParam (required = false) List<String> uitleenbaarItemId,
+            @RequestParam (required = false) List<String> uitleningId) {
+        List<UitleningItem> returnValue = new ArrayList<>();
+
+        //return findAll() if no properties
+        if (uitleenbaarItemId == null || uitleenbaarItemId.isEmpty()
+                && (uitleningId == null || uitleningId.isEmpty())) {
+            returnValue = uitleningItemRepository.findAll();
+
+            if (returnValue.isEmpty())
+                return ResponseEntity.notFound().build();
+
+            return ResponseEntity.ok().body(returnValue);
+        }
+
+        //add all elements found by the properties to returnValue
+        if (uitleenbaarItemId != null && !uitleenbaarItemId.isEmpty())
+            returnValue.addAll(uitleningItemRepository.findAllByUitleenbaarItemIdIsIn(uitleenbaarItemId));
+        if (uitleningId != null && !uitleningId.isEmpty())
+            returnValue.addAll(uitleningItemRepository.findAllByUitleningIdIsIn(uitleningId));
+
+        if (returnValue.isEmpty())
+            return ResponseEntity.notFound().build();
+
+        //remove duplicates
+        returnValue = RemoveDuplicates.removeDuplicates(returnValue);
+
+        return ResponseEntity.ok().body(returnValue);
     }
 
     @GetMapping("/{id}")
@@ -41,6 +77,14 @@ public class UitleningItemController {
             if (!validateUitleningItem(uitleningItem))
                 return ResponseEntity.badRequest().build();
 
+            Optional<UitleningItem> optionalUitleningItem =
+                    uitleningItemRepository.findByUitleenbaarItemIdAndUitleningId(
+                            uitleningItem.getUitleenbaarItemId(), uitleningItem.getUitleningId());
+
+            if (optionalUitleningItem.isPresent())
+                return ResponseEntity.badRequest().build();
+
+            uitleningItem.setId(null);
             UitleningItem u = uitleningItemRepository.save(uitleningItem);
 
             return new ResponseEntity(u, HttpStatus.CREATED);
@@ -92,10 +136,22 @@ public class UitleningItemController {
     }
 
     private boolean validateUitleningItem(UitleningItem u) {
-        return u.getUitlening() != null
-                && u.getItem() != null
-                && u.getAantal() < 0
-                && u.getTeruggebrachtOp() != null
-                && u.getAantalTeruggebracht() < 0;
+        return validateUitleningId(u.getUitleningId())
+                && validateUitleenbaarItemId(u.getUitleenbaarItemId())
+                && u.getAantal() > 0
+                && (u.getTeruggebrachtOp() != null && !u.getTeruggebrachtOp().isEmpty())
+                && u.getAantalTeruggebracht() > 0;
+    }
+
+    private boolean validateUitleningId (String uitleningId) {
+        if (uitleningId == null || uitleningId.isEmpty()) return false;
+        Optional<Uitlening> u = uitleningRepository.findById(uitleningId);
+        return u.isPresent();
+    }
+
+    private boolean validateUitleenbaarItemId (String uitleenbaarItemId) {
+        if (uitleenbaarItemId == null || uitleenbaarItemId.isEmpty()) return false;
+        Optional<UitleenbaarItem> ui = uitleenbaarItemRepository.findById(uitleenbaarItemId);
+        return ui.isPresent();
     }
 }

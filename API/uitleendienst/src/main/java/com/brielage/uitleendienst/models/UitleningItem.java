@@ -10,22 +10,22 @@ import java.util.Date;
 @DynamoDBTable (tableName = "uitleningItem")
 public class UitleningItem {
     private String          id;
-    private Uitlening       uitlening;
-    private UitleenbaarItem item;
+    private String          uitleningId;
+    private String          uitleenbaarItemId;
     private int             aantal;
-    private String            teruggebrachtOp;
+    private String          teruggebrachtOp;
     private int             aantalTeruggebracht;
 
     public UitleningItem () {}
 
     public UitleningItem (
-            Uitlening uitlening,
-            UitleenbaarItem item,
+            String uitleningId,
+            String uitleenbaarItemId,
             int aantal,
             String teruggebrachtOp,
             int aantalTeruggebracht) {
-        this.uitlening           = uitlening;
-        this.item                = item;
+        this.uitleningId         = uitleningId;
+        this.uitleenbaarItemId   = uitleenbaarItemId;
         this.aantal              = aantal;
         this.teruggebrachtOp     = teruggebrachtOp;
         this.aantalTeruggebracht = aantalTeruggebracht;
@@ -43,23 +43,23 @@ public class UitleningItem {
     }
 
     @DynamoDBAttribute
-    public Uitlening getUitlening () {
-        return uitlening;
+    public String getUitleningId () {
+        return uitleningId;
     }
 
     @DynamoDBAttribute
-    public void setUitlening (Uitlening uitlening) {
-        this.uitlening = uitlening;
+    public void setUitleningId (String uitlening) {
+        this.uitleningId = uitleningId;
     }
 
     @DynamoDBAttribute
-    public UitleenbaarItem getItem () {
-        return item;
+    public String getUitleenbaarItemId () {
+        return uitleenbaarItemId;
     }
 
     @DynamoDBAttribute
-    public void setItem (UitleenbaarItem item) {
-        this.item = item;
+    public void setUitleenbaarItemId (String item) {
+        this.uitleenbaarItemId = uitleenbaarItemId;
     }
 
     @DynamoDBAttribute
@@ -96,8 +96,8 @@ public class UitleningItem {
     public String toString () {
         return "UitleningItem{" +
                 "id='" + id + '\'' +
-                ", uitlening=" + uitlening +
-                ", item=" + item +
+                ", uitleningId=" + uitleningId +
+                ", uitleenbaarItemId=" + uitleenbaarItemId +
                 ", aantal=" + aantal +
                 ", teruggebrachtOp=" + teruggebrachtOp +
                 ", aantalTeruggebracht=" + aantalTeruggebracht +
