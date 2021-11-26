@@ -1,0 +1,42 @@
+﻿@using WebApplication_Uitleendienst.Models.ViewModels.Categories
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model CategoryViewModel
+
+<div class="category-wrapper">
+    <ul class="navbar-nav d-flex align-items-center float-left">
+        <li>
+            <a class="nav-link btn btn-dark px-2 py-1" asp-area="Admin" asp-controller="Category" asp-action="Create" title="Category">
+                <i class="fa-solid fa-plus"></i>
+                <i class="fa-solid fa-sitemap"></i>
+            </a>
+        </li>
+    </ul>
+
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Naam</th>
+                <th scope="col">Detail</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cat in Model.Categories) {
+            <tr>
+                <td>@cat.Naam</td>
+                <td>
+                    <a class="nav-link btn btn-light px-2 py-1" asp-area="Admin" asp-controller="Category" asp-action="Detail" asp-route-id="@cat.Id" title="Category">
+
+                        <i class="fa-solid fa-eye"></i>
+                    </a>
+                </td>
+            </tr>
+            }
+
+        </tbody>
+    </table>
+</div>
+
