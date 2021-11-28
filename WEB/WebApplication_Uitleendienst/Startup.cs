@@ -74,6 +74,14 @@ namespace WebApplication_Uitleendienst {
 
             services.AddMvc().AddJsonOptions(options =>
                     options.JsonSerializerOptions.IgnoreNullValues = true);
+
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -94,6 +102,8 @@ namespace WebApplication_Uitleendienst {
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions {
                 ForwardedHeaders = ForwardedHeaders.XForwardedProto
