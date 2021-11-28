@@ -28,7 +28,7 @@
         "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation"
       },
       "dotnetRunMessages": "true",
-      "applicationUrl": "http://peahi.be:80;https://peahi.be:443"
+      "applicationUrl": "https:--172.31.39.74:443"
     }
   }
 }
