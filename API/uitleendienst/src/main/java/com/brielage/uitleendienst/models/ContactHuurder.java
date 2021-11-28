@@ -8,18 +8,18 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 @DynamoDBTable (tableName = "contactHuurder")
 public class ContactHuurder {
     private String      id;
-    private Persoon     persoon;
-    private Organisatie organisatie;
+    private String      persoonId;
+    private String      organisatieId;
     private String      opmerking;
 
     public ContactHuurder () {}
 
     public ContactHuurder (
-            Persoon persoon,
-            Organisatie organisatie,
+            String persoonId,
+            String organisatieId,
             String opmerking) {
-        this.persoon     = persoon;
-        this.organisatie = organisatie;
+        this.persoonId = persoonId;
+        this.organisatieId = organisatieId;
         this.opmerking   = opmerking;
     }
 
@@ -35,23 +35,23 @@ public class ContactHuurder {
     }
 
     @DynamoDBAttribute
-    public Persoon getPersoon () {
-        return persoon;
+    public String getPersoonId() {
+        return persoonId;
     }
 
     @DynamoDBAttribute
-    public void setPersoon (Persoon persoon) {
-        this.persoon = persoon;
+    public void setPersoonId(String persoonId) {
+        this.persoonId = persoonId;
     }
 
     @DynamoDBAttribute
-    public Organisatie getOrganisatie () {
-        return organisatie;
+    public String getOrganisatieId() {
+        return organisatieId;
     }
 
     @DynamoDBAttribute
-    public void setOrganisatie (Organisatie organisatie) {
-        this.organisatie = organisatie;
+    public void setOrganisatieId(String organisatieId) {
+        this.organisatieId = organisatieId;
     }
 
     @DynamoDBAttribute
@@ -68,8 +68,8 @@ public class ContactHuurder {
     public String toString () {
         return "ContactHuurder{" +
                 "id='" + id + '\'' +
-                ", persoon=" + persoon +
-                ", organisatie=" + organisatie +
+                ", persoonId=" + persoonId +
+                ", organisatieId=" + organisatieId +
                 ", opmerking='" + opmerking + '\'' +
                 '}';
     }
