@@ -1,0 +1,44 @@
+﻿@model WebApplication_Uitleendienst.Models.ViewModels.Cart.CartViewModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@if (Model.Cart != null) {
+    <table class="table cart">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Product</th>
+                <th scope="col">Magazijnlocatie</th>
+                <th scope="col">Aantal</th>
+                <th scope="col">Prijs</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var cartItem in Model.Cart) {
+                <tr>
+                    <td><img src="~/images/default.png" class="img-fluid d-none d-md-block w-50" /></td>
+                    <td>@cartItem.Product.Naam</td>
+                    <td>@cartItem.Magazijn.Naam</td>
+                    <td>@cartItem.Amount</td>
+                    <td>€@cartItem.Product.Prijs</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+} else {
+    <div class="row">
+        <div class="col-12 d-flex justify-content-center align-items-center">
+            <h4>Uw winkelwagen bevat nog geen items.</h4>
+        </div>
+    </div>
+}
+
+
+
+
+
+

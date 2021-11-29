@@ -28,13 +28,13 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
                         <li class="nav-item">
-                            <a class="nav-link link text-black" href="#!">
-                                Overzicht
+                            <a class="nav-link link text-black" href="/">
+                                Home
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link link text-black" href="#!">
-                                Services
+                            <a class="nav-link link text-black" href="/catalogue/catalogue">
+                                Catalogue
                             </a>
                         </li>
                     </ul>
@@ -52,7 +52,14 @@
                     </div>
 
                     @await Component.InvokeAsync("Authentication")
-
+                    <ul class="navbar-nav d-flex align-items-center">
+                        <li class="nav-item">
+                            <a href="/cart/index">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span>@await Component.InvokeAsync("CartCounter")</span>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </nav>
