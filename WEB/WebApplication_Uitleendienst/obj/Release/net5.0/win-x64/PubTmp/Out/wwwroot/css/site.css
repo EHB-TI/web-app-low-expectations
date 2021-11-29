@@ -66,7 +66,6 @@ body {
 }
 
 .footer {
-    position: absolute;
     bottom: 0;
     width: 100%;
     white-space: nowrap;
@@ -83,6 +82,10 @@ i {
     font-size: 19px;
 }
 
+
+/* FONTS _____________ */
+
+
 /* CATALOGUE _______________*/
 
 
@@ -92,9 +95,8 @@ i {
 
 /* PRODUCT DETAIL ______________*/
 
-/*****************globals*************/
 body {
-    font-family: 'open sans';
+    font-family: 'Montserrat Alternates', sans-serif;
     overflow-x: hidden;
 }
 

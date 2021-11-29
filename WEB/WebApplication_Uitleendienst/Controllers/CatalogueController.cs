@@ -32,10 +32,15 @@ namespace WebApplication_Uitleendienst.Controllers {
             model.Product = item;
             model.Magazijnen = new List<Magazijn>();
             model.BeschikbareItems = _beschikbaarItemService.GetAll("uitleenbaarItemId", item.Id);
-            model.BeschikbareItems.ToList().ForEach(s => {
-                model.TotalStock += (int)s.AantalTotaal;
-                model.Magazijnen.Add(_magazijnService.Get(s.MagazijnId));
-            });
+            if (model.BeschikbareItems == null) {
+                model.Message = "Er is geen product gevonden";
+                model.Level = Models.ViewModels.InfoLevel.danger;
+            } else {
+                model.BeschikbareItems.ToList().ForEach(s => {
+                    model.TotalStock += (int)s.AantalTotaal;
+                    model.Magazijnen.Add(_magazijnService.Get(s.MagazijnId));
+                });
+            }
 
             return View(model);
         }

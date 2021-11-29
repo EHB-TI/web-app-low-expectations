@@ -25,9 +25,11 @@ function AddToCart($elem, $url) {
             if (data == "not_authenticated") {
                 $infoText.removeClass("hidden");
                 $infoText.find("label").text("Gelieve je aan te melden/registreren om producten toe te voegen aan het winkelmandje.");
+                $infoText.append("<a href='/Home/Login' class='btn btn-dark'>Inloggen</a>");
             } else if (data == "success") {
                 $infoText.removeClass("hidden");
                 $infoText.find("label").text("Succesvol toegevoegd aan het winkelmandje.");
+                $infoText.append("<a href='/cart' class='btn btn-dark'>Bekijk winkemandje</a>");
                 UpdateCart();
             }
         },

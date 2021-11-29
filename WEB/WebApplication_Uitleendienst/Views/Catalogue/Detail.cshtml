@@ -5,59 +5,66 @@
     var count = 0;
 }
 <div class="container">
-    <div class="wrapper row detail">
-        <input type="hidden" value="@Model.Product.Id" class="product-id" />
-        <div class="hidden info-text alert alert-warning">
-            <label type="text" class="form-control"></label>
+    @if (!string.IsNullOrEmpty(Model.Message)) {
+        <div class="alert alert-@(Model.Level.ToString())">
+            @Model.Message
         </div>
-        <div class="preview col-md-6">
+    }
+    @if (Model.BeschikbareItems != null) {<div class="wrapper row detail">
+            <input type="hidden" value="@Model.Product.Id" class="product-id" />
+            <div class="hidden info-text alert alert-warning">
+                <label type="text"></label>
+            </div>
+            <div class="preview col-md-6">
 
-            <div class="preview-pic tab-content">
-                <div class="tab-pane active" id="pic-1"><img src="~/images/default.png" /></div>
-                <div class="tab-pane" id="pic-2"><img src="~/images/default.png" /></div>
-                <div class="tab-pane" id="pic-3"><img src="~/images/default.png" /></div>
-                <div class="tab-pane" id="pic-4"><img src="~/images/default.png" /></div>
-                <div class="tab-pane" id="pic-5"><img src="~/images/default.png" /></div>
-            </div>
-            <ul class="preview-thumbnail nav nav-tabs">
-                <li class="active"><a data-target="#pic-1" data-toggle="tab"><img src="~/images/default.png" /></a></li>
-                <li><a data-target="#pic-2" data-toggle="tab"><img src="~/images/default.png" /></a></li>
-                <li><a data-target="#pic-3" data-toggle="tab"><img src="~/images/default.png" /></a></li>
-                <li><a data-target="#pic-4" data-toggle="tab"><img src="~/images/default.png" /></a></li>
-                <li><a data-target="#pic-5" data-toggle="tab"><img src="~/images/default.png" /></a></li>
-            </ul>
+                <div class="preview-pic tab-content">
+                    <div class="tab-pane active" id="pic-1"><img src="~/images/default.png" /></div>
+                    <div class="tab-pane" id="pic-2"><img src="~/images/default.png" /></div>
+                    <div class="tab-pane" id="pic-3"><img src="~/images/default.png" /></div>
+                    <div class="tab-pane" id="pic-4"><img src="~/images/default.png" /></div>
+                    <div class="tab-pane" id="pic-5"><img src="~/images/default.png" /></div>
+                </div>
+                <ul class="preview-thumbnail nav nav-tabs">
+                    <li class="active"><a data-target="#pic-1" data-toggle="tab"><img src="~/images/default.png" /></a></li>
+                    <li><a data-target="#pic-2" data-toggle="tab"><img src="~/images/default.png" /></a></li>
+                    <li><a data-target="#pic-3" data-toggle="tab"><img src="~/images/default.png" /></a></li>
+                    <li><a data-target="#pic-4" data-toggle="tab"><img src="~/images/default.png" /></a></li>
+                    <li><a data-target="#pic-5" data-toggle="tab"><img src="~/images/default.png" /></a></li>
+                </ul>
 
+            </div>
+            <div class="details col-md-6">
+                <h3 class="product-title">@Model.Product.Naam</h3>
+                <div class="stock">
+                    <h6><span class="font-weight-bold">Totale stock: </span> @Model.TotalStock</h6>
+                    <h6 class="font-weight-bold">Kies een magazijn: </h6>
+                    @foreach (var magazijn in Model.Magazijnen) {
+                        <label class="w-100">
+                            <input type="radio" @(count == 0 ? "checked='checked'" : "") name="magazijn" value="@magazijn.Id" />
+                            @magazijn.Naam : @(Model.BeschikbareItems.Where(s => s.MagazijnId == magazijn.Id).FirstOrDefault().AantalBeschikbaar > 0 ? Html.Raw("<span class='beschikbaar'>Beschikbaar</span>") : Html.Raw("<span class='niet-beschikbaar'Niet beschikaar</span>"))
+                        </label>
+                        count++;
+                    }
+                    <div class="amount">
+                        <h6 class="font-weight-bold">Aantal: </h6>
+                        <select class="form-control" name="select-amount">
+                            <option selected>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                    </div>
+                </div>
+                <p class="product-description">Suspendisse quos? Tempus cras iure temporibus? Eu laudantium cubilia sem sem! Repudiandae et! Massa senectus enim minim sociosqu delectus posuere.</p>
+                <h4 class="price">Prijs: <span>€@Model.Product.Prijs</span></h4>
+                <div class="action">
+                    <a href="#!" class="add-to-cart m-0 btn btn-dark" onclick="AddToCart($(this), '@Url.Action("AddToCart", "Catalogue")')">Toevoegen aan winkelmandje</a>
+                    <button class="like btn btn-dark" type="button"><span class="fa fa-heart"></span></button>
+                </div>
+            </div>
         </div>
-        <div class="details col-md-6">
-            <h3 class="product-title">@Model.Product.Naam</h3>
-            <div class="stock">
-                <h6><span>Totale stock: </span> @Model.TotalStock</h6>
-                <h6>Kies een magazijn: </h6>
-                @foreach (var magazijn in Model.Magazijnen) {                
-                    <label class="form-control">
-                        <input type="radio" @(count == 0 ? "checked='checked'" : "") name="magazijn" value="@magazijn.Id"/>
-                        @magazijn.Naam : @(Model.BeschikbareItems.Where(s => s.MagazijnId == magazijn.Id).FirstOrDefault().AantalBeschikbaar > 0 ? Html.Raw("<span class='beschikbaar'>Beschikbaar</span>") : Html.Raw("<span class='niet-beschikbaar'Niet beschikaar</span>"))
-                    </label>
-                    count++;
-                }
-            </div>
-            <div class="amount">
-                <select class="form-control">
-                    <option selected>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </select>
-            </div>
-            <p class="product-description">Suspendisse quos? Tempus cras iure temporibus? Eu laudantium cubilia sem sem! Repudiandae et! Massa senectus enim minim sociosqu delectus posuere.</p>
-            <h4 class="price">Prijs: <span>€@Model.Product.Prijs</span></h4>
-            <div class="action">
-                <a href="#!" class="add-to-cart m-0 btn btn-dark" onclick="AddToCart($(this), '@Url.Action("AddToCart", "Catalogue")')">Toevoegen aan winkelmandje</a>
-                <button class="like btn btn-dark" type="button"><span class="fa fa-heart"></span></button>
-            </div>
-        </div>
-    </div>
+    }
 
 </div>
 
