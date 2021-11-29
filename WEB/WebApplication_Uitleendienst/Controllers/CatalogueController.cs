@@ -41,9 +41,13 @@ namespace WebApplication_Uitleendienst.Controllers {
         }
         public IActionResult Catalogue(string categoryId) {
             var model = new CatalogueViewModel();
-            if (categoryId != null)
-                model.Products = _uitleenbaarItemService.GetAll("categorieId", categoryId);
-            else
+            if (categoryId != null) {
+                var items = _uitleenbaarItemService.GetAll("categorieId", categoryId);
+                if (items == null)
+                    model.Products = _uitleenbaarItemService.GetAll();
+                else
+                    model.Products = items;
+            } else
                 model.Products = _uitleenbaarItemService.GetAll();
             model.Categories = _categorieService.GetAll();
             return View(model);
@@ -72,7 +76,7 @@ namespace WebApplication_Uitleendienst.Controllers {
                 // check for any existing occurences
                 // if so, add the old amount to the new amount, and remove the occurence from list
                 var existingCartItem = cart.Where(s => s.ProductId == cartItem.ProductId && s.MagazijnId == cartItem.MagazijnId).FirstOrDefault();
-                if (existingCartItem != null){
+                if (existingCartItem != null) {
                     cartItem.Amount = (int.Parse(cartItem.Amount) + int.Parse(existingCartItem.Amount)).ToString();
                     cart.Remove(existingCartItem);
                 }

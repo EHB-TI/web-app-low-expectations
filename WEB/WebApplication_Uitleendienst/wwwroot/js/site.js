@@ -28,6 +28,7 @@ function AddToCart($elem, $url) {
             } else if (data == "success") {
                 $infoText.removeClass("hidden");
                 $infoText.find("label").text("Succesvol toegevoegd aan het winkelmandje.");
+                UpdateCart();
             }
         },
         error: function () {
@@ -36,4 +37,7 @@ function AddToCart($elem, $url) {
     });
 };
 
+function UpdateCart() {
+   
+}
 

@@ -54,9 +54,9 @@
                     @await Component.InvokeAsync("Authentication")
                     <ul class="navbar-nav d-flex align-items-center">
                         <li class="nav-item">
-                            <a href="/cart/index">
+                            <a href="/cart/index" class="text-dark">
                                 <i class="fas fa-shopping-cart"></i>
-                                <span>@await Component.InvokeAsync("CartCounter")</span>
+                                <span>@await Component.InvokeAsync("Cart")</span>
                             </a>
                         </li>
                     </ul>

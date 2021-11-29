@@ -34,5 +34,9 @@ namespace WebApplication_Uitleendienst.Controllers {
             }
             return View(model);
         }
+
+        public IActionResult GetCartViewComponent() {
+            return ViewComponent("Cart");
+        }
     }
 }

@@ -61,16 +61,20 @@ namespace WebApplication_Uitleendienst.Services {
             var key = typeof(TEntity).Name + "_GetAll_" + DateTime.Now.ToString("yy-MM-dd");
 
             if (!_cache.TryGetValue(key, out IEnumerable<TEntity> items) || !cache) {
-                var request = WebRequest.Create(url);
-                request.Method = "GET";
-                var response = request.GetResponse();
-                using (Stream dataStream = response.GetResponseStream()) {
-                    // Open the stream using a StreamReader for easy access.
-                    var reader = new StreamReader(dataStream);
-                    // Read the content.
-                    var responseFromServer = reader.ReadToEnd();
-                    // convert to entity
-                    _cache.Set(key, JsonConvert.DeserializeObject<IEnumerable<TEntity>>(responseFromServer));
+                try {
+                    var request = WebRequest.Create(url);
+                    request.Method = "GET";
+                    var response = request.GetResponse();
+                    using (Stream dataStream = response.GetResponseStream()) {
+                        // Open the stream using a StreamReader for easy access.
+                        var reader = new StreamReader(dataStream);
+                        // Read the content.
+                        var responseFromServer = reader.ReadToEnd();
+                        // convert to entity
+                        _cache.Set(key, JsonConvert.DeserializeObject<IEnumerable<TEntity>>(responseFromServer));
+                    }
+                } catch (Exception ex) {
+                    return null;
                 }
             }
 

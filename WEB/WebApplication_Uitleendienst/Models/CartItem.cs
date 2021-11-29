@@ -9,6 +9,7 @@ namespace WebApplication_Uitleendienst.Models {
         public string ProductId { get; set; }
         public string MagazijnId { get; set; }
         public string Amount { get; set; }
+        public float Total => Product != null ? (float)Product.Prijs * float.Parse(Amount) : 0;
         public UitleenbaarItem Product { get; set; }
         public Magazijn Magazijn { get; set; }
     }
