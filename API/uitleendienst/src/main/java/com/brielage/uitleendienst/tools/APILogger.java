@@ -15,5 +15,9 @@ public enum APILogger {
             String s,
             String j) {logger.info("request " + s + ": " + j);}
 
-    public static void logRequest (String s) {logger.info("request " + s);}
+    public static void logRequest (String s)         {logger.info("request " + s);}
+
+    public static void logException (final String s) {logger.info("exception: " + s);}
+
+    public static void logFail (String s)            {logger.info("fail: " + s);}
 }
