@@ -47,7 +47,7 @@ public class VerantwoordelijkeMagazijnController {
 
         //add all elements found by the properties to returnValue
         if (persoondId != null && !persoondId.isEmpty())
-            returnValue.addAll(verantwoordelijkeMagazijnRepository.findAllByPersoondIdIsIn(persoondId));
+            returnValue.addAll(verantwoordelijkeMagazijnRepository.findAllByPersoonIdIsIn(persoondId));
         if (magazijnId != null && !magazijnId.isEmpty())
             returnValue.addAll(verantwoordelijkeMagazijnRepository.findAllByMagazijnIdIsIn(magazijnId));
 

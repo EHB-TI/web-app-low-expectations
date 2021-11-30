@@ -45,7 +45,7 @@ public class ContactHuurderController {
 
         //add all elements found by the properties to returnValue
         if (persoondId != null && !persoondId.isEmpty())
-            returnValue.addAll(contactHuurderRepository.findAllByPersoondIdIsIn(persoondId));
+            returnValue.addAll(contactHuurderRepository.findAllByPersoonIdIsIn(persoondId));
         if (organisatieId != null && !organisatieId.isEmpty())
             returnValue.addAll(contactHuurderRepository.findAllByOrganisatieIdIsIn(organisatieId));
 
