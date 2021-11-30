@@ -1,10 +1,12 @@
 package com.brielage.uitleendienst.controllers;
 
-import com.brielage.uitleendienst.models.*;
+import com.brielage.uitleendienst.models.Magazijn;
+import com.brielage.uitleendienst.models.Organisatie;
+import com.brielage.uitleendienst.models.Uitlening;
 import com.brielage.uitleendienst.repositories.MagazijnRepository;
 import com.brielage.uitleendienst.repositories.OrganisatieRepository;
-import com.brielage.uitleendienst.tools.APILogger;
 import com.brielage.uitleendienst.repositories.UitleningRepository;
+import com.brielage.uitleendienst.tools.APILogger;
 import com.brielage.uitleendienst.tools.RemoveDuplicates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,8 +40,10 @@ public class UitleningController {
             returnValue = uitleningRepository.findAll();
 
             if (returnValue.isEmpty())
-                return ResponseEntity.notFound().build();
-            return ResponseEntity.ok().body(returnValue);
+                return ResponseEntity.notFound()
+                                     .build();
+            return ResponseEntity.ok()
+                                 .body(returnValue);
         }
 
         //add all elements found by the properties to returnValue
@@ -49,22 +53,26 @@ public class UitleningController {
             returnValue.addAll(uitleningRepository.findAllByMagazijnIdIsIn(magazijnId));
 
         if (returnValue.isEmpty())
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.notFound()
+                                 .build();
 
         //remove duplicates
         returnValue = RemoveDuplicates.removeDuplicates(returnValue);
 
-        return ResponseEntity.ok().body(returnValue);
+        return ResponseEntity.ok()
+                             .body(returnValue);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity findById(@PathVariable String id) {
+    @GetMapping ("/{id}")
+    public ResponseEntity findById (@PathVariable String id) {
         APILogger.logRequest("uitlening.findById", id);
         Optional<Uitlening> u = uitleningRepository.findById(id);
 
         if (u.isPresent())
-            return ResponseEntity.ok().body(u.get());
-        return ResponseEntity.notFound().build();
+            return ResponseEntity.ok()
+                                 .body(u.get());
+        return ResponseEntity.notFound()
+                             .build();
     }
 
     @PostMapping (value = { "/", "" })
@@ -72,34 +80,42 @@ public class UitleningController {
         APILogger.logRequest("uitlening.create", uitlening.toString());
         try {
             if (!validateUitlening(uitlening))
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.badRequest()
+                                     .build();
 
             uitlening.setId(null);
             Uitlening u = uitleningRepository.save(uitlening);
 
             return new ResponseEntity(u, HttpStatus.CREATED);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest()
+                                 .build();
         }
     }
 
-    @PutMapping(value = "/{id}")
-    public ResponseEntity put (@PathVariable String id, @RequestBody Uitlening uitlening) {
+    @PutMapping (value = "/{id}")
+    public ResponseEntity put (
+            @PathVariable String id,
+            @RequestBody Uitlening uitlening) {
         APILogger.logRequest("uitlening.put", id);
         try {
             if (!validateUitleningId(uitlening))
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.badRequest()
+                                     .build();
 
             Optional<Uitlening> u = uitleningRepository.findById(id);
 
             if (u.isEmpty())
-                return ResponseEntity.notFound().build();
+                return ResponseEntity.notFound()
+                                     .build();
 
-            uitlening.setId(u.get().getId());
+            uitlening.setId(u.get()
+                             .getId());
             Uitlening result = uitleningRepository.save(uitlening);
             return new ResponseEntity(result, HttpStatus.CREATED);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest()
+                                 .build();
         }
     }
 
@@ -110,27 +126,30 @@ public class UitleningController {
             Optional<Uitlening> u = uitleningRepository.findById(id);
 
             if (u.isEmpty())
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.badRequest()
+                                     .build();
 
             uitleningRepository.delete(u.get());
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.noContent()
+                                 .build();
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest()
+                                 .build();
         }
     }
 
-    private boolean validateUitleningId(Uitlening u) {
-        if (u.getId().isEmpty())
+    private boolean validateUitleningId (Uitlening u) {
+        if (u.getId()
+             .isEmpty())
             return false;
         return validateUitlening(u);
     }
 
-    private boolean validateUitlening(Uitlening u) {
+    private boolean validateUitlening (Uitlening u) {
         return validateOrganisatieId(u.getOrganisatieId())
                 && validateMagazijnId(u.getMagazijnId())
-                && (u.getStart() != null && !u.getStart().isEmpty())
-                && (u.getEind() != null && !u.getEind().isEmpty())
-                && (u.getTeruggebrachtOp() != null && !u.getTeruggebrachtOp().isEmpty());
+                && (u.getStart() != null && !u.getStart()
+                                              .isEmpty());
     }
 
     private boolean validateOrganisatieId (String organisatieId) {
