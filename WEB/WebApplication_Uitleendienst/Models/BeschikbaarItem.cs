@@ -1,4 +1,6 @@
-﻿namespace WebApplication_Uitleendienst
+﻿using Newtonsoft.Json;
+
+namespace WebApplication_Uitleendienst
 {
 
 	public class BeschikbaarItem
@@ -22,7 +24,7 @@
 			this.aantalBeschikbaar = aantalBeschikbaar.Value;
 			this.aantalGereserveerd = aantalGereserveerd.Value;
 		}
-
+		[JsonProperty("id")]
 		public virtual string Id
 		{
 			get
@@ -34,8 +36,8 @@
 				this.id = value;
 			}
 		}
-
-		public virtual string UitleenbaarItem
+		[JsonProperty("uitleenbaarItemId")]
+		public virtual string UitleenbaarItemId
 		{
 			get
 			{
@@ -47,7 +49,7 @@
 			}
 		}
 
-
+		[JsonProperty("magazijnId")]
 		public virtual string MagazijnId
 		{
 			get
@@ -59,7 +61,7 @@
 				this.magazijnId = value;
 			}
 		}
-
+		[JsonProperty("aantalTotaal")]
 		public virtual int? AantalTotaal
 		{
 			get
@@ -71,7 +73,7 @@
 				this.aantalTotaal = value.Value;
 			}
 		}
-
+		[JsonProperty("aantalBeschikbaar")]
 		public virtual int? AantalBeschikbaar
 		{
 			get
@@ -84,7 +86,7 @@
 			}
 		}
 
-
+		[JsonProperty("aantalGereserveerd")]
 		public virtual int? AantalGereserveerd
 		{
 			get
@@ -97,11 +99,6 @@
 			}
 		}
 
-
-		public override string ToString()
-		{
-			return "BeschikbaarItem{" + "id='" + id + '\'' + ", uitleenbaarItem=" + uitleenbaarItemId + ", magazijn=" + magazijnId + ", aantalTotaal=" + aantalTotaal + ", aantalBeschikbaar=" + aantalBeschikbaar + ", aantalGereserveerd=" + aantalGereserveerd + '}';
-		}
 	}
 
 }

@@ -470,3 +470,14 @@ C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-exp
 C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\WebApplication_Uitleendienst.genruntimeconfig.cache
 C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\Razor\Views\Cart\Index.cshtml.g.cs
 C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\Razor\Views\Shared\Components\Cart\_CartCounter.cshtml.g.cs
+C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\Razor\Areas\Admin\Views\Category\Edit.cshtml.g.cs
+C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\Razor\Views\Shared\Components\Message\_Message.cshtml.g.cs
+C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\Razor\Areas\Admin\Views\Product\Detail.cshtml.g.cs
+C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\Razor\Areas\Admin\Views\Product\Edit.cshtml.g.cs
+C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\Razor\Areas\Admin\Views\Product\Index.cshtml.g.cs
+C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\Razor\Areas\Admin\Views\Magazijn\Detail.cshtml.g.cs
+C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\Razor\Areas\Admin\Views\Magazijn\Edit.cshtml.g.cs
+C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\Razor\Areas\Admin\Views\Magazijn\Index.cshtml.g.cs
+C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\Razor\Areas\Admin\Views\Product\CreateBeschikbaarItem.cshtml.g.cs
+C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\Razor\Areas\Admin\Views\Product\CreateUitleenbaarItem.cshtml.g.cs
+C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\Razor\Areas\Admin\Views\Magazijn\Create.cshtml.g.cs

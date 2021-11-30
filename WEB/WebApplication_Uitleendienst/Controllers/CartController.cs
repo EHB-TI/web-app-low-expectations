@@ -38,7 +38,7 @@ namespace WebApplication_Uitleendienst.Controllers {
             return View(model);
         }
 
-        public IActionResult CreateUitlening() {
+        public IActionResult CreateUitlening(List<CartItem> Cart) {
             var model = new CartViewModel();
 
             if (!User.Identity.IsAuthenticated) {
@@ -56,7 +56,7 @@ namespace WebApplication_Uitleendienst.Controllers {
                     var cart = JsonConvert.DeserializeObject<List<CartItem>>(currentCart);
 
                     // create uitlening 
-                    _uitleningService.Save() // implementatie dient nog via put te gebeuren
+                    // _uitleningService.Save() implementatie dient nog via put te gebeuren
                     // create uitleningitems for each cartitem with the received uitleningId
                 } else {
                     model.Message = "Gelieve eerst items toe te voegen aan het winkelmandje.";
@@ -68,8 +68,10 @@ namespace WebApplication_Uitleendienst.Controllers {
             } catch (Exception ex) {
                 model.Message = ex.Message;
                 model.Level = Models.ViewModels.InfoLevel.info;
-                RedirectToAction("Index", model);
+
             }
+
+            return RedirectToAction("Index", model);
         }
 
         public IActionResult GetCartViewComponent() {

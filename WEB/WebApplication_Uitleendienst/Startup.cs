@@ -53,6 +53,8 @@ namespace WebApplication_Uitleendienst {
             services.AddTransient<IBaseService<BeschikbaarItem>, BaseService<BeschikbaarItem>>();
             services.AddTransient<IBaseService<UitleenbaarItem>, BaseService<UitleenbaarItem>>();
             services.AddTransient<IBaseService<Magazijn>, BaseService<Magazijn>>();
+            services.AddTransient<IBaseService<Uitlening>, BaseService<Uitlening>>();
+            services.AddTransient<IBaseService<UitleningItem>, BaseService<UitleningItem>>();
 
             services.AddAuthentication(options => {
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;

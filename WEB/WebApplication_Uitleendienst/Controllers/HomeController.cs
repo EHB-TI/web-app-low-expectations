@@ -16,30 +16,7 @@ using WebApplication_Uitleendienst.Services.Interfaces;
 namespace WebApplication_Uitleendienst.Controllers {
     public class HomeController : BaseController {
         private readonly ILogger<HomeController> _logger;
-        private readonly IBaseService<Categorie> _categorieService;
-        private IEnumerable<Categorie> _categories => new List<Categorie>() {
-                new Categorie {
-                    Naam = "Geluid", 
-                    Omschrijving = "Luidsprekers, Mengpanelen, Afspeelapparatuur, Microfoons, ...",
-                    Image = "/images/categories/Geluid.jpg"
-                },
-                new Categorie {
-                    Naam = "Licht", 
-                    Omschrijving = "Conventionele spots, Ledspots, Lichteffecten, Dimmers, Sturingen/tafels",
-                    Image = "/images/categories/licht.jpg"
-                },
-                new Categorie {
-                    Naam = "Video",
-                    Omschrijving = "Camera's, Afspeelapparatuur, Mengpanelen, Projectoren, Projectieschermen",
-                    Image = "/images/categories/video.jpg"
-                },
-                new Categorie {
-                    Naam="Kabels", 
-                    Omschrijving = "XLR (licht/ geluid), Geluid, Licht, Video, Stroom",
-                    Image = "/images/categories/kabels.jpg"
-                }
-            };
-        
+        private readonly IBaseService<Categorie> _categorieService;        
         
         public HomeController(ILogger<HomeController> logger, IBaseService<Categorie> catService) {
             _logger = logger;

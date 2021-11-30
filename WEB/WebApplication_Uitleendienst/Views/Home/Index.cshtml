@@ -11,8 +11,10 @@
         <h2 class="display-6">Categories</h2>
     </div>
     <div class="categories row">
-        @foreach (var categorie in Model.Categories) {
-            <vc:categorie categorie="categorie"></vc:categorie>
+        @if (Model.Categories != null) {
+            @foreach (var categorie in Model.Categories) {
+                <vc:categorie categorie="categorie"></vc:categorie>
+            }
         }
     </div>
 </div>

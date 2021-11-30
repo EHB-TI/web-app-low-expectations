@@ -1,4 +1,6 @@
-﻿namespace WebApplication_Uitleendienst
+﻿using Newtonsoft.Json;
+
+namespace WebApplication_Uitleendienst
 {
 	public class Magazijn
 	{
@@ -21,7 +23,7 @@
 			this.email = email;
 			this.opmerking = opmerking;
 		}
-
+		[JsonProperty("id")]
 		public virtual string Id
 		{
 			get
@@ -34,7 +36,7 @@
 			}
 		}
 
-
+		[JsonProperty("naam")]
 		public virtual string Naam
 		{
 			get
@@ -46,7 +48,7 @@
 				this.naam = value;
 			}
 		}
-
+		[JsonProperty("adres")]
 		public virtual string Adres
 		{
 			get
@@ -59,7 +61,7 @@
 			}
 		}
 
-
+		[JsonProperty("telefoon")]
 		public virtual string Telefoon
 		{
 			get
@@ -72,7 +74,7 @@
 			}
 		}
 
-
+		[JsonProperty("email")]
 		public virtual string Email
 		{
 			get
@@ -84,7 +86,7 @@
 				this.email = value;
 			}
 		}
-
+		[JsonProperty("opmerking")]
 		public virtual string Opmerking
 		{
 			get
@@ -95,12 +97,6 @@
 			{
 				this.opmerking = value;
 			}
-		}
-
-
-		public override string ToString()
-		{
-			return "Magazijn{" + "id='" + id + '\'' + ", naam='" + naam + '\'' + ", adres='" + adres + '\'' + ", telefoon='" + telefoon + '\'' + ", email='" + email + '\'' + ", opmerking='" + opmerking + '\'' + '}';
 		}
 	}
 

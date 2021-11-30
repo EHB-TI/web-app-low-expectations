@@ -8,7 +8,7 @@ using WebApplication_Uitleendienst.Models;
 namespace WebApplication_Uitleendienst.Services.Interfaces {
     public interface IBaseService<TEntity> where TEntity : class {
         public void Update(IEnumerable<TEntity> Items);
-        public void Update(TEntity Item);
+        public Task<TEntity> Update(TEntity item, string customEntity = null);
         public Task<TEntity> Save(TEntity item, string customEntity = null);
         public void Save(IEnumerable<TEntity> Items);
         public TEntity Get(string propertyValue = null, bool cache = false);

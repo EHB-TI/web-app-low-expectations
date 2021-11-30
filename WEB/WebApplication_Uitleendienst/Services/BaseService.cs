@@ -107,8 +107,22 @@ namespace WebApplication_Uitleendienst.Services {
             throw new NotImplementedException();
         }
 
-        public void Update(TEntity Item) {
-            throw new NotImplementedException();
+        public async Task<TEntity> Update(TEntity item, string customEntity = null) {
+            var url = BaseUrl;
+            if (customEntity == null)
+                url += typeof(TEntity).Name.ToLower();
+            else
+                url += customEntity;
+
+            var JsonData = JsonConvert.SerializeObject(item);
+
+            using (var client = new HttpClient()) {
+                var response = await client.PutAsync(url, new StringContent(JsonData, Encoding.UTF8, "application/json"));
+                var data = await response.Content.ReadAsStringAsync();
+                if (data != null)
+                    return JsonConvert.DeserializeObject<TEntity>(data);
+            }
+            return null;
         }
     }
 }

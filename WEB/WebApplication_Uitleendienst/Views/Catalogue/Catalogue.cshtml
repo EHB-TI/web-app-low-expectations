@@ -3,6 +3,8 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+
 <div class="container">
     <div class="row catalogue">
         <div class="col-12 col-md-2 filter">
@@ -11,23 +13,29 @@
             <hr />
             <h6>Category</h6>
             <form method="GET" id="formFilters">
-                @foreach (var cat in Model.Categories) {
-                    <p>
-                        <input type="checkbox" name="@cat.Naam" onclick="reloadPartial(" />
-                        @cat.Naam
-                    </p>
+                @if (Model.Categories != null) {
+                    @foreach (var cat in Model.Categories) {
+                        <p>
+                            <input type="checkbox" name="@cat.Naam" onclick="reloadPartial(" />
+                            @cat.Naam
+                        </p>
+                    }
                 }
             </form>
         </div>
         <div class="col-12 col-md-10 products">
             <!-- Catalogue -->
             <div class="row">
-                @foreach (var product in Model.Products) {
-                    @await Component.InvokeAsync("Catalogue", new { uitleenbaarItem = product });
-                }
+                @if (Model.Products != null) {
+                    @foreach (var product in Model.Products) {
+                        @await Component.InvokeAsync("Catalogue", new { uitleenbaarItem = product });
+                    }
+                } else {
+                <h6>Er zijn geen producten gevonden.</h6>
+            }
             </div>
+
         </div>
     </div>
 
 </div>
-

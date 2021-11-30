@@ -1,0 +1,12 @@
+﻿@model WebApplication_Uitleendienst.Models.ViewModels.BaseViewModel
+
+<div class="row message-wrapper">
+    <div class="col-12">
+        @if (!string.IsNullOrEmpty(Model.Message)) {
+            <div class="alert alert-@(Model.Level.ToString())">
+                @Model.Message
+            </div>
+        }
+    </div>
+</div>
+

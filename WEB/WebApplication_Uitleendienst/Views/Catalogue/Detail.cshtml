@@ -5,11 +5,9 @@
     var count = 0;
 }
 <div class="container">
-    @if (!string.IsNullOrEmpty(Model.Message)) {
-        <div class="alert alert-@(Model.Level.ToString())">
-            @Model.Message
-        </div>
-    }
+
+    @await Component.InvokeAsync("Message", @Model)
+
     @if (Model.BeschikbareItems != null) {<div class="wrapper row detail">
             <input type="hidden" value="@Model.Product.Id" class="product-id" />
             <div class="hidden info-text alert alert-warning">

@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 namespace WebApplication_Uitleendienst
 {
@@ -9,22 +10,14 @@ namespace WebApplication_Uitleendienst
 		private int? eenheid;
 		private float? prijs;
 		private string periode;
-		private Categorie categorie;
+		private string categorieId;
 
 		public UitleenbaarItem()
 		{
 		}
 
-		public UitleenbaarItem(string naam, int? eenheid, float? prijs, string periode, Categorie categorie)
-		{
-			this.naam = naam;
-			this.eenheid = eenheid;
-			this.prijs = prijs;
-			this.periode = periode;
-			this.categorie = categorie;
-		}
-
-		public virtual string Id
+		[JsonProperty("id")]
+		public string Id
 		{
 			get
 			{
@@ -36,7 +29,7 @@ namespace WebApplication_Uitleendienst
 			}
 		}
 
-
+		[JsonProperty("naam")]
 		public virtual string Naam
 		{
 			get
@@ -49,7 +42,7 @@ namespace WebApplication_Uitleendienst
 			}
 		}
 
-
+		[JsonProperty("eenheid")]
 		public virtual int? Eenheid
 		{
 			get
@@ -62,7 +55,7 @@ namespace WebApplication_Uitleendienst
 			}
 		}
 
-
+		[JsonProperty("prijs")]
 		public virtual float? Prijs
 		{
 			get
@@ -75,7 +68,7 @@ namespace WebApplication_Uitleendienst
 			}
 		}
 
-
+		[JsonProperty("periode")]
 		public virtual string Periode
 		{
 			get
@@ -88,24 +81,19 @@ namespace WebApplication_Uitleendienst
 			}
 		}
 
-
-		public virtual Categorie Categorie
+		[JsonProperty("categorieId")]
+		public virtual string CategorieId
 		{
 			get
 			{
-				return categorie;
+				return categorieId;
 			}
 			set
 			{
-				this.categorie = value;
+				this.categorieId = value;
 			}
 		}
 
-
-		public override string ToString()
-		{
-			return "UitleenbaarItem{" + "id='" + id + '\'' + ", naam='" + naam + '\'' + ", eenheid=" + eenheid + ", prijs=" + prijs + ", periode=" + periode + ", categorie=" + categorie + '}';
-		}
 	}
 
 }
