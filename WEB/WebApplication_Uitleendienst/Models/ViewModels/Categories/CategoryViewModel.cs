@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace WebApplication_Uitleendienst.Models.ViewModels.Categories {
-    public class CategoryViewModel {
+    public class CategoryViewModel : BaseViewModel {
         public IEnumerable<Categorie> Categories { get; set; }
     }
 }

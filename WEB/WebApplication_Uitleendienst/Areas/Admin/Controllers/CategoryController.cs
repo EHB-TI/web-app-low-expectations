@@ -23,6 +23,24 @@ namespace WebApplication_Uitleendienst.Areas.Admin.Controllers {
             return View();
         }
 
+        public IActionResult Edit(string Id) {
+            var category = _categoryService.Get(Id);
+            if (category != null) {
+                return View(category);
+            } else {
+                return RedirectToAction("index", new CategoryViewModel() {
+                    Message = "Cannot edit category",
+                    Level = Models.ViewModels.InfoLevel.warning
+                });
+            }
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditPost(Categorie cat) {
+            var entity = await _categoryService.Update(cat);
+            return RedirectToAction("index");
+        }
         public IActionResult Detail(string Id) {
             var category = _categoryService.GetAll(cache: true).FirstOrDefault(s => s.Id == Id);
             return View(category);

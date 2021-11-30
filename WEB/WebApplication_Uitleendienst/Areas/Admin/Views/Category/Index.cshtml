@@ -6,6 +6,9 @@
 }
 @model CategoryViewModel
 
+
+
+
 <div class="category-wrapper">
     <ul class="navbar-nav d-flex align-items-center float-left">
         <li>
@@ -24,16 +27,18 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var cat in Model.Categories) {
-            <tr>
-                <td>@cat.Naam</td>
-                <td>
-                    <a class="nav-link btn btn-light px-2 py-1" asp-area="Admin" asp-controller="Category" asp-action="Detail" asp-route-id="@cat.Id" title="Category">
+            @if (Model.Categories != null) {
+                @foreach (var cat in Model.Categories) {
+                    <tr>
+                        <td>@cat.Naam</td>
+                        <td>
+                            <a class="nav-link btn btn-light px-2 py-1" asp-area="Admin" asp-controller="Category" asp-action="Detail" asp-route-id="@cat.Id" title="Category">
 
-                        <i class="fa-solid fa-eye"></i>
-                    </a>
-                </td>
-            </tr>
+                                <i class="fa-solid fa-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
             }
 
         </tbody>
