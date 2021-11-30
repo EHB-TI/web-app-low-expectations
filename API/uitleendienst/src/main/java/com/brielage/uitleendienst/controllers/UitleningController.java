@@ -134,7 +134,7 @@ public class UitleningController {
     }
 
     private boolean validateOrganisatieId (String organisatieId) {
-        if (organisatieId == null || organisatieId.isEmpty()) return false;
+        if (organisatieId == null || organisatieId.isEmpty()) return true;
         Optional<Organisatie> o = organisatieRepository.findById(organisatieId);
         return o.isPresent();
     }
