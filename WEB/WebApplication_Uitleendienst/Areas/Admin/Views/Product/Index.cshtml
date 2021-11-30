@@ -1,0 +1,56 @@
+﻿
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model WebApplication_Uitleendienst.Models.ViewModels.Product.ProductViewModel
+
+
+
+
+<div class="category-wrapper">
+    <ul class="navbar-nav d-flex align-items-center float-left">
+        <li>
+            <a class="nav-link btn btn-dark px-2 py-1" asp-area="Admin" asp-controller="Product" asp-action="CreateUitleenbaarItem" title="Product">
+                UitleenbaarItem
+                <i class="fa-solid fa-plus"></i>
+                <i class="fa-solid fa-sitemap"></i>
+            </a>
+        </li>
+        <li>
+            <a class="nav-link btn btn-dark px-2 py-1" asp-area="Admin" asp-controller="Product" asp-action="CreateBeschikbaarItem" title="Product">
+                BeschikbaarItem
+                <i class="fa-solid fa-plus"></i>
+                <i class="fa-solid fa-sitemap"></i>
+            </a>
+        </li>
+    </ul>
+
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Naam</th>
+                <th scope="col">Detail</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Products != null) {
+                @foreach (var prod in Model.Products) {
+                    <tr>
+                        <td>@prod.Naam</td>
+                        <td>
+                            <a class="nav-link btn btn-light px-2 py-1" asp-area="Admin" asp-controller="Product" asp-action="Detail" asp-route-id="@prod.Id" title="Product">
+
+                                <i class="fa-solid fa-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>
+
