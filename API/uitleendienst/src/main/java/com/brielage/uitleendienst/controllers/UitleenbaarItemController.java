@@ -22,10 +22,10 @@ public class UitleenbaarItemController {
     @Autowired
     private UitleenbaarItemRepository uitleenbaarItemRepository;
     @Autowired
-    private CategorieRepository categorieRepository;
+    private CategorieRepository       categorieRepository;
 
     @GetMapping (value = { "/", "" })
-    public ResponseEntity findByProperties(
+    public ResponseEntity findByProperties (
             @RequestParam (required = false) List<String> categorieId,
             @RequestParam (required = false) List<String> naam) {
         List<UitleenbaarItem> returnValue = new ArrayList<>();
@@ -36,9 +36,11 @@ public class UitleenbaarItemController {
             returnValue = uitleenbaarItemRepository.findAll();
 
             if (returnValue.isEmpty())
-                return ResponseEntity.notFound().build();
+                return ResponseEntity.notFound()
+                                     .build();
 
-            return ResponseEntity.ok().body(returnValue);
+            return ResponseEntity.ok()
+                                 .body(returnValue);
         }
 
         //add all elements found by the properties to returnValue
@@ -48,62 +50,79 @@ public class UitleenbaarItemController {
             returnValue.addAll(uitleenbaarItemRepository.findAllByNaamIsIn(naam));
 
         if (returnValue.isEmpty())
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.notFound()
+                                 .build();
 
         //remove duplicates
         returnValue = RemoveDuplicates.removeDuplicates(returnValue);
 
-        return ResponseEntity.ok().body(returnValue);
+        return ResponseEntity.ok()
+                             .body(returnValue);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity findById(@PathVariable String id) {
+    @GetMapping ("/{id}")
+    public ResponseEntity findById (@PathVariable String id) {
         Optional<UitleenbaarItem> u = uitleenbaarItemRepository.findById(id);
 
         if (u.isPresent())
-            return ResponseEntity.ok().body(u.get());
-        return ResponseEntity.notFound().build();
+            return ResponseEntity.ok()
+                                 .body(u.get());
+        return ResponseEntity.notFound()
+                             .build();
     }
 
     @PostMapping (value = { "/", "" })
     public ResponseEntity create (@RequestBody UitleenbaarItem uitleenbaarItem) {
         try {
-            if (!validateUitleenbaarItem(uitleenbaarItem))
-                return ResponseEntity.badRequest().build();
+            if (!validateUitleenbaarItem(uitleenbaarItem)) {
+                APILogger.logFail("not valid");
+                return ResponseEntity.badRequest()
+                                     .build();
+            }
 
             Optional<UitleenbaarItem> optionalUitleenbaarItem =
                     uitleenbaarItemRepository.findByNaamAndCategorieId(
                             uitleenbaarItem.getNaam(), uitleenbaarItem.getCategorieId());
 
-            if (optionalUitleenbaarItem.isPresent())
-                return ResponseEntity.badRequest().build();
+            if (optionalUitleenbaarItem.isPresent()) {
+                APILogger.logFail("not present");
+                return ResponseEntity.badRequest()
+                                     .build();
+            }
 
             uitleenbaarItem.setId(null);
             UitleenbaarItem u = uitleenbaarItemRepository.save(uitleenbaarItem);
 
             return new ResponseEntity(u, HttpStatus.CREATED);
         } catch (Exception e) {
-            APILogger.logRequest("qsdf", e.getMessage());
-            return ResponseEntity.badRequest().build();
+            APILogger.logException(e.getMessage());
+            return ResponseEntity.badRequest()
+                                 .build();
         }
     }
 
     @PutMapping (value = "/{id}")
-    public ResponseEntity put (@PathVariable String id, @RequestBody UitleenbaarItem uitleenbaarItem) {
+    public ResponseEntity put (
+            @PathVariable String id,
+            @RequestBody UitleenbaarItem uitleenbaarItem) {
         try {
             if (!validateUitleenbaarItemId(uitleenbaarItem))
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.badRequest()
+                                     .build();
 
             Optional<UitleenbaarItem> u = uitleenbaarItemRepository.findById(id);
 
             if (u.isEmpty())
-                return ResponseEntity.notFound().build();
+                return ResponseEntity.notFound()
+                                     .build();
 
-            uitleenbaarItem.setId(u.get().getId());
+            uitleenbaarItem.setId(u.get()
+                                   .getId());
             UitleenbaarItem result = uitleenbaarItemRepository.save(uitleenbaarItem);
             return new ResponseEntity(result, HttpStatus.CREATED);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest()
+                                 .build();
         }
     }
 
@@ -113,23 +132,33 @@ public class UitleenbaarItemController {
             Optional<UitleenbaarItem> u = uitleenbaarItemRepository.findById(id);
 
             if (u.isEmpty())
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.badRequest()
+                                     .build();
 
             uitleenbaarItemRepository.delete(u.get());
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.noContent()
+                                 .build();
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest()
+                                 .build();
         }
     }
 
-    private boolean validateUitleenbaarItemId(UitleenbaarItem u) {
-        if (u.getId().isEmpty())
+    private boolean validateUitleenbaarItemId (UitleenbaarItem u) {
+        if (u.getId()
+             .isEmpty())
             return false;
         return validateUitleenbaarItem(u);
     }
 
-    private boolean validateUitleenbaarItem(UitleenbaarItem u) {
-        return !u.getNaam().isEmpty()
+    private boolean validateUitleenbaarItem (UitleenbaarItem u) {
+        if (u.getNaam()
+             .isEmpty()) APILogger.logFail("naam empty");
+        if (u.getEenheid() < 0) APILogger.logFail("eenheid < 0");
+        if (u.getPrijs() < 0) APILogger.logFail("prijs < 0");
+        if (u.getPeriode() == null) APILogger.logFail("periode null");
+        return !u.getNaam()
+                 .isEmpty()
                 && u.getEenheid() > 0
                 && u.getPrijs() > 0
                 && u.getPeriode() != null
@@ -137,8 +166,12 @@ public class UitleenbaarItemController {
     }
 
     private boolean validateCategorieId (String categorieId) {
-        if (categorieId == null || categorieId.isEmpty()) return false;
-        Optional<Categorie> u = categorieRepository.findById(categorieId);
-        return u.isPresent();
+        if (categorieId == null || categorieId.isEmpty()) {
+            APILogger.logFail("categorieId null or empty");
+            return false;
+        }
+        Optional<Categorie> c = categorieRepository.findById(categorieId);
+        if (c.isEmpty()) APILogger.logFail("optional categorie empty");
+        return c.isPresent();
     }
 }
