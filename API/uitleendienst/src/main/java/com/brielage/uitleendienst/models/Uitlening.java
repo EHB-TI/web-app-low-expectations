@@ -7,24 +7,24 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 @DynamoDBTable (tableName = "uitlening")
 public class Uitlening {
-    private String      id;
-    private String      organisatieId;
-    private String      magazijnId;
-    private String      start;
-    private String      eind;
-    private String      teruggebrachtOp;
-    private String      opmerking;
+    private String id;
+    private String persoonId;
+    private String magazijnId;
+    private String start;
+    private String eind;
+    private String teruggebrachtOp;
+    private String opmerking;
 
     public Uitlening () {}
 
     public Uitlening (
-            String organisatieId,
+            String persoonId,
             String magazijnId,
             String start,
             String eind,
             String teruggebrachtOp,
             String opmerking) {
-        this.organisatieId   = organisatieId;
+        this.persoonId       = persoonId;
         this.magazijnId      = magazijnId;
         this.start           = start;
         this.eind            = eind;
@@ -44,22 +44,18 @@ public class Uitlening {
     }
 
     @DynamoDBAttribute
-    public String getOrganisatieId() {
-        return organisatieId;
-    }
+    public String getPersoonId () {return persoonId;}
 
     @DynamoDBAttribute
-    public void setOrganisatieId(String organisatieId) {
-        this.organisatieId = organisatieId;
-    }
+    public void setPersoonId (final String persoonId) {this.persoonId = persoonId;}
 
     @DynamoDBAttribute
-    public String getMagazijnId() {
+    public String getMagazijnId () {
         return magazijnId;
     }
 
     @DynamoDBAttribute
-    public void setMagazijnId(String magazijnId) {
+    public void setMagazijnId (String magazijnId) {
         this.magazijnId = magazijnId;
     }
 
@@ -69,9 +65,7 @@ public class Uitlening {
     }
 
     @DynamoDBAttribute
-    public void setStart (String start) {
-        this.start = start;
-    }
+    public void setStart (String start) {this.start = start;}
 
     @DynamoDBAttribute
     public String getEind () {
@@ -107,20 +101,21 @@ public class Uitlening {
     public String toString () {
         return "Uitlening{" +
                 "id='" + id + '\'' +
-                ", organisatieId=" + organisatieId +
-                ", magazijnId=" + magazijnId +
-                ", start=" + start +
-                ", eind=" + eind +
-                ", teruggebrachtOp=" + teruggebrachtOp +
+                ", persoonId='" + persoonId + '\'' +
+                ", magazijnId='" + magazijnId + '\'' +
+                ", start='" + start + '\'' +
+                ", eind='" + eind + '\'' +
+                ", teruggebrachtOp='" + teruggebrachtOp + '\'' +
                 ", opmerking='" + opmerking + '\'' +
                 '}';
     }
 
     @Override
-    public boolean equals(Object o){
-        if(o instanceof Uitlening u){
-            return this.getId().equals(u.getId());
-        }
+    public boolean equals (Object o) {
+        if (o instanceof Uitlening u)
+            return this.getId()
+                       .equals(u.getId());
+
         return false;
     }
 }
