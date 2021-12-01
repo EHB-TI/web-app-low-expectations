@@ -23,7 +23,8 @@ public class PersoonController {
     public ResponseEntity findByProperties (
             @RequestParam (required = false) List<String> voornaam,
             @RequestParam (required = false) List<String> familienaam,
-            @RequestParam (required = false) List<String> email) {
+            @RequestParam (required = false) List<String> email,
+            @RequestHeader ("Authorization") String token) {
         List<Persoon> returnValue = new ArrayList<>();
 
         //return findAll() if no properties
@@ -59,7 +60,9 @@ public class PersoonController {
     }
 
     @GetMapping ("/{id}")
-    public ResponseEntity findById (@PathVariable String id) {
+    public ResponseEntity findById (
+            @PathVariable String id,
+            @RequestHeader ("Authorization") String token) {
         Optional<Persoon> p = persoonRepository.findById(id);
 
         if (p.isPresent())
@@ -71,7 +74,9 @@ public class PersoonController {
     }
 
     @PostMapping (value = { "/", "" })
-    public ResponseEntity create (@RequestBody Persoon persoon) {
+    public ResponseEntity create (
+            @RequestBody Persoon persoon,
+            @RequestHeader ("Authorization") String token) {
         try {
             if (!validatePersoon(persoon))
                 return ResponseEntity.badRequest()
@@ -89,7 +94,8 @@ public class PersoonController {
     @PutMapping (value = "/{id}")
     public ResponseEntity put (
             @PathVariable String id,
-            @RequestBody Persoon persoon) {
+            @RequestBody Persoon persoon,
+            @RequestHeader ("Authorization") String token) {
         try {
             if (!validatePersoonId(persoon))
                 return ResponseEntity.badRequest()
@@ -113,7 +119,9 @@ public class PersoonController {
     }
 
     @DeleteMapping (value = "/{id}")
-    public ResponseEntity delete (@PathVariable String id) {
+    public ResponseEntity delete (
+            @PathVariable String id,
+            @RequestHeader ("Authorization") String token) {
         try {
             Optional<Persoon> p = persoonRepository.findById(id);
 

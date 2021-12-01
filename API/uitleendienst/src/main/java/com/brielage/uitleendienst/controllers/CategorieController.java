@@ -1,5 +1,6 @@
 package com.brielage.uitleendienst.controllers;
 
+import com.brielage.uitleendienst.authorization.JWTChecker;
 import com.brielage.uitleendienst.models.Categorie;
 import com.brielage.uitleendienst.repositories.CategorieRepository;
 import com.brielage.uitleendienst.tools.APILogger;
@@ -19,7 +20,15 @@ public class CategorieController {
     private CategorieRepository categorieRepository;
 
     @GetMapping (value = { "/", "" })
-    public ResponseEntity findByProperties (@RequestParam (required = false) List<String> naam) {
+    public ResponseEntity findByProperties (
+            @RequestParam (required = false) List<String> naam,
+            @RequestHeader ("Authorization") String token)
+            throws
+            Exception {
+        APILogger.logRequest("categorie.get");
+        JWTChecker checker = new JWTChecker(token);
+        checker.log();
+
         if (naam == null || naam.isEmpty()) {
             List<Categorie> ret = categorieRepository.findAll();
 
@@ -42,7 +51,9 @@ public class CategorieController {
     }
 
     @GetMapping ("/{id}")
-    public ResponseEntity findById (@PathVariable String id) {
+    public ResponseEntity findById (
+            @PathVariable String id,
+            @RequestHeader ("Authorization") String token) {
         APILogger.logRequest("categorie.findById", id);
         Optional<Categorie> c = categorieRepository.findById(id);
 
@@ -55,7 +66,9 @@ public class CategorieController {
     }
 
     @PostMapping (value = { "/", "" })
-    public ResponseEntity create (@RequestBody Categorie categorie) {
+    public ResponseEntity create (
+            @RequestBody Categorie categorie,
+            @RequestHeader ("Authorization") String token) {
         APILogger.logRequest("categorie.create", categorie.toString());
         try {
             if (!validateCategorie(categorie))
@@ -76,7 +89,8 @@ public class CategorieController {
     @PutMapping (value = "/{id}")
     public ResponseEntity put (
             @PathVariable String id,
-            @RequestBody Categorie categorie) {
+            @RequestBody Categorie categorie,
+            @RequestHeader ("Authorization") String token) {
         APILogger.logRequest("categorie.put", id);
         try {
             if (!validateCategorieId(categorie))
@@ -101,7 +115,9 @@ public class CategorieController {
     }
 
     @DeleteMapping (value = "/{id}")
-    public ResponseEntity delete (@PathVariable String id) {
+    public ResponseEntity delete (
+            @PathVariable String id,
+            @RequestHeader ("Authorization") String token) {
         APILogger.logRequest("categorie.delete", id);
         try {
             Optional<Categorie> c = categorieRepository.findById(id);

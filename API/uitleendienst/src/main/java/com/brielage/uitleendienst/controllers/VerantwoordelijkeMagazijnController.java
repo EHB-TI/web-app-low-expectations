@@ -2,11 +2,11 @@ package com.brielage.uitleendienst.controllers;
 
 import com.brielage.uitleendienst.models.Magazijn;
 import com.brielage.uitleendienst.models.Persoon;
+import com.brielage.uitleendienst.models.VerantwoordelijkeMagazijn;
 import com.brielage.uitleendienst.repositories.MagazijnRepository;
 import com.brielage.uitleendienst.repositories.PersoonRepository;
-import com.brielage.uitleendienst.tools.APILogger;
-import com.brielage.uitleendienst.models.VerantwoordelijkeMagazijn;
 import com.brielage.uitleendienst.repositories.VerantwoordelijkeMagazijnRepository;
+import com.brielage.uitleendienst.tools.APILogger;
 import com.brielage.uitleendienst.tools.RemoveDuplicates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,15 +24,15 @@ public class VerantwoordelijkeMagazijnController {
     @Autowired
     private VerantwoordelijkeMagazijnRepository verantwoordelijkeMagazijnRepository;
     @Autowired
-    private PersoonRepository persoonRepository;
+    private PersoonRepository                   persoonRepository;
     @Autowired
-    private MagazijnRepository magazijnRepository;
+    private MagazijnRepository                  magazijnRepository;
 
     @GetMapping (value = { "/", "" })
     public ResponseEntity findByProperties (
             @RequestParam (required = false) List<String> persoondId,
-            @RequestParam (required = false) List<String> magazijnId
-    ) {
+            @RequestParam (required = false) List<String> magazijnId,
+            @RequestHeader ("Authorization") String token) {
         List<VerantwoordelijkeMagazijn> returnValue = new ArrayList<>();
 
         //return findAll() if no properties
@@ -41,104 +41,136 @@ public class VerantwoordelijkeMagazijnController {
             returnValue = verantwoordelijkeMagazijnRepository.findAll();
 
             if (returnValue.isEmpty())
-                return ResponseEntity.notFound().build();
-            return ResponseEntity.ok().body(returnValue);
+                return ResponseEntity.notFound()
+                                     .build();
+            return ResponseEntity.ok()
+                                 .body(returnValue);
         }
 
         //add all elements found by the properties to returnValue
         if (persoondId != null && !persoondId.isEmpty())
-            returnValue.addAll(verantwoordelijkeMagazijnRepository.findAllByPersoonIdIsIn(persoondId));
+            returnValue.addAll(
+                    verantwoordelijkeMagazijnRepository.findAllByPersoonIdIsIn(persoondId));
         if (magazijnId != null && !magazijnId.isEmpty())
-            returnValue.addAll(verantwoordelijkeMagazijnRepository.findAllByMagazijnIdIsIn(magazijnId));
+            returnValue.addAll(
+                    verantwoordelijkeMagazijnRepository.findAllByMagazijnIdIsIn(magazijnId));
 
         if (returnValue.isEmpty())
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.notFound()
+                                 .build();
 
         //remove duplicates
         returnValue = RemoveDuplicates.removeDuplicates(returnValue);
 
-        return ResponseEntity.ok().body(returnValue);
+        return ResponseEntity.ok()
+                             .body(returnValue);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity findById(@PathVariable String id) {
+    @GetMapping ("/{id}")
+    public ResponseEntity findById (
+            @PathVariable String id,
+            @RequestHeader ("Authorization") String token) {
         APILogger.logRequest("verantwoordelijkeMagazijn.findById", id);
         Optional<VerantwoordelijkeMagazijn> vm = verantwoordelijkeMagazijnRepository.findById(id);
 
         if (vm.isPresent())
-            return ResponseEntity.ok().body(vm.get());
-        return ResponseEntity.notFound().build();
+            return ResponseEntity.ok()
+                                 .body(vm.get());
+        return ResponseEntity.notFound()
+                             .build();
     }
 
     @PostMapping (value = { "/", "" })
-    public ResponseEntity create (@RequestBody VerantwoordelijkeMagazijn verantwoordelijkeMagazijn) {
-        APILogger.logRequest("verantwoordelijkeMagazijn.create", verantwoordelijkeMagazijn.toString());
+    public ResponseEntity create (
+            @RequestBody VerantwoordelijkeMagazijn verantwoordelijkeMagazijn,
+            @RequestHeader ("Authorization") String token) {
+        APILogger.logRequest("verantwoordelijkeMagazijn.create",
+                             verantwoordelijkeMagazijn.toString());
         try {
             if (!validateVerantwoordelijkeMagazijn(verantwoordelijkeMagazijn))
                 return ResponseEntity.badRequest()
-                        .build();
+                                     .build();
 
             Optional<VerantwoordelijkeMagazijn> optionalVerantwoordelijkeMagazijn =
                     verantwoordelijkeMagazijnRepository.findByMagazijnIdAndPersoonId(
-                            verantwoordelijkeMagazijn.getMagazijnId(), verantwoordelijkeMagazijn.getPersoonId());
+                            verantwoordelijkeMagazijn.getMagazijnId(),
+                            verantwoordelijkeMagazijn.getPersoonId());
 
             if (optionalVerantwoordelijkeMagazijn.isPresent())
                 return ResponseEntity.badRequest()
-                        .build();
+                                     .build();
 
             // ignore ID when creating, will get automagically generated by DB
             verantwoordelijkeMagazijn.setId(null);
-            VerantwoordelijkeMagazijn vm = verantwoordelijkeMagazijnRepository.save(verantwoordelijkeMagazijn);
+            VerantwoordelijkeMagazijn vm = verantwoordelijkeMagazijnRepository.save(
+                    verantwoordelijkeMagazijn);
 
             return new ResponseEntity(vm, HttpStatus.CREATED);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest()
+                                 .build();
         }
     }
 
     @PutMapping (value = "/{id}")
-    public ResponseEntity put (@PathVariable String id, @RequestBody VerantwoordelijkeMagazijn verantwoordelijkeMagazijn) {
+    public ResponseEntity put (
+            @PathVariable String id,
+            @RequestBody VerantwoordelijkeMagazijn verantwoordelijkeMagazijn,
+            @RequestHeader ("Authorization") String token) {
         APILogger.logRequest("verantwoordelijkeMagazijn.put", id);
         try {
             if (!validateVerantwoordelijkeMagazijnId(verantwoordelijkeMagazijn))
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.badRequest()
+                                     .build();
 
-            Optional<VerantwoordelijkeMagazijn> vm = verantwoordelijkeMagazijnRepository.findById(id);
+            Optional<VerantwoordelijkeMagazijn> vm = verantwoordelijkeMagazijnRepository.findById(
+                    id);
 
             if (vm.isEmpty())
-                return ResponseEntity.notFound().build();
+                return ResponseEntity.notFound()
+                                     .build();
 
-            verantwoordelijkeMagazijn.setId(vm.get().getId());
-            VerantwoordelijkeMagazijn result = verantwoordelijkeMagazijnRepository.save(verantwoordelijkeMagazijn);
+            verantwoordelijkeMagazijn.setId(vm.get()
+                                              .getId());
+            VerantwoordelijkeMagazijn result = verantwoordelijkeMagazijnRepository.save(
+                    verantwoordelijkeMagazijn);
             return new ResponseEntity(result, HttpStatus.CREATED);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest()
+                                 .build();
         }
     }
 
     @DeleteMapping (value = "/{id}")
-    public ResponseEntity delete (@PathVariable String id) {
+    public ResponseEntity delete (
+            @PathVariable String id,
+            @RequestHeader ("Authorization") String token) {
         APILogger.logRequest("verantwoordelijkeMagazijn.delete", id);
         try {
-            Optional<VerantwoordelijkeMagazijn> vm = verantwoordelijkeMagazijnRepository.findById(id);
+            Optional<VerantwoordelijkeMagazijn> vm = verantwoordelijkeMagazijnRepository.findById(
+                    id);
 
             if (vm.isEmpty())
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.badRequest()
+                                     .build();
 
             verantwoordelijkeMagazijnRepository.delete(vm.get());
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.noContent()
+                                 .build();
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest()
+                                 .build();
         }
     }
 
-    private boolean validateVerantwoordelijkeMagazijnId(VerantwoordelijkeMagazijn vm) {
-        if (vm.getId().isEmpty())
+    private boolean validateVerantwoordelijkeMagazijnId (VerantwoordelijkeMagazijn vm) {
+        if (vm.getId()
+              .isEmpty())
             return false;
         return validateVerantwoordelijkeMagazijn(vm);
     }
 
-    private boolean validateVerantwoordelijkeMagazijn(VerantwoordelijkeMagazijn vm) {
+    private boolean validateVerantwoordelijkeMagazijn (VerantwoordelijkeMagazijn vm) {
         return validatePersoonId(vm.getPersoonId())
                 && validateMagazijnId(vm.getMagazijnId());
     }

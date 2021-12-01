@@ -109,10 +109,11 @@ public class Persoon {
     }
 
     @Override
-    public boolean equals(Object o){
-        if(o instanceof Persoon p){
-            return this.getId().equals(p.getId());
-        }
+    public boolean equals (Object o) {
+        if (o instanceof Persoon p)
+            return this.getId()
+                       .equals(p.getId());
+
         return false;
     }
 }

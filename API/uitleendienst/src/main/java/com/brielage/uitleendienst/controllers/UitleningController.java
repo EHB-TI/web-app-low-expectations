@@ -1,10 +1,11 @@
 package com.brielage.uitleendienst.controllers;
 
 import com.brielage.uitleendienst.models.Magazijn;
-import com.brielage.uitleendienst.models.Organisatie;
+import com.brielage.uitleendienst.models.Persoon;
 import com.brielage.uitleendienst.models.Uitlening;
 import com.brielage.uitleendienst.repositories.MagazijnRepository;
 import com.brielage.uitleendienst.repositories.OrganisatieRepository;
+import com.brielage.uitleendienst.repositories.PersoonRepository;
 import com.brielage.uitleendienst.repositories.UitleningRepository;
 import com.brielage.uitleendienst.tools.APILogger;
 import com.brielage.uitleendienst.tools.RemoveDuplicates;
@@ -22,16 +23,22 @@ import java.util.Optional;
 public class UitleningController {
     @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
     @Autowired
-    private UitleningRepository uitleningRepository;
+    private UitleningRepository   uitleningRepository;
+    @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
     @Autowired
     private OrganisatieRepository organisatieRepository;
+    @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
     @Autowired
-    private MagazijnRepository magazijnRepository;
+    private MagazijnRepository    magazijnRepository;
+    @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
+    @Autowired
+    private PersoonRepository     persoonRepository;
 
     @GetMapping (value = { "/", "" })
     public ResponseEntity findByProperties (
             @RequestParam (required = false) List<String> organisatieId,
-            @RequestParam (required = false) List<String> magazijnId) {
+            @RequestParam (required = false) List<String> magazijnId,
+            @RequestHeader ("Authorization") String token) {
         List<Uitlening> returnValue = new ArrayList<>();
 
         //return findAll() if no properties
@@ -48,7 +55,7 @@ public class UitleningController {
 
         //add all elements found by the properties to returnValue
         if (organisatieId != null && !organisatieId.isEmpty())
-            returnValue.addAll(uitleningRepository.findAllByOrganisatieIdIsIn(organisatieId));
+            returnValue.addAll(uitleningRepository.findAllByPersoonIdIsIn(organisatieId));
         if (magazijnId != null && !magazijnId.isEmpty())
             returnValue.addAll(uitleningRepository.findAllByMagazijnIdIsIn(magazijnId));
 
@@ -64,7 +71,9 @@ public class UitleningController {
     }
 
     @GetMapping ("/{id}")
-    public ResponseEntity findById (@PathVariable String id) {
+    public ResponseEntity findById (
+            @PathVariable String id,
+            @RequestHeader ("Authorization") String token) {
         APILogger.logRequest("uitlening.findById", id);
         Optional<Uitlening> u = uitleningRepository.findById(id);
 
@@ -76,7 +85,9 @@ public class UitleningController {
     }
 
     @PostMapping (value = { "/", "" })
-    public ResponseEntity create (@RequestBody Uitlening uitlening) {
+    public ResponseEntity create (
+            @RequestBody Uitlening uitlening,
+            @RequestHeader ("Authorization") String token) {
         APILogger.logRequest("uitlening.create", uitlening.toString());
         try {
             if (!validateUitlening(uitlening))
@@ -96,7 +107,8 @@ public class UitleningController {
     @PutMapping (value = "/{id}")
     public ResponseEntity put (
             @PathVariable String id,
-            @RequestBody Uitlening uitlening) {
+            @RequestBody Uitlening uitlening,
+            @RequestHeader ("Authorization") String token) {
         APILogger.logRequest("uitlening.put", id);
         try {
             if (!validateUitleningId(uitlening))
@@ -120,7 +132,9 @@ public class UitleningController {
     }
 
     @DeleteMapping (value = "/{id}")
-    public ResponseEntity delete (@PathVariable String id) {
+    public ResponseEntity delete (
+            @PathVariable String id,
+            @RequestHeader ("Authorization") String token) {
         APILogger.logRequest("uitlening.delete", id);
         try {
             Optional<Uitlening> u = uitleningRepository.findById(id);
@@ -146,15 +160,15 @@ public class UitleningController {
     }
 
     private boolean validateUitlening (Uitlening u) {
-        return validateOrganisatieId(u.getOrganisatieId())
+        return validatePersoonId(u.getPersoonId())
                 && validateMagazijnId(u.getMagazijnId())
                 && (u.getStart() != null && !u.getStart()
                                               .isEmpty());
     }
 
-    private boolean validateOrganisatieId (String organisatieId) {
-        if (organisatieId == null || organisatieId.isEmpty()) return true;
-        Optional<Organisatie> o = organisatieRepository.findById(organisatieId);
+    private boolean validatePersoonId (String persoonId) {
+        if (persoonId == null || persoonId.isEmpty()) return true;
+        Optional<Persoon> o = persoonRepository.findById(persoonId);
         return o.isPresent();
     }
 

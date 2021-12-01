@@ -27,7 +27,8 @@ public class UitleenbaarItemController {
     @GetMapping (value = { "/", "" })
     public ResponseEntity findByProperties (
             @RequestParam (required = false) List<String> categorieId,
-            @RequestParam (required = false) List<String> naam) {
+            @RequestParam (required = false) List<String> naam,
+            @RequestHeader ("Authorization") String token) {
         List<UitleenbaarItem> returnValue = new ArrayList<>();
 
         //return findAll() if no properties
@@ -61,7 +62,9 @@ public class UitleenbaarItemController {
     }
 
     @GetMapping ("/{id}")
-    public ResponseEntity findById (@PathVariable String id) {
+    public ResponseEntity findById (
+            @PathVariable String id,
+            @RequestHeader ("Authorization") String token) {
         Optional<UitleenbaarItem> u = uitleenbaarItemRepository.findById(id);
 
         if (u.isPresent())
@@ -72,7 +75,9 @@ public class UitleenbaarItemController {
     }
 
     @PostMapping (value = { "/", "" })
-    public ResponseEntity create (@RequestBody UitleenbaarItem uitleenbaarItem) {
+    public ResponseEntity create (
+            @RequestBody UitleenbaarItem uitleenbaarItem,
+            @RequestHeader ("Authorization") String token) {
         try {
             if (!validateUitleenbaarItem(uitleenbaarItem)) {
                 APILogger.logFail("not valid");
@@ -104,7 +109,8 @@ public class UitleenbaarItemController {
     @PutMapping (value = "/{id}")
     public ResponseEntity put (
             @PathVariable String id,
-            @RequestBody UitleenbaarItem uitleenbaarItem) {
+            @RequestBody UitleenbaarItem uitleenbaarItem,
+            @RequestHeader ("Authorization") String token) {
         try {
             if (!validateUitleenbaarItemId(uitleenbaarItem))
                 return ResponseEntity.badRequest()
@@ -127,7 +133,9 @@ public class UitleenbaarItemController {
     }
 
     @DeleteMapping (value = "/{id}")
-    public ResponseEntity delete (@PathVariable String id) {
+    public ResponseEntity delete (
+            @PathVariable String id,
+            @RequestHeader ("Authorization") String token) {
         try {
             Optional<UitleenbaarItem> u = uitleenbaarItemRepository.findById(id);
 

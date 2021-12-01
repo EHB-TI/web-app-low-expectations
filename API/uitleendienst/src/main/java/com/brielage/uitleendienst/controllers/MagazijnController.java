@@ -2,7 +2,6 @@ package com.brielage.uitleendienst.controllers;
 
 import com.brielage.uitleendienst.models.Magazijn;
 import com.brielage.uitleendienst.repositories.MagazijnRepository;
-import com.brielage.uitleendienst.tools.APILogger;
 import com.brielage.uitleendienst.tools.RemoveDuplicates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +22,8 @@ public class MagazijnController {
     @GetMapping (value = { "/", "" })
     public ResponseEntity findByProperties (
             @RequestParam (required = false) List<String> naam,
-            @RequestParam (required = false) List<String> email) {
+            @RequestParam (required = false) List<String> email,
+            @RequestHeader ("Authorization") String token) {
         if ((naam == null || naam.isEmpty())
                 && (email == null || email.isEmpty())) {
             List<Magazijn> magazijnen = magazijnRepository.findAll();
@@ -54,7 +54,9 @@ public class MagazijnController {
     }
 
     @GetMapping ("/{id}")
-    public ResponseEntity findById (@PathVariable String id) {
+    public ResponseEntity findById (
+            @PathVariable String id,
+            @RequestHeader ("Authorization") String token) {
         Optional<Magazijn> m = magazijnRepository.findById(id);
 
         if (m.isPresent())
@@ -66,7 +68,9 @@ public class MagazijnController {
     }
 
     @PostMapping (value = { "/", "" })
-    public ResponseEntity create (@RequestBody Magazijn magazijn) {
+    public ResponseEntity create (
+            @RequestBody Magazijn magazijn,
+            @RequestHeader ("Authorization") String token) {
         try {
             if (!validateMagazijn(magazijn))
                 return ResponseEntity.badRequest()
@@ -86,7 +90,8 @@ public class MagazijnController {
     @PutMapping (value = "/{id}")
     public ResponseEntity put (
             @PathVariable String id,
-            @RequestBody Magazijn magazijn) {
+            @RequestBody Magazijn magazijn,
+            @RequestHeader ("Authorization") String token) {
         try {
             if (!validateMagazijnId(magazijn))
                 return ResponseEntity.badRequest()
@@ -110,7 +115,9 @@ public class MagazijnController {
     }
 
     @DeleteMapping (value = "/{id}")
-    public ResponseEntity delete (@PathVariable String id) {
+    public ResponseEntity delete (
+            @PathVariable String id,
+            @RequestHeader ("Authorization") String token) {
         try {
             Optional<Magazijn> m = magazijnRepository.findById(id);
 

@@ -4,29 +4,31 @@ import com.brielage.uitleendienst.models.Uitlening;
 import org.socialsignin.spring.data.dynamodb.repository.EnableScan;
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @EnableScan
-public interface UitleningRepository extends CrudRepository<Uitlening, String> {
-    List<Uitlening> findAll();
+public interface UitleningRepository
+        extends CrudRepository<Uitlening, String> {
+    List<Uitlening> findAll ();
 
     Optional<Uitlening> findById (String id);
 
-    List<Uitlening> findAllByOrganisatieId (String id);
+    List<Uitlening> findAllByPersoonId (String id);
 
     List<Uitlening> findAllByMagazijnId (String id);
 
-    List<Uitlening> findAllByStart (Date start);
+    List<Uitlening> findAllByStart (String start);
 
-    List<Uitlening> findAllByEind (Date eind);
+    List<Uitlening> findAllByEind (String eind);
 
-    List<Uitlening> findAllByTeruggebrachtOp (Date teruggebrachtOp);
+    List<Uitlening> findAllByTeruggebrachtOp (String teruggebrachtOp);
 
-    List<Uitlening> findAllByOrganisatieIdIsIn (List<String> organisatieId);
+    List<Uitlening> findAllByPersoonIdIsIn (List<String> persoonId);
 
     List<Uitlening> findAllByMagazijnIdIsIn (List<String> magazijnId);
 
-    Optional<Uitlening> findByOrganisatieIdAndMagazijnId (String organisatieId, String magazijnId);
+    Optional<Uitlening> findByPersoonIdAndMagazijnId (
+            String organisatieId,
+            String magazijnId);
 }

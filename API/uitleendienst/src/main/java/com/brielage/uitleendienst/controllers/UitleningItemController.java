@@ -8,6 +8,7 @@ import com.brielage.uitleendienst.repositories.UitleningItemRepository;
 import com.brielage.uitleendienst.repositories.UitleningRepository;
 import com.brielage.uitleendienst.tools.APILogger;
 import com.brielage.uitleendienst.tools.RemoveDuplicates;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,8 @@ public class UitleningItemController {
     @GetMapping (value = { "/", "" })
     public ResponseEntity findByProperties (
             @RequestParam (required = false) List<String> uitleenbaarItemId,
-            @RequestParam (required = false) List<String> uitleningId) {
+            @RequestParam (required = false) List<String> uitleningId,
+            @RequestHeader ("Authorization") String token) {
         List<UitleningItem> returnValue = new ArrayList<>();
 
         //return findAll() if no properties
@@ -70,7 +72,8 @@ public class UitleningItemController {
 
     @SuppressWarnings ("rawtypes")
     @GetMapping ("/{id}")
-    public ResponseEntity findById (@PathVariable String id) {
+    public ResponseEntity findById (@PathVariable String id,
+                                    @RequestHeader ("Authorization") String token) {
         APILogger.logRequest("uitleningItem.findById", id);
         Optional<UitleningItem> u = uitleningItemRepository.findById(id);
 
@@ -83,7 +86,8 @@ public class UitleningItemController {
 
     @SuppressWarnings ("rawtypes")
     @PostMapping (value = { "/", "" })
-    public ResponseEntity create (@RequestBody List<UitleningItem> uitleningItems) {
+    public ResponseEntity create (@RequestBody List<UitleningItem> uitleningItems,
+                                  @RequestHeader ("Authorization") String token) {
         if (uitleningItems == null || uitleningItems.isEmpty()) {
             APILogger.logFail("uitleningitems is null or empty");
             return ResponseEntity.badRequest()
@@ -141,7 +145,8 @@ public class UitleningItemController {
     @PutMapping (value = "/{id}")
     public ResponseEntity put (
             @PathVariable String id,
-            @RequestBody UitleningItem uitleningItem) {
+            @RequestBody UitleningItem uitleningItem,
+            @RequestHeader ("Authorization") String token) {
         APILogger.logRequest("uitleningItem.put", id);
         try {
             if (!validateUitleningItemId(uitleningItem))
@@ -169,7 +174,8 @@ public class UitleningItemController {
 
     @SuppressWarnings ("rawtypes")
     @DeleteMapping (value = "/{id}")
-    public ResponseEntity delete (@PathVariable String id) {
+    public ResponseEntity delete (@PathVariable String id,
+                                  @RequestHeader ("Authorization") String token) {
         APILogger.logRequest("uitleningItem.delete", id);
         try {
             Optional<UitleningItem> u = uitleningItemRepository.findById(id);
@@ -204,9 +210,18 @@ public class UitleningItemController {
         return validateUitleningId(u.getUitleningId())
                 && validateUitleenbaarItemId(u.getUitleenbaarItemId())
                 && u.getAantal() > 0
-                && (u.getTeruggebrachtOp() != null && !u.getTeruggebrachtOp()
-                                                        .isEmpty())
+                && validateTeruggebrachtOp(u.getTeruggebrachtOp())
                 && u.getAantalTeruggebracht() >= 0;
+    }
+
+    // putting the json into the DynamoDB object results in all null values being
+    // given a value, so a null value for this is not actually null
+    // thus we check on empty or "null"
+    private boolean validateTeruggebrachtOp (String teruggebrachtOp) {
+        if (teruggebrachtOp == null) return true;
+        if (teruggebrachtOp.isEmpty()) return true;
+        if (teruggebrachtOp.equals("null")) return true;
+        return false;
     }
 
     private boolean validateUitleningId (String uitleningId) {
