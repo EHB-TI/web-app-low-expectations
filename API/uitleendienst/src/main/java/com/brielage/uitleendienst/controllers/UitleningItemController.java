@@ -198,8 +198,7 @@ public class UitleningItemController {
 
     private boolean validateUitleningItem (UitleningItem u) {
         if (u.getAantal() < 0) APILogger.logFail("aantal < 0");
-        if (u.getTeruggebrachtOp() == null) APILogger.logFail("teruggebrachtOp is null");
-        if (u.getTeruggebrachtOp()
+        if (u.getTeruggebrachtOp() != null && u.getTeruggebrachtOp()
              .isEmpty()) APILogger.logFail("teruggebrachtOp is empty");
         if (u.getAantalTeruggebracht() < 0) APILogger.logFail("aantalTeruggebracht < 0");
         return validateUitleningId(u.getUitleningId())
