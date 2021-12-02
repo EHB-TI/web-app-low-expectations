@@ -45,12 +45,16 @@ public class UitleenbaarItemController {
         }
 
         //add all elements found by the properties to returnValue
-        if (categorieId != null && !categorieId.isEmpty())
+        if (categorieId != null && !categorieId.isEmpty()){
             APILogger.logRequest("uitleenbaarItem.findAllByCategorieIdIsIn");
             returnValue.addAll(uitleenbaarItemRepository.findAllByCategorieIdIsIn(categorieId));
-        if (naam != null && !naam.isEmpty())
+        }
+
+        if (naam != null && !naam.isEmpty()){
             APILogger.logRequest("uitleenbaarItem.findAllByNaamIsIn");
             returnValue.addAll(uitleenbaarItemRepository.findAllByNaamIsIn(naam));
+        }
+
 
         if (returnValue.isEmpty()) return Responder.respondNotFound();
 

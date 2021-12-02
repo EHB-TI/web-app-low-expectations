@@ -6,7 +6,6 @@ import com.brielage.uitleendienst.responses.Responder;
 import com.brielage.uitleendienst.tools.APILogger;
 import com.brielage.uitleendienst.tools.RemoveDuplicates;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,12 +40,15 @@ public class MagazijnController {
 
         List<Magazijn> magazijnen = new ArrayList<>();
 
-        if (naam != null && !naam.isEmpty())
+        if (naam != null && !naam.isEmpty()){
             APILogger.logRequest("magazijn.findAllByNaamIsIn");
             magazijnen.addAll(magazijnRepository.findAllByNaamIsIn(naam));
-        if (email != null && !email.isEmpty())
+        }
+
+        if (email != null && !email.isEmpty()){
             APILogger.logRequest("magazijn.findAllByEmailIsIn");
             magazijnen.addAll(magazijnRepository.findAllByEmailIsIn(email));
+        }
 
         magazijnen = RemoveDuplicates.removeDuplicates(magazijnen);
 

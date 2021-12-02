@@ -6,9 +6,10 @@ import com.brielage.uitleendienst.models.UitleenbaarItem;
 import com.brielage.uitleendienst.repositories.BeschikbaarItemRepository;
 import com.brielage.uitleendienst.repositories.MagazijnRepository;
 import com.brielage.uitleendienst.repositories.UitleenbaarItemRepository;
+import com.brielage.uitleendienst.responses.Responder;
+import com.brielage.uitleendienst.tools.APILogger;
 import com.brielage.uitleendienst.tools.RemoveDuplicates;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@SuppressWarnings ("rawtypes")
 @RestController
 @RequestMapping (value = "/beschikbaaritem")
 public class BeschikbaarItemController {
@@ -33,34 +35,38 @@ public class BeschikbaarItemController {
             @RequestParam (required = false) List<String> uitleenbaarItemId,
             @RequestParam (required = false) List<String> magazijnId,
             @RequestParam (required = false) List<String> categorieId,
-            @RequestHeader ("Authorization") String token) {
+            @RequestHeader ("Authorization") String token,
+            @RequestHeader ("Origin") String origin) {
         List<BeschikbaarItem> returnValue = new ArrayList<>();
 
         //return findAll() if no properties
         if ((uitleenbaarItemId == null || uitleenbaarItemId.isEmpty())
                 && (magazijnId == null || magazijnId.isEmpty())
                 && (categorieId == null || categorieId.isEmpty())) {
+            APILogger.logRequest("beschikbaaritem.findAll");
             returnValue = beschikbaarItemRepository.findAll();
 
-            if (returnValue.isEmpty())
-                return ResponseEntity.notFound()
-                                     .build();
+            if (returnValue.isEmpty()) return Responder.respondNotFound();
 
-            return ResponseEntity.ok()
-                                 .body(returnValue);
+            return Responder.respondOk(returnValue);
         }
         List<UitleenbaarItem> uitleenbaarItems;
         List<String>          uitleenbaarItemIds;
 
         //add all elements found by the properties to returnValue
-        if (uitleenbaarItemId != null && !uitleenbaarItemId.isEmpty())
+        if (uitleenbaarItemId != null && !uitleenbaarItemId.isEmpty()){
+            APILogger.logRequest("beschikbaaritem.findAllByUitleenbaarItemIdIsIn");
             returnValue.addAll(
                     beschikbaarItemRepository.findAllByUitleenbaarItemIdIsIn(uitleenbaarItemId));
+        }
 
-        if (magazijnId != null && !magazijnId.isEmpty())
+        if (magazijnId != null && !magazijnId.isEmpty()){
+            APILogger.logRequest("beschikbaaritem.findAllByMagazijnIdIsIn");
             returnValue.addAll(beschikbaarItemRepository.findAllByMagazijnIdIsIn(magazijnId));
+        }
 
         if (categorieId != null && !categorieId.isEmpty()) {
+            APILogger.logRequest("beschikbaaritem.findAllByCategorieIdIsIn");
             uitleenbaarItems   = uitleenbaarItemRepository.findAllByCategorieIdIsIn(categorieId);
             uitleenbaarItemIds = uitleenbaarItems.stream()
                                                  .map(UitleenbaarItem::getId)
@@ -69,38 +75,37 @@ public class BeschikbaarItemController {
                     beschikbaarItemRepository.findAllByUitleenbaarItemIdIsIn(uitleenbaarItemIds));
         }
 
-        if (returnValue.isEmpty())
-            return ResponseEntity.notFound()
-                                 .build();
+        if (returnValue.isEmpty()) return Responder.respondNotFound();
 
         //remove duplicates
         returnValue = RemoveDuplicates.removeDuplicates(returnValue);
 
-        return ResponseEntity.ok()
-                             .body(returnValue);
+        return Responder.respondOk(returnValue);
     }
 
     @GetMapping ("/{id}")
     public ResponseEntity findById (
             @PathVariable String id,
-            @RequestHeader ("Authorization") String token) {
+            @RequestHeader ("Authorization") String token,
+            @RequestHeader ("Origin") String origin) {
+        APILogger.logRequest("beschikbaaritem.findById", id);
+
         Optional<BeschikbaarItem> b = beschikbaarItemRepository.findById(id);
 
-        if (b.isPresent())
-            return ResponseEntity.ok()
-                                 .body(b.get());
-        return ResponseEntity.notFound()
-                             .build();
+        if (b.isEmpty()) return Responder.respondNotFound();
+
+        return Responder.respondOk(b.get());
     }
 
     @PostMapping (value = { "/", "" })
     public ResponseEntity create (
             @RequestBody BeschikbaarItem beschikbaarItem,
-            @RequestHeader ("Authorization") String token) {
+            @RequestHeader ("Authorization") String token,
+            @RequestHeader ("Origin") String origin) {
+        APILogger.logRequest("beschikbaarItem.create", beschikbaarItem.toString());
         try {
             if (!validateBeschikbaarItem(beschikbaarItem))
-                return ResponseEntity.badRequest()
-                                     .build();
+                return Responder.respondBadRequest("not valid");
 
             Optional<BeschikbaarItem> optionalBeschikbaarItem =
                     beschikbaarItemRepository.findByUitleenbaarItemIdAndMagazijnId(
@@ -108,16 +113,15 @@ public class BeschikbaarItemController {
                             beschikbaarItem.getMagazijnId());
 
             if (optionalBeschikbaarItem.isPresent())
-                return ResponseEntity.badRequest()
-                                     .build();
+                return Responder.respondBadRequest("already present");
 
             beschikbaarItem.setId(null);
             BeschikbaarItem b = beschikbaarItemRepository.save(beschikbaarItem);
 
-            return new ResponseEntity(b, HttpStatus.CREATED);
+            return Responder.respondCreated(b);
         } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                                 .build();
+            APILogger.logException(e.getMessage());
+            return Responder.respondBadRequest(e.getMessage());
         }
     }
 
@@ -125,45 +129,45 @@ public class BeschikbaarItemController {
     public ResponseEntity put (
             @PathVariable String id,
             @RequestBody BeschikbaarItem beschikbaarItem,
-            @RequestHeader ("Authorization") String token) {
+            @RequestHeader ("Authorization") String token,
+            @RequestHeader ("Origin") String origin) {
+        APILogger.logRequest("beschikbaarItem.put", id);
         try {
             if (!validateBeschikbaarItemId(beschikbaarItem))
-                return ResponseEntity.badRequest()
-                                     .build();
+                return Responder.respondBadRequest("not valid");
 
             Optional<BeschikbaarItem> b = beschikbaarItemRepository.findById(id);
 
             if (b.isEmpty())
-                return ResponseEntity.notFound()
-                                     .build();
+                return Responder.respondNotFound();
 
             beschikbaarItem.setId(b.get()
                                    .getId());
             BeschikbaarItem result = beschikbaarItemRepository.save(beschikbaarItem);
-            return new ResponseEntity(result, HttpStatus.CREATED);
+
+            return Responder.respondCreated(result);
         } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                                 .build();
+            return Responder.respondBadRequest(e.getMessage());
         }
     }
 
     @DeleteMapping (value = "/{id}")
     public ResponseEntity delete (
             @PathVariable String id,
-            @RequestHeader ("Authorization") String token) {
+            @RequestHeader ("Authorization") String token,
+            @RequestHeader ("Origin") String origin) {
+        APILogger.logRequest("beschikbaarItem.delete", id);
         try {
             Optional<BeschikbaarItem> b = beschikbaarItemRepository.findById(id);
 
             if (b.isEmpty())
-                return ResponseEntity.badRequest()
-                                     .build();
+                return Responder.respondNotFound();
 
             beschikbaarItemRepository.delete(b.get());
-            return ResponseEntity.noContent()
-                                 .build();
+
+            return Responder.respondNoContent("deleted");
         } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                                 .build();
+            return Responder.respondBadRequest(e.getMessage());
         }
     }
 
