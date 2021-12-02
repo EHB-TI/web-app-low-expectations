@@ -36,6 +36,7 @@ public class PersoonController {
                 && (familienaam == null || familienaam.isEmpty())
                 && (email == null || email.isEmpty())
                 && (username == null || username.isEmpty())) {
+            APILogger.logRequest("persoon.findAll");
             returnValue = persoonRepository.findAll();
 
             if (returnValue.isEmpty()) return Responder.respondNotFound();
@@ -91,6 +92,7 @@ public class PersoonController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("persoon.create", persoon.toString());
+
         try {
             if (!validatePersoon(persoon))
                 return Responder.respondBadRequest("not valid");
