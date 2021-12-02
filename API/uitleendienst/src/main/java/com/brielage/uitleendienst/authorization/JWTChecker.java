@@ -2,30 +2,37 @@
 package com.brielage.uitleendienst.authorization;
 
 import com.brielage.uitleendienst.tools.APILogger;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Base64;
 
-public class JWTChecker {
-    String         token;
-    String[]       chunks;
-    Base64.Decoder decoder = Base64.getUrlDecoder();
+public enum JWTChecker {
+    ;
 
-    public JWTChecker (String token) {
-        this.token = token;
-        if (!token.isEmpty())
-            chunks = token.split("\\.");
-    }
+    private static final Base64.Decoder decoder      = Base64.getUrlDecoder();
+    private static final ObjectMapper   objectMapper = new ObjectMapper();
 
-    public void log () {
-        if (chunks == null || chunks.length == 0) {
+    public static void log (String token) {
+        if (token == null || token.isEmpty()) {
             APILogger.logResult("EMPTY TOKEN");
             return;
         }
-        
-        String header  = new String(decoder.decode(chunks[0]));
-        String payload = new String(decoder.decode(chunks[1]));
 
-        APILogger.logResult(header);
-        APILogger.logResult(payload);
+        APILogger.logResult(token);
+
+        try {
+            String[] chunks = token.split("\\.");
+
+            String header  = new String(decoder.decode(chunks[0]));
+            String payload = new String(decoder.decode(chunks[1]));
+
+            APILogger.logResult(header);
+            APILogger.logResult(payload);
+            JsonNode jsonPayload = objectMapper.readTree(payload);
+            APILogger.logResult(jsonPayload.get("cognito:groups" +
+                                                        "")
+                                           .toString());
+        } catch (Exception e) {APILogger.logException(e.getMessage());}
     }
 }
