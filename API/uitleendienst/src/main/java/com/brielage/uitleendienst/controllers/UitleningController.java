@@ -167,7 +167,7 @@ public class UitleningController {
     }
 
     private boolean validatePersoonId (String persoonId) {
-        if (persoonId == null || persoonId.isEmpty()) return true;
+        if (persoonId == null || persoonId.isEmpty()) return false;
         Optional<Persoon> o = persoonRepository.findById(persoonId);
         return o.isPresent();
     }
