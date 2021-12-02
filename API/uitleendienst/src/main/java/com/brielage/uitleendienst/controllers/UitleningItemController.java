@@ -42,7 +42,7 @@ public class UitleningItemController {
         List<UitleningItem> returnValue = new ArrayList<>();
 
         //return findAll() if no properties
-        if (uitleenbaarItemId == null || uitleenbaarItemId.isEmpty()
+        if ((uitleenbaarItemId == null || uitleenbaarItemId.isEmpty())
                 && (uitleningId == null || uitleningId.isEmpty())) {
             APILogger.logRequest("uitleningitem.findAll");
             returnValue = uitleningItemRepository.findAll();
@@ -53,7 +53,7 @@ public class UitleningItemController {
         }
 
         //add all elements found by the properties to returnValue
-        if (!uitleenbaarItemId.isEmpty()){
+        if (uitleenbaarItemId != null && !uitleenbaarItemId.isEmpty()){
             APILogger.logRequest("uitleningitem.findAllByUitleenbaarItemIdIsIn");
             returnValue.addAll(
                     uitleningItemRepository.findAllByUitleenbaarItemIdIsIn(uitleenbaarItemId));
