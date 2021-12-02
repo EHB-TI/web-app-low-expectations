@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 
 public enum JWTChecker {
     ;
@@ -17,6 +18,7 @@ public enum JWTChecker {
     private static final Base64.Decoder decoder      = Base64.getUrlDecoder();
     private static final ObjectMapper   objectMapper = new ObjectMapper();
 
+    @SuppressWarnings ("unused")
     public static void log (String token) {
         if (!checkTokenForLog(token)) return;
 
@@ -78,6 +80,12 @@ public enum JWTChecker {
         return groups.contains(permission.group);
     }
 
+    public static boolean checkUsername (
+            String token,
+            String username) {
+        return Objects.equals(getUsername(token), username);
+    }
+
     private static JsonNode getHeader (String token)
             throws
             JsonProcessingException {
@@ -101,6 +109,17 @@ public enum JWTChecker {
 
             return groups;
         } catch (Exception e) {
+            APILogger.logException(e.getMessage());
+            return null;
+        }
+    }
+
+    public static String getUsername (String token) {
+        try {
+            return getPayload(token).get("username")
+                                    .toString()
+                                    .replaceAll("\"", "");
+        } catch (JsonProcessingException e) {
             APILogger.logException(e.getMessage());
             return null;
         }
