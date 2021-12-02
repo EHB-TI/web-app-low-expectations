@@ -38,7 +38,7 @@ namespace WebApplication_Uitleendienst.Areas.Admin.Controllers {
         }
 
         public IActionResult Detail(string Id) {
-            var category = _uitleenbaarItemService.Get(Id);
+            var category = _uitleenbaarItemService.Get(propertyValue: Id);
             return View(category);
         }
 

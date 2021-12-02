@@ -25,7 +25,7 @@ namespace WebApplication_Uitleendienst.Areas.Admin.Controllers {
         }
 
         public IActionResult Detail(string Id) {
-            var category = _magazijnService.Get(Id);
+            var category = _magazijnService.Get(propertyValue: Id);
             return View(category);
         }
 

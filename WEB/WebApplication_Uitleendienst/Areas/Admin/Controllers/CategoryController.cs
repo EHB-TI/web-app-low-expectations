@@ -24,7 +24,7 @@ namespace WebApplication_Uitleendienst.Areas.Admin.Controllers {
         }
 
         public IActionResult Edit(string Id) {
-            var category = _categoryService.Get(Id);
+            var category = _categoryService.Get(propertyValue: Id);
             if (category != null) {
                 return View(category);
             } else {
