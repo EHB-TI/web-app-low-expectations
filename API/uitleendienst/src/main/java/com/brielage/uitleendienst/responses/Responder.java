@@ -11,7 +11,7 @@ public enum Responder {
     ;
 
     public static ResponseEntity respondOk (Object o) {
-        APILogger.logSuccess(o.toString());
+        APILogger.logSuccess(o);
         return ResponseEntity.ok()
                              .body(o);
     }

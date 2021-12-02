@@ -1,8 +1,10 @@
 package com.brielage.uitleendienst.tools;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedScanList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public enum APILogger {
@@ -27,16 +29,18 @@ public enum APILogger {
 
     public static void logSuccess ()                 {logSuccess("success");}
 
-    public static void logSuccess (List<Object> objects) {
-        StringBuilder output = new StringBuilder();
-        for (Object o : objects)
-            output.append(o.toString())
-                  .append("; ");
-        logSuccess(output.toString());
-    }
-
+    @SuppressWarnings ("unchecked")
     public static void logSuccess (Object object) {
-        logSuccess(object.toString());
+        String output;
+        if (object instanceof PaginatedScanList p) {
+            List<String> strings = new ArrayList<>();
+            p.forEach(o -> strings.add(o.toString()));
+            output = "\n" + String.join("\n", strings);
+        } else {
+            output = object.toString();
+        }
+
+        logSuccess(output);
     }
 
 }
