@@ -6,9 +6,10 @@ import com.brielage.uitleendienst.models.Persoon;
 import com.brielage.uitleendienst.repositories.ContactMagazijnRepository;
 import com.brielage.uitleendienst.repositories.MagazijnRepository;
 import com.brielage.uitleendienst.repositories.PersoonRepository;
+import com.brielage.uitleendienst.responses.Responder;
+import com.brielage.uitleendienst.tools.APILogger;
 import com.brielage.uitleendienst.tools.RemoveDuplicates;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@SuppressWarnings ("rawtypes")
 @RestController
 @RequestMapping (value = "/contactmagazijn")
 public class ContactMagazijnController {
@@ -30,117 +32,129 @@ public class ContactMagazijnController {
     @GetMapping (value = { "/", "" })
     public ResponseEntity findByProperties (
             @RequestParam (required = false) List<String> persoondId,
-            @RequestParam (required = false) List<String> magazijnId
-                                           ) {
+            @RequestParam (required = false) List<String> magazijnId,
+            @RequestHeader ("Authorization") String token,
+            @RequestHeader ("Origin") String origin) {
+
         if ((persoondId == null || persoondId.isEmpty())
                 && (magazijnId == null || magazijnId.isEmpty())) {
+            APILogger.logRequest("contactmagazijn.findAll");
             List<ContactMagazijn> contactMagazijnen = contactMagazijnRepository.findAll();
 
-            if (contactMagazijnen.isEmpty())
-                return ResponseEntity.notFound()
-                                     .build();
+            if (contactMagazijnen.isEmpty()) return Responder.respondNotFound();
 
-            return ResponseEntity.ok()
-                                 .body(contactMagazijnen);
+            return Responder.respondOk(contactMagazijnen);
         }
 
         List<ContactMagazijn> contactMagazijnen = new ArrayList<>();
 
-        if (persoondId != null && !persoondId.isEmpty())
+        if (persoondId != null && !persoondId.isEmpty()){
+            APILogger.logRequest("contactmagazijn.findAllByPersoonIdIsIn");
             contactMagazijnen.addAll(contactMagazijnRepository.findAllByPersoonIdIsIn(persoondId));
-        if (magazijnId != null && !magazijnId.isEmpty())
-            contactMagazijnen.addAll(contactMagazijnRepository.findAllByMagazijnIdIsIn(magazijnId));
+        }
 
+        if (magazijnId != null && !magazijnId.isEmpty()){
+            APILogger.logRequest("contactmagazijn.findAllByMagazijnIdIsIn");
+            contactMagazijnen.addAll(contactMagazijnRepository.findAllByMagazijnIdIsIn(magazijnId));
+        }
+
+
+        if (contactMagazijnen.isEmpty()) return Responder.respondNotFound();
+
+        //remove duplicates
         contactMagazijnen = RemoveDuplicates.removeDuplicates(contactMagazijnen);
 
-        if (contactMagazijnen.isEmpty())
-            return ResponseEntity.notFound()
-                                 .build();
-
-        return ResponseEntity.ok()
-                             .body(contactMagazijnen);
+        return Responder.respondOk(contactMagazijnen);
     }
 
     @GetMapping ("/{id}")
-    public ResponseEntity findById (@PathVariable String id) {
+    public ResponseEntity findById (
+            @PathVariable String id,
+            @RequestHeader ("Authorization") String token,
+            @RequestHeader ("Origin") String origin) {
+        APILogger.logRequest("contactmagazijn.findById", id);
+
         Optional<ContactMagazijn> c = contactMagazijnRepository.findById(id);
 
-        if (c.isPresent())
-            return ResponseEntity.ok()
-                                 .body(c.get());
+        if (c.isEmpty()) return Responder.respondNotFound();
 
-        return ResponseEntity.notFound()
-                             .build();
+        return Responder.respondOk(c.get());
     }
 
     @PostMapping (value = { "/", "" })
-    public ResponseEntity create (@RequestBody ContactMagazijn contactMagazijn) {
+    public ResponseEntity create (
+            @RequestBody ContactMagazijn contactMagazijn,
+            @RequestHeader ("Authorization") String token,
+            @RequestHeader ("Origin") String origin) {
+        APILogger.logRequest("contactMagazijn.create", contactMagazijn.toString());
+
         try {
             if (!validateContactMagazijn(contactMagazijn))
-                return ResponseEntity.badRequest()
-                                     .build();
+                return Responder.respondBadRequest("not valid");
 
             Optional<ContactMagazijn> optionalContactMagazijn =
                     contactMagazijnRepository.findByMagazijnIdAndPersoonId(
                             contactMagazijn.getMagazijnId(), contactMagazijn.getPersoonId());
 
             if (optionalContactMagazijn.isPresent())
-                return ResponseEntity.badRequest()
-                                     .build();
+                return Responder.respondBadRequest("already present");
 
             // ignore ID when creating, will get automagically generated by DB
             contactMagazijn.setId(null);
             ContactMagazijn c = contactMagazijnRepository.save(contactMagazijn);
 
-            return new ResponseEntity(c, HttpStatus.CREATED);
+            return Responder.respondCreated(c);
         } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                                 .build();
+            APILogger.logException(e.getMessage());
+            return Responder.respondBadRequest(e.getMessage());
         }
     }
 
     @PutMapping (value = "/{id}")
     public ResponseEntity put (
             @PathVariable String id,
-            @RequestBody ContactMagazijn contactMagazijn) {
+            @RequestBody ContactMagazijn contactMagazijn,
+            @RequestHeader ("Authorization") String token,
+            @RequestHeader ("Origin") String origin) {
+        APILogger.logRequest("contactMagazijn.put", id);
+
         try {
             if (!validateContactMagazijnId(contactMagazijn))
-                return ResponseEntity.badRequest()
-                                     .build();
+                return Responder.respondBadRequest("not valid");
 
             Optional<ContactMagazijn> c = contactMagazijnRepository.findById(id);
 
             if (c.isEmpty())
-                return ResponseEntity.notFound()
-                                     .build();
+                return Responder.respondNotFound();
 
             contactMagazijn.setId(c.get()
                                    .getId());
             ContactMagazijn result = contactMagazijnRepository.save(contactMagazijn);
 
-            return new ResponseEntity(result, HttpStatus.CREATED);
+            return Responder.respondCreated(result);
         } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                                 .build();
+            return Responder.respondBadRequest(e.getMessage());
         }
     }
 
     @DeleteMapping (value = "/{id}")
-    public ResponseEntity delete (@PathVariable String id) {
+    public ResponseEntity delete (
+            @PathVariable String id,
+            @RequestHeader ("Authorization") String token,
+            @RequestHeader ("Origin") String origin) {
+        APILogger.logRequest("uitleenbaarItem.delete", id);
+
         try {
             Optional<ContactMagazijn> c = contactMagazijnRepository.findById(id);
 
             if (c.isEmpty())
-                return ResponseEntity.badRequest()
-                                     .build();
+                return Responder.respondNotFound();
 
             contactMagazijnRepository.delete(c.get());
 
-            return ResponseEntity.noContent()
-                                 .build();
+            return Responder.respondNoContent("deleted");
         } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                                 .build();
+            return Responder.respondBadRequest(e.getMessage());
         }
     }
 
