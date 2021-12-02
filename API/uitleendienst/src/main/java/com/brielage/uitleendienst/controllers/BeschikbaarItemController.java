@@ -1,5 +1,7 @@
 package com.brielage.uitleendienst.controllers;
 
+import com.brielage.uitleendienst.authorization.JWTChecker;
+import com.brielage.uitleendienst.authorization.Permission;
 import com.brielage.uitleendienst.models.BeschikbaarItem;
 import com.brielage.uitleendienst.models.Magazijn;
 import com.brielage.uitleendienst.models.UitleenbaarItem;
@@ -25,8 +27,10 @@ public class BeschikbaarItemController {
     @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
     @Autowired
     private BeschikbaarItemRepository beschikbaarItemRepository;
+    @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
     @Autowired
     private UitleenbaarItemRepository uitleenbaarItemRepository;
+    @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
     @Autowired
     private MagazijnRepository        magazijnRepository;
 
@@ -37,6 +41,13 @@ public class BeschikbaarItemController {
             @RequestParam (required = false) List<String> categorieId,
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
+        APILogger.logRequest("beschikbaarItem.get*");
+
+        if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
+
+        if (!JWTChecker.checkPermission(token, Permission.ADMIN))
+            return Responder.respondForbidden();
+
         List<BeschikbaarItem> returnValue = new ArrayList<>();
 
         //return findAll() if no properties
@@ -54,13 +65,13 @@ public class BeschikbaarItemController {
         List<String>          uitleenbaarItemIds;
 
         //add all elements found by the properties to returnValue
-        if (uitleenbaarItemId != null && !uitleenbaarItemId.isEmpty()){
+        if (uitleenbaarItemId != null && !uitleenbaarItemId.isEmpty()) {
             APILogger.logRequest("beschikbaaritem.findAllByUitleenbaarItemIdIsIn");
             returnValue.addAll(
                     beschikbaarItemRepository.findAllByUitleenbaarItemIdIsIn(uitleenbaarItemId));
         }
 
-        if (magazijnId != null && !magazijnId.isEmpty()){
+        if (magazijnId != null && !magazijnId.isEmpty()) {
             APILogger.logRequest("beschikbaaritem.findAllByMagazijnIdIsIn");
             returnValue.addAll(beschikbaarItemRepository.findAllByMagazijnIdIsIn(magazijnId));
         }
@@ -90,6 +101,11 @@ public class BeschikbaarItemController {
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("beschikbaaritem.findById", id);
 
+        if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
+
+        if (!JWTChecker.checkPermission(token, Permission.ADMIN))
+            return Responder.respondForbidden();
+
         Optional<BeschikbaarItem> b = beschikbaarItemRepository.findById(id);
 
         if (b.isEmpty()) return Responder.respondNotFound();
@@ -103,6 +119,12 @@ public class BeschikbaarItemController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("beschikbaarItem.create", beschikbaarItem.toString());
+
+        if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
+
+        if (!JWTChecker.checkPermission(token, Permission.ADMIN))
+            return Responder.respondForbidden();
+
         try {
             if (!validateBeschikbaarItem(beschikbaarItem))
                 return Responder.respondBadRequest("not valid");
@@ -119,10 +141,7 @@ public class BeschikbaarItemController {
             BeschikbaarItem b = beschikbaarItemRepository.save(beschikbaarItem);
 
             return Responder.respondCreated(b);
-        } catch (Exception e) {
-            APILogger.logException(e.getMessage());
-            return Responder.respondBadRequest(e.getMessage());
-        }
+        } catch (Exception e) {return Responder.respondBadRequest(e.getMessage());}
     }
 
     @PutMapping (value = "/{id}")
@@ -132,6 +151,12 @@ public class BeschikbaarItemController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("beschikbaarItem.put", id);
+
+        if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
+
+        if (!JWTChecker.checkPermission(token, Permission.ADMIN))
+            return Responder.respondForbidden();
+
         try {
             if (!validateBeschikbaarItemId(beschikbaarItem))
                 return Responder.respondBadRequest("not valid");
@@ -146,9 +171,7 @@ public class BeschikbaarItemController {
             BeschikbaarItem result = beschikbaarItemRepository.save(beschikbaarItem);
 
             return Responder.respondCreated(result);
-        } catch (Exception e) {
-            return Responder.respondBadRequest(e.getMessage());
-        }
+        } catch (Exception e) {return Responder.respondBadRequest(e.getMessage());}
     }
 
     @DeleteMapping (value = "/{id}")
@@ -157,6 +180,12 @@ public class BeschikbaarItemController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("beschikbaarItem.delete", id);
+
+        if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
+
+        if (!JWTChecker.checkPermission(token, Permission.ADMIN))
+            return Responder.respondForbidden();
+
         try {
             Optional<BeschikbaarItem> b = beschikbaarItemRepository.findById(id);
 
@@ -166,9 +195,7 @@ public class BeschikbaarItemController {
             beschikbaarItemRepository.delete(b.get());
 
             return Responder.respondNoContent("deleted");
-        } catch (Exception e) {
-            return Responder.respondBadRequest(e.getMessage());
-        }
+        } catch (Exception e) {return Responder.respondBadRequest(e.getMessage());}
     }
 
     private boolean validateBeschikbaarItemId (BeschikbaarItem b) {
