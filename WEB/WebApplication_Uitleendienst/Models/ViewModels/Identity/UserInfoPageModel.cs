@@ -55,13 +55,31 @@ namespace WebApplication_Uitleendienst.Models.ViewModels.Identity {
 
         public string Username {
             get {
-                return httpContextAccessor.User?.Claims.FirstOrDefault(c => c.Type.Equals("username"))?.Value;
+                return httpContextAccessor.User?.Claims.FirstOrDefault(c => c.Type.Equals("cognito:username"))?.Value;
             }
         }
 
         public string Name {
             get {
                 return httpContextAccessor.User?.Claims.FirstOrDefault(c => c.Type.Equals("name"))?.Value;
+            }
+        }
+
+        public string Telephone {
+            get {
+                return httpContextAccessor.User?.Claims.FirstOrDefault(c => c.Type.Equals("phone_number"))?.Value;
+            }
+        }
+
+        public string Adress {
+            get {
+                return httpContextAccessor.User?.Claims.FirstOrDefault(c => c.Type.Equals("address"))?.Value;
+            }
+        }
+
+        public string FamilyName {
+            get {
+                return httpContextAccessor.User?.Claims.FirstOrDefault(c => c.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname"))?.Value;
             }
         }
     }

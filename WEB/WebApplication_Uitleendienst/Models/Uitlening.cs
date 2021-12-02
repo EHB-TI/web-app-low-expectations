@@ -1,10 +1,11 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 namespace WebApplication_Uitleendienst {
 
     public class Uitlening {
         private string id;
-        private string organisatieId;
+        private string persoonId;
         private string magazijnId;
         private string start;
         private string eind;
@@ -14,7 +15,7 @@ namespace WebApplication_Uitleendienst {
         public Uitlening() {
         }
 
-
+        [JsonProperty("id")]
         public virtual string Id {
             get {
                 return id;
@@ -23,16 +24,16 @@ namespace WebApplication_Uitleendienst {
                 this.id = value;
             }
         }
-
-        public virtual string OrganisatieId {
+        [JsonProperty("persoonId")]
+        public virtual string PersoonId {
             get {
-                return organisatieId;
+                return persoonId;
             }
             set {
-                this.organisatieId = value;
+                this.persoonId = value;
             }
         }
-
+        [JsonProperty("magazijnId")]
         public virtual string MagazijnId {
             get {
                 return magazijnId;
@@ -42,7 +43,7 @@ namespace WebApplication_Uitleendienst {
             }
         }
 
-
+        [JsonProperty("start")]
         public virtual string Start {
             get {
                 return start;
@@ -51,7 +52,7 @@ namespace WebApplication_Uitleendienst {
                 this.start = value;
             }
         }
-
+        [JsonProperty("eind")]
         public virtual string Eind {
             get {
                 return eind;
@@ -61,7 +62,7 @@ namespace WebApplication_Uitleendienst {
             }
         }
 
-
+        [JsonProperty("teruggebrachtOp")]
         public virtual string TeruggebrachtOp {
             get {
                 return teruggebrachtOp;
@@ -70,7 +71,7 @@ namespace WebApplication_Uitleendienst {
                 this.teruggebrachtOp = value;
             }
         }
-
+        [JsonProperty("opmerking")]
         public virtual string Opmerking {
             get {
                 return opmerking;

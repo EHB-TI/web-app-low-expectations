@@ -3,19 +3,12 @@
 	public class ContactHuurder
 	{
 		private string id;
-		private Persoon persoon;
-		private Organisatie organisatie;
+		private string persoonId;
+		private string organisatieId;
 		private string opmerking;
 
 		public ContactHuurder()
 		{
-		}
-
-		public ContactHuurder(Persoon persoon, Organisatie organisatie, string opmerking)
-		{
-			this.persoon = persoon;
-			this.organisatie = organisatie;
-			this.opmerking = opmerking;
 		}
 
 		public virtual string Id
@@ -30,27 +23,27 @@
 			}
 		}
 
-		public virtual Persoon Persoon
+		public virtual string PersoonId
 		{
 			get
 			{
-				return persoon;
+				return persoonId;
 			}
 			set
 			{
-				this.persoon = value;
+				this.persoonId = value;
 			}
 		}
 
-		public virtual Organisatie Organisatie
+		public virtual string OrganisatieId
 		{
 			get
 			{
-				return organisatie;
+				return organisatieId;
 			}
 			set
 			{
-				this.organisatie = value;
+				this.organisatieId = value;
 			}
 		}
 
@@ -66,11 +59,6 @@
 			}
 		}
 
-
-		public override string ToString()
-		{
-			return "ContactHuurder{" + "id='" + id + '\'' + ", persoon=" + persoon + ", organisatie=" + organisatie + ", opmerking='" + opmerking + '\'' + '}';
-		}
 	}
 
 }
