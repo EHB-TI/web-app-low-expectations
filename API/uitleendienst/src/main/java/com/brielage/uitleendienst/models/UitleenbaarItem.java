@@ -1,10 +1,6 @@
 package com.brielage.uitleendienst.models;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.util.Date;
-
 
 @DynamoDBTable (tableName = "uitleenbaarItem")
 public class UitleenbaarItem {
