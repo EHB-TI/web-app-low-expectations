@@ -1,5 +1,7 @@
 package com.brielage.uitleendienst.controllers;
 
+import com.brielage.uitleendienst.authorization.JWTChecker;
+import com.brielage.uitleendienst.authorization.Permission;
 import com.brielage.uitleendienst.models.Persoon;
 import com.brielage.uitleendienst.repositories.PersoonRepository;
 import com.brielage.uitleendienst.responses.Responder;
@@ -29,6 +31,10 @@ public class PersoonController {
             @RequestParam (required = false) List<String> username,
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
+        APILogger.logRequest("persoon.get*");
+
+        if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
+
         List<Persoon> returnValue = new ArrayList<>();
 
         //return findAll() if no properties
@@ -37,6 +43,10 @@ public class PersoonController {
                 && (email == null || email.isEmpty())
                 && (username == null || username.isEmpty())) {
             APILogger.logRequest("persoon.findAll");
+
+            if (!JWTChecker.checkPermission(token, Permission.ADMIN))
+                return Responder.respondForbidden();
+
             returnValue = persoonRepository.findAll();
 
             if (returnValue.isEmpty()) return Responder.respondNotFound();
@@ -47,21 +57,43 @@ public class PersoonController {
         //add all elements found by the properties to returnValue
         if (voornaam != null && !voornaam.isEmpty()) {
             APILogger.logRequest("persoon.findAllByVoornaamIsIn");
+
+            if (!JWTChecker.checkPermission(token, Permission.ADMIN))
+                return Responder.respondForbidden();
+
             returnValue.addAll(persoonRepository.findAllByVoornaamIsIn(voornaam));
         }
 
         if (familienaam != null && !familienaam.isEmpty()) {
             APILogger.logRequest("persoon.findAllByFamilienaamIsIn");
+
+            if (!JWTChecker.checkPermission(token, Permission.ADMIN))
+                return Responder.respondForbidden();
+
             returnValue.addAll(persoonRepository.findAllByFamilienaamIsIn(familienaam));
         }
 
         if (email != null && !email.isEmpty()) {
             APILogger.logRequest("persoon.findAllByEmailIsIn");
+
+            if (!JWTChecker.checkPermission(token, Permission.ADMIN))
+                return Responder.respondForbidden();
+
             returnValue.addAll(persoonRepository.findAllByEmailIsIn(email));
         }
 
         if (username != null && !username.isEmpty()) {
             APILogger.logRequest("persoon.findAllByUsernameIsIn");
+
+            if (username.size() == 1) {
+                if (!JWTChecker.checkUsername(token, username.get(0))
+                        || !JWTChecker.checkPermission(token, Permission.ADMIN))
+                    return Responder.respondForbidden();
+            } else {
+                if (!JWTChecker.checkPermission(token, Permission.ADMIN))
+                    return Responder.respondForbidden();
+            }
+
             returnValue.addAll(persoonRepository.findAllByUsernameIsIn(username));
         }
 
@@ -79,7 +111,16 @@ public class PersoonController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("persoon.findById", id);
+
         Optional<Persoon> p = persoonRepository.findById(id);
+
+        if (p.isPresent())
+            if (!p.get()
+                  .getUsername()
+                  .equals(JWTChecker.getUsername(token)))
+                return Responder.respondForbidden();
+            else if (!JWTChecker.checkPermission(token, Permission.ADMIN))
+                return Responder.respondForbidden();
 
         if (p.isEmpty()) return Responder.respondNotFound();
 
@@ -93,6 +134,8 @@ public class PersoonController {
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("persoon.create", persoon.toString());
 
+        if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
+
         try {
             if (!validatePersoon(persoon))
                 return Responder.respondBadRequest("not valid");
@@ -100,9 +143,7 @@ public class PersoonController {
             Persoon p = persoonRepository.save(persoon);
 
             return Responder.respondCreated(p);
-        } catch (Exception e) {
-            return Responder.respondBadRequest(e.getMessage());
-        }
+        } catch (Exception e) {return Responder.respondBadRequest(e.getMessage());}
     }
 
     @PutMapping (value = "/{id}")
@@ -112,6 +153,8 @@ public class PersoonController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("persoon.put", id);
+
+        if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
 
         try {
             if (!validatePersoonId(persoon))
@@ -128,9 +171,7 @@ public class PersoonController {
             Persoon result = persoonRepository.save(persoon);
 
             return Responder.respondCreated(result);
-        } catch (Exception e) {
-            return Responder.respondBadRequest(e.getMessage());
-        }
+        } catch (Exception e) {return Responder.respondBadRequest(e.getMessage());}
     }
 
     @DeleteMapping (value = "/{id}")
@@ -139,6 +180,11 @@ public class PersoonController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("persoon.delete", id);
+
+        if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
+
+        if (!JWTChecker.checkPermission(token, Permission.ADMIN))
+            return Responder.respondForbidden();
 
         try {
             Optional<Persoon> p = persoonRepository.findById(id);
@@ -149,9 +195,7 @@ public class PersoonController {
             persoonRepository.delete(p.get());
 
             return Responder.respondNoContent("deleted");
-        } catch (Exception e) {
-            return Responder.respondBadRequest(e.getMessage());
-        }
+        } catch (Exception e) {return Responder.respondBadRequest(e.getMessage());}
     }
 
     private boolean validatePersoonId (Persoon p) {
