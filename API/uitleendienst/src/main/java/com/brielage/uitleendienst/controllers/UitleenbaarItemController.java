@@ -1,5 +1,7 @@
 package com.brielage.uitleendienst.controllers;
 
+import com.brielage.uitleendienst.authorization.JWTChecker;
+import com.brielage.uitleendienst.authorization.Permission;
 import com.brielage.uitleendienst.models.Categorie;
 import com.brielage.uitleendienst.models.UitleenbaarItem;
 import com.brielage.uitleendienst.repositories.CategorieRepository;
@@ -22,6 +24,7 @@ public class UitleenbaarItemController {
     @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
     @Autowired
     private UitleenbaarItemRepository uitleenbaarItemRepository;
+    @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
     @Autowired
     private CategorieRepository       categorieRepository;
 
@@ -37,6 +40,7 @@ public class UitleenbaarItemController {
         if ((categorieId == null || categorieId.isEmpty())
                 && (naam == null || naam.isEmpty())) {
             APILogger.logRequest("uitleenbaarItem.findAll");
+
             returnValue = uitleenbaarItemRepository.findAll();
 
             if (returnValue.isEmpty()) return Responder.respondNotFound();
@@ -45,16 +49,15 @@ public class UitleenbaarItemController {
         }
 
         //add all elements found by the properties to returnValue
-        if (categorieId != null && !categorieId.isEmpty()){
+        if (categorieId != null && !categorieId.isEmpty()) {
             APILogger.logRequest("uitleenbaarItem.findAllByCategorieIdIsIn");
             returnValue.addAll(uitleenbaarItemRepository.findAllByCategorieIdIsIn(categorieId));
         }
 
-        if (naam != null && !naam.isEmpty()){
+        if (naam != null && !naam.isEmpty()) {
             APILogger.logRequest("uitleenbaarItem.findAllByNaamIsIn");
             returnValue.addAll(uitleenbaarItemRepository.findAllByNaamIsIn(naam));
         }
-
 
         if (returnValue.isEmpty()) return Responder.respondNotFound();
 
@@ -85,6 +88,11 @@ public class UitleenbaarItemController {
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("uitleenbaarItem.create", uitleenbaarItem.toString());
 
+        if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
+
+        if (!JWTChecker.checkPermission(token, Permission.ADMIN))
+            return Responder.respondForbidden();
+
         try {
             if (!validateUitleenbaarItem(uitleenbaarItem)) {
                 return Responder.respondBadRequest("not valid");
@@ -102,10 +110,7 @@ public class UitleenbaarItemController {
             UitleenbaarItem u = uitleenbaarItemRepository.save(uitleenbaarItem);
 
             return Responder.respondCreated(u);
-        } catch (Exception e) {
-            APILogger.logException(e.getMessage());
-            return Responder.respondBadRequest(e.getMessage());
-        }
+        } catch (Exception e) {return Responder.respondBadRequest(e.getMessage());}
     }
 
     @PutMapping (value = "/{id}")
@@ -115,6 +120,11 @@ public class UitleenbaarItemController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("uitleenbaarItem.put", id);
+
+        if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
+
+        if (!JWTChecker.checkPermission(token, Permission.ADMIN))
+            return Responder.respondForbidden();
 
         try {
             if (!validateUitleenbaarItemId(uitleenbaarItem))
@@ -130,9 +140,7 @@ public class UitleenbaarItemController {
             UitleenbaarItem result = uitleenbaarItemRepository.save(uitleenbaarItem);
 
             return Responder.respondCreated(result);
-        } catch (Exception e) {
-            return Responder.respondBadRequest(e.getMessage());
-        }
+        } catch (Exception e) {return Responder.respondBadRequest(e.getMessage());}
     }
 
     @DeleteMapping (value = "/{id}")
@@ -151,9 +159,7 @@ public class UitleenbaarItemController {
             uitleenbaarItemRepository.delete(u.get());
 
             return Responder.respondNoContent("deleted");
-        } catch (Exception e) {
-            return Responder.respondBadRequest(e.getMessage());
-        }
+        } catch (Exception e) {return Responder.respondBadRequest(e.getMessage());}
     }
 
     private boolean validateUitleenbaarItemId (UitleenbaarItem u) {
@@ -182,8 +188,11 @@ public class UitleenbaarItemController {
             APILogger.logFail("categorieId null or empty");
             return false;
         }
+
         Optional<Categorie> c = categorieRepository.findById(categorieId);
+
         if (c.isEmpty()) APILogger.logFail("optional categorie empty");
+
         return c.isPresent();
     }
 }
