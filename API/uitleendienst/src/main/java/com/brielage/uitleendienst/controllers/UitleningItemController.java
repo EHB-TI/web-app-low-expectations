@@ -6,9 +6,9 @@ import com.brielage.uitleendienst.models.UitleningItem;
 import com.brielage.uitleendienst.repositories.UitleenbaarItemRepository;
 import com.brielage.uitleendienst.repositories.UitleningItemRepository;
 import com.brielage.uitleendienst.repositories.UitleningRepository;
+import com.brielage.uitleendienst.responses.Responder;
 import com.brielage.uitleendienst.tools.APILogger;
 import com.brielage.uitleendienst.tools.RemoveDuplicates;
-import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@SuppressWarnings ("rawtypes")
 @RestController
 @RequestMapping (value = "/uitleningitem")
 public class UitleningItemController {
@@ -36,62 +37,67 @@ public class UitleningItemController {
     public ResponseEntity findByProperties (
             @RequestParam (required = false) List<String> uitleenbaarItemId,
             @RequestParam (required = false) List<String> uitleningId,
-            @RequestHeader ("Authorization") String token) {
+            @RequestHeader ("Authorization") String token,
+            @RequestHeader ("Origin") String origin) {
         List<UitleningItem> returnValue = new ArrayList<>();
 
         //return findAll() if no properties
         if (uitleenbaarItemId == null || uitleenbaarItemId.isEmpty()
                 && (uitleningId == null || uitleningId.isEmpty())) {
+            APILogger.logRequest("uitleningitem.findAll");
             returnValue = uitleningItemRepository.findAll();
 
-            if (returnValue.isEmpty())
-                return ResponseEntity.notFound()
-                                     .build();
+            if (returnValue.isEmpty()) return Responder.respondNotFound();
 
-            return ResponseEntity.ok()
-                                 .body(returnValue);
+            return Responder.respondOk(returnValue);
         }
 
         //add all elements found by the properties to returnValue
-        if (!uitleenbaarItemId.isEmpty())
+        if (!uitleenbaarItemId.isEmpty()){
+            APILogger.logRequest("uitleningitem.findAllByUitleenbaarItemIdIsIn");
             returnValue.addAll(
                     uitleningItemRepository.findAllByUitleenbaarItemIdIsIn(uitleenbaarItemId));
-        if (uitleningId != null && !uitleningId.isEmpty())
-            returnValue.addAll(uitleningItemRepository.findAllByUitleningIdIsIn(uitleningId));
+        }
 
-        if (returnValue.isEmpty())
-            return ResponseEntity.notFound()
-                                 .build();
+        if (uitleningId != null && !uitleningId.isEmpty()){
+            APILogger.logRequest("uitleningitem.findAllByUitleningIdIsIn");
+            returnValue.addAll(uitleningItemRepository.findAllByUitleningIdIsIn(uitleningId));
+        }
+
+        if (returnValue.isEmpty()) return Responder.respondNotFound();
 
         //remove duplicates
         returnValue = RemoveDuplicates.removeDuplicates(returnValue);
 
-        return ResponseEntity.ok()
-                             .body(returnValue);
+        return Responder.respondOk(returnValue);
     }
 
     @SuppressWarnings ("rawtypes")
     @GetMapping ("/{id}")
-    public ResponseEntity findById (@PathVariable String id,
-                                    @RequestHeader ("Authorization") String token) {
+    public ResponseEntity findById (
+            @PathVariable String id,
+            @RequestHeader ("Authorization") String token,
+            @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("uitleningItem.findById", id);
+
         Optional<UitleningItem> u = uitleningItemRepository.findById(id);
 
-        if (u.isPresent())
-            return ResponseEntity.ok()
-                                 .body(u.get());
-        return ResponseEntity.notFound()
-                             .build();
+        if (u.isEmpty()) return Responder.respondNotFound();
+
+        return Responder.respondOk(u.get());
     }
 
     @SuppressWarnings ("rawtypes")
     @PostMapping (value = { "/", "" })
-    public ResponseEntity create (@RequestBody List<UitleningItem> uitleningItems,
-                                  @RequestHeader ("Authorization") String token) {
+    public ResponseEntity create (
+            @RequestBody List<UitleningItem> uitleningItems,
+            @RequestHeader ("Authorization") String token,
+            @RequestHeader ("Origin") String origin) {
+        APILogger.logRequest("uitleenbaarItem.create", uitleningItems.toString());
+
         if (uitleningItems == null || uitleningItems.isEmpty()) {
             APILogger.logFail("uitleningitems is null or empty");
-            return ResponseEntity.badRequest()
-                                 .build();
+            return Responder.respondBadRequest("not valid");
         }
 
         StringBuilder logoutput = new StringBuilder();
@@ -108,8 +114,7 @@ public class UitleningItemController {
             for (UitleningItem ui : uitleningItems) {
                 if (!validateUitleningItem(ui)) {
                     APILogger.logFail("not valid");
-                    return ResponseEntity.badRequest()
-                                         .build();
+                    return Responder.respondBadRequest("not valid");
                 }
 
                 Optional<UitleningItem> optionalUitleningItem =
@@ -118,8 +123,7 @@ public class UitleningItemController {
 
                 if (optionalUitleningItem.isPresent()) {
                     APILogger.logFail("uitleningItem already exists");
-                    return ResponseEntity.badRequest()
-                                         .build();
+                    return Responder.respondBadRequest("already present");
                 }
             }
 
@@ -133,11 +137,10 @@ public class UitleningItemController {
 
             //noinspection unchecked
             APILogger.logSuccess(createdItems);
-            return new ResponseEntity(createdItems, HttpStatus.CREATED);
+            return Responder.respondCreated(createdItems);
         } catch (Exception e) {
             APILogger.logException(e.getMessage());
-            return ResponseEntity.badRequest()
-                                 .build();
+            return Responder.respondBadRequest(e.getMessage());
         }
     }
 
@@ -146,51 +149,48 @@ public class UitleningItemController {
     public ResponseEntity put (
             @PathVariable String id,
             @RequestBody UitleningItem uitleningItem,
-            @RequestHeader ("Authorization") String token) {
+            @RequestHeader ("Authorization") String token,
+            @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("uitleningItem.put", id);
         try {
             if (!validateUitleningItemId(uitleningItem))
-                return ResponseEntity.badRequest()
-                                     .build();
+                return Responder.respondBadRequest("not valid");
 
             Optional<UitleningItem> u = uitleningItemRepository.findById(id);
 
             if (u.isEmpty())
-                return ResponseEntity.notFound()
-                                     .build();
+                return Responder.respondNotFound();
 
             uitleningItem.setId(u.get()
                                  .getId());
             UitleningItem result = uitleningItemRepository.save(uitleningItem);
 
             //noinspection unchecked
-            return new ResponseEntity(result, HttpStatus.CREATED);
+            return Responder.respondCreated(result);
         } catch (Exception e) {
-            APILogger.logException(e.getMessage());
-            return ResponseEntity.badRequest()
-                                 .build();
+            return Responder.respondBadRequest(e.getMessage());
         }
     }
 
     @SuppressWarnings ("rawtypes")
     @DeleteMapping (value = "/{id}")
-    public ResponseEntity delete (@PathVariable String id,
-                                  @RequestHeader ("Authorization") String token) {
+    public ResponseEntity delete (
+            @PathVariable String id,
+            @RequestHeader ("Authorization") String token,
+            @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("uitleningItem.delete", id);
+
         try {
             Optional<UitleningItem> u = uitleningItemRepository.findById(id);
 
             if (u.isEmpty())
-                return ResponseEntity.badRequest()
-                                     .build();
+                return Responder.respondNotFound();
 
             uitleningItemRepository.delete(u.get());
-            return ResponseEntity.noContent()
-                                 .build();
+
+            return Responder.respondNoContent("deleted");
         } catch (Exception e) {
-            APILogger.logException(e.getMessage());
-            return ResponseEntity.badRequest()
-                                 .build();
+            return Responder.respondBadRequest(e.getMessage());
         }
     }
 
