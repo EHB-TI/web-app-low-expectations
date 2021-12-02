@@ -49,4 +49,14 @@ public enum Responder {
         return ResponseEntity.noContent()
                              .build();
     }
+
+    public static ResponseEntity respondForbidden () {
+        APILogger.logFail("forbidden");
+        return new ResponseEntity(HttpStatus.FORBIDDEN);
+    }
+
+    public static ResponseEntity respondUnauthorized () {
+        APILogger.logFail("unauthorized");
+        return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+    }
 }

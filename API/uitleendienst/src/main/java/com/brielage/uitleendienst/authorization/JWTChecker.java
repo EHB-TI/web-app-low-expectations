@@ -2,10 +2,14 @@
 package com.brielage.uitleendienst.authorization;
 
 import com.brielage.uitleendienst.tools.APILogger;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 public enum JWTChecker {
     ;
@@ -14,25 +18,91 @@ public enum JWTChecker {
     private static final ObjectMapper   objectMapper = new ObjectMapper();
 
     public static void log (String token) {
-        if (token == null || token.isEmpty()) {
-            APILogger.logResult("EMPTY TOKEN");
-            return;
-        }
+        if (!checkTokenForLog(token)) return;
 
         APILogger.logResult(token);
 
         try {
-            String[] chunks = token.split("\\.");
-
-            String header  = new String(decoder.decode(chunks[0]));
-            String payload = new String(decoder.decode(chunks[1]));
-
-            APILogger.logResult(header);
-            APILogger.logResult(payload);
-            JsonNode jsonPayload = objectMapper.readTree(payload);
-            APILogger.logResult(jsonPayload.get("cognito:groups" +
-                                                        "")
-                                           .toString());
+            APILogger.logResult(getHeader(token).toString());
+            APILogger.logResult(getPayload(token).toString());
         } catch (Exception e) {APILogger.logException(e.getMessage());}
+    }
+
+    private static boolean checkTokenForLog (String token) {
+        if (token == null || token.isEmpty()) {
+            APILogger.logFail("EMPTY TOKEN");
+            return false;
+        }
+
+        return true;
+    }
+
+    @SuppressWarnings ("BooleanMethodIsAlwaysInverted")
+    public static boolean checkToken (String token) {
+        if (token == null || token.isEmpty()) {
+            APILogger.logFail("EMPTY TOKEN");
+            return false;
+        }
+
+        try {
+            // get header but don't do anything with it,
+            // just to get Exception if the header is invalid
+            getHeader(token);
+
+            String tokenUse = getPayload(token).get("token_use")
+                                               .toString()
+                                               .replaceAll("\"", "");
+
+            if (tokenUse.equals("access")) {
+                APILogger.logSuccess("token checked");
+                return true;
+            }
+        } catch (Exception e) {
+            APILogger.logFail(e.getMessage());
+            return false;
+        }
+
+        APILogger.logFail("token invalid");
+        return false;
+    }
+
+    @SuppressWarnings ("BooleanMethodIsAlwaysInverted")
+    public static boolean checkPermission (
+            String token,
+            Permission permission) {
+        List<String> groups = getGroups(token);
+
+        if (groups == null || groups.isEmpty() || permission == null) return false;
+
+        APILogger.logSuccess("is in group " + permission.group);
+        return groups.contains(permission.group);
+    }
+
+    private static JsonNode getHeader (String token)
+            throws
+            JsonProcessingException {
+        return objectMapper.readTree(new String(decoder.decode(token.split("\\.")[0])));
+    }
+
+    private static JsonNode getPayload (String token)
+            throws
+            JsonProcessingException {
+        return objectMapper.readTree(new String(decoder.decode(token.split("\\.")[1])));
+    }
+
+    private static List<String> getGroups (String token) {
+        try {
+            List<String> groups    = new ArrayList<>();
+            ArrayNode    arrayNode = (ArrayNode) getPayload(token).get("cognito:groups");
+
+            for (final JsonNode jsonNode : arrayNode)
+                groups.add(jsonNode.toString()
+                                   .replaceAll("\"", ""));
+
+            return groups;
+        } catch (Exception e) {
+            APILogger.logException(e.getMessage());
+            return null;
+        }
     }
 }
