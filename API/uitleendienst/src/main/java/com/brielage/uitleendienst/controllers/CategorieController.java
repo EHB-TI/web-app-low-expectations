@@ -1,5 +1,7 @@
 package com.brielage.uitleendienst.controllers;
 
+import com.brielage.uitleendienst.authorization.JWTChecker;
+import com.brielage.uitleendienst.authorization.Permission;
 import com.brielage.uitleendienst.models.Categorie;
 import com.brielage.uitleendienst.repositories.CategorieRepository;
 import com.brielage.uitleendienst.responses.Responder;
@@ -62,6 +64,11 @@ public class CategorieController {
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("categorie.create", categorie.toString());
 
+        if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
+
+        if (!JWTChecker.checkPermission(token, Permission.ADMIN))
+            return Responder.respondForbidden();
+
         try {
             if (!validateCategorie(categorie))
                 return Responder.respondBadRequest("not valid");
@@ -83,6 +90,11 @@ public class CategorieController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("categorie.put", id);
+
+        if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
+
+        if (!JWTChecker.checkPermission(token, Permission.ADMIN))
+            return Responder.respondForbidden();
 
         try {
             if (!validateCategorieId(categorie))
@@ -109,6 +121,11 @@ public class CategorieController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("categorie.delete", id);
+
+        if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
+
+        if (!JWTChecker.checkPermission(token, Permission.ADMIN))
+            return Responder.respondForbidden();
 
         try {
             Optional<Categorie> c = categorieRepository.findById(id);
