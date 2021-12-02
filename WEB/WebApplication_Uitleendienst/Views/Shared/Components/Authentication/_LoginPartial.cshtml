@@ -9,12 +9,12 @@
 
 <ul class="navbar-nav d-flex align-items-center">
     @if (User.Identity.IsAuthenticated) {
-        <li class="nav-item">
-            <a class="nav-link btn btn-light px-2 py-1" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+    <li class="nav-item">
+            <a class="nav-link btn btn-light px-2 py-1" asp-area="Account" asp-controller="Order" asp-action="Index" title="Manage">
                 <i class="fa-solid fa-user"></i>
                 @Model.UserInfo.Name
             </a>
-        </li>
+    </li>
         @if (Model.UserInfo.IsAdmin) {
             <li class="nav-item">
                 <a class="nav-link btn btn-dark px-2 py-1" asp-area="Admin" asp-controller="Home" asp-action="Index" title="Manage">

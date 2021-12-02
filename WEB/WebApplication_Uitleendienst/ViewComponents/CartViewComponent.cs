@@ -12,7 +12,7 @@ namespace WebApplication_Uitleendienst.ViewComponents {
     public class CartViewComponent : ViewComponent {
         public async Task<IViewComponentResult> InvokeAsync(){ 
             var model = new CartViewModel();
-            var cart = HttpContext.Session.GetString("Cart");
+            var cart = HttpContext.Request.Cookies["Cart"];
             if(cart != null){
                 model.Cart = JsonConvert.DeserializeObject<List<CartItem>>(cart);
             }

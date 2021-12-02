@@ -481,3 +481,5 @@ C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-exp
 C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\Razor\Areas\Admin\Views\Product\CreateBeschikbaarItem.cshtml.g.cs
 C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\Razor\Areas\Admin\Views\Product\CreateUitleenbaarItem.cshtml.g.cs
 C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\Razor\Areas\Admin\Views\Magazijn\Create.cshtml.g.cs
+C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\Razor\Areas\Identity\Views\Order\Index.cshtml.g.cs
+C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\Razor\Areas\Account\Views\Order\Index.cshtml.g.cs

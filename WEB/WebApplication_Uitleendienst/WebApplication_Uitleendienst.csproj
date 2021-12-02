@@ -27,7 +27,9 @@
     <DotNetCliToolReference Include="DotnetPublishSsh" Version="0.1.0" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas\Account\Views\Shared\" />
     <Folder Include="Areas\Admin\Views\Shared\" />
+    <Folder Include="Areas\Identity\Controllers\" />
     <Folder Include="wwwroot\assets\" />
     <Folder Include="wwwroot\assets\bootstrap\js\" />
   </ItemGroup>

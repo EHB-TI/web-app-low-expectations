@@ -4,6 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@await Component.InvokeAsync("Message", @Model)
 
 @if (Model.Cart != null) {
     <table class="table cart">
@@ -28,9 +29,8 @@
                 </tr>
             }
         </tbody>
-
-        <a class="btn btn-dark" href="@Url.Action("CreateUitlening", "Cart", new { @Cart = Model.Cart})">Uitlenen</a>
     </table>
+    <a class="btn btn-dark" href="@Url.Action("CreateUitlening", "Cart")">Uitlenen</a>
 } else {
     <div class="row">
         <div class="col-12 d-flex justify-content-center align-items-center">

@@ -38,7 +38,7 @@ namespace WebApplication_Uitleendienst.Controllers {
             } else {
                 model.BeschikbareItems.ToList().ForEach(s => {
                     model.TotalStock += (int)s.AantalTotaal;
-                    model.Magazijnen.Add(_magazijnService.Get(s.MagazijnId));
+                    model.Magazijnen.Add(_magazijnService.Get(propertyValue: s.MagazijnId));
                 });
             }
 
@@ -69,7 +69,7 @@ namespace WebApplication_Uitleendienst.Controllers {
                     MagazijnId = magazijnId,
                     UserId = new UserInfoPageModel(HttpContext).Username
                 };
-                var currentCart = HttpContext.Session.GetString("Cart");
+                var currentCart = HttpContext.Request.Cookies["Cart"];
 
                 if (!string.IsNullOrEmpty(currentCart)) {
                     // when there is info in current cart
@@ -86,7 +86,8 @@ namespace WebApplication_Uitleendienst.Controllers {
                     cart.Remove(existingCartItem);
                 }
                 cart.Add(cartItem);
-                HttpContext.Session.SetString("Cart", JsonConvert.SerializeObject(cart));
+
+                HttpContext.Response.Cookies.Append("Cart", JsonConvert.SerializeObject(cart));
 
                 return "success";
             } catch (Exception ex) {

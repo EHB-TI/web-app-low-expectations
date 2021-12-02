@@ -11,13 +11,14 @@ using System.Threading.Tasks;
 using WebApplication_Uitleendienst.AuthorizeAttributes;
 using WebApplication_Uitleendienst.Models;
 using WebApplication_Uitleendienst.Models.ViewModels;
+using WebApplication_Uitleendienst.Models.ViewModels.Identity;
 using WebApplication_Uitleendienst.Services.Interfaces;
 
 namespace WebApplication_Uitleendienst.Controllers {
     public class HomeController : BaseController {
         private readonly ILogger<HomeController> _logger;
-        private readonly IBaseService<Categorie> _categorieService;        
-        
+        private readonly IBaseService<Categorie> _categorieService;
+
         public HomeController(ILogger<HomeController> logger, IBaseService<Categorie> catService) {
             _logger = logger;
             _categorieService = catService;
@@ -25,7 +26,9 @@ namespace WebApplication_Uitleendienst.Controllers {
 
         public IActionResult Index() {
             var model = new HomeViewModel(HttpContext);
-            model.Categories = _categorieService.GetAll(cache: true);
+            var userInfo = new UserInfoPageModel(HttpContext);
+            model.Categories = _categorieService.GetAll(cache: false, token: userInfo.Token);
+
             return View(model);
         }
 

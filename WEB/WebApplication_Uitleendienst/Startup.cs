@@ -55,6 +55,7 @@ namespace WebApplication_Uitleendienst {
             services.AddTransient<IBaseService<Magazijn>, BaseService<Magazijn>>();
             services.AddTransient<IBaseService<Uitlening>, BaseService<Uitlening>>();
             services.AddTransient<IBaseService<UitleningItem>, BaseService<UitleningItem>>();
+            services.AddTransient<IBaseService<Persoon>, BaseService<Persoon>>();
 
             services.AddAuthentication(options => {
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -112,9 +113,21 @@ namespace WebApplication_Uitleendienst {
             });
 
             app.UseEndpoints(endpoints => {
+
+                endpoints.MapAreaControllerRoute(
+                    name: "Admin",
+                    areaName: "Admin",
+                    pattern: "Admin/{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapAreaControllerRoute(
+                    name: "Account",
+                    areaName: "Account",
+                    pattern: "Account/{controller=Order}/{action=Index}/{id?}");
+
+
                 endpoints.MapControllerRoute(
-                name: "Admin",
-                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+               name: "Account",
+               pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
