@@ -1,5 +1,7 @@
 package com.brielage.uitleendienst.controllers;
 
+import com.brielage.uitleendienst.authorization.JWTChecker;
+import com.brielage.uitleendienst.authorization.Permission;
 import com.brielage.uitleendienst.models.Magazijn;
 import com.brielage.uitleendienst.repositories.MagazijnRepository;
 import com.brielage.uitleendienst.responses.Responder;
@@ -27,6 +29,12 @@ public class MagazijnController {
             @RequestParam (required = false) List<String> email,
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
+        APILogger.logRequest("magazijn.get*");
+
+        if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
+
+        if (!JWTChecker.checkPermission(token, Permission.ADMIN))
+            return Responder.respondForbidden();
 
         if ((naam == null || naam.isEmpty())
                 && (email == null || email.isEmpty())) {
@@ -40,12 +48,12 @@ public class MagazijnController {
 
         List<Magazijn> magazijnen = new ArrayList<>();
 
-        if (naam != null && !naam.isEmpty()){
+        if (naam != null && !naam.isEmpty()) {
             APILogger.logRequest("magazijn.findAllByNaamIsIn");
             magazijnen.addAll(magazijnRepository.findAllByNaamIsIn(naam));
         }
 
-        if (email != null && !email.isEmpty()){
+        if (email != null && !email.isEmpty()) {
             APILogger.logRequest("magazijn.findAllByEmailIsIn");
             magazijnen.addAll(magazijnRepository.findAllByEmailIsIn(email));
         }
@@ -64,6 +72,11 @@ public class MagazijnController {
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("magazijn.findById", id);
 
+        if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
+
+        if (!JWTChecker.checkPermission(token, Permission.ADMIN))
+            return Responder.respondForbidden();
+
         Optional<Magazijn> m = magazijnRepository.findById(id);
 
         if (m.isEmpty()) return Responder.respondNotFound();
@@ -78,6 +91,11 @@ public class MagazijnController {
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("magazijn.create", magazijn.toString());
 
+        if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
+
+        if (!JWTChecker.checkPermission(token, Permission.ADMIN))
+            return Responder.respondForbidden();
+
         try {
             if (!validateMagazijn(magazijn))
                 return Responder.respondBadRequest("not valid");
@@ -87,10 +105,7 @@ public class MagazijnController {
             Magazijn m = magazijnRepository.save(magazijn);
 
             return Responder.respondCreated(m);
-        } catch (Exception e) {
-            APILogger.logException(e.getMessage());
-            return Responder.respondBadRequest(e.getMessage());
-        }
+        } catch (Exception e) {return Responder.respondBadRequest(e.getMessage());}
     }
 
     @PutMapping (value = "/{id}")
@@ -100,6 +115,12 @@ public class MagazijnController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("magazijn.put", id);
+
+        if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
+
+        if (!JWTChecker.checkPermission(token, Permission.ADMIN))
+            return Responder.respondForbidden();
+
         try {
             if (!validateMagazijnId(magazijn))
                 return Responder.respondBadRequest("not valid");
@@ -114,9 +135,7 @@ public class MagazijnController {
             Magazijn result = magazijnRepository.save(magazijn);
 
             return Responder.respondCreated(result);
-        } catch (Exception e) {
-            return Responder.respondBadRequest(e.getMessage());
-        }
+        } catch (Exception e) {return Responder.respondBadRequest(e.getMessage());}
     }
 
     @DeleteMapping (value = "/{id}")
@@ -125,6 +144,12 @@ public class MagazijnController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("magazijn.delete", id);
+
+        if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
+
+        if (!JWTChecker.checkPermission(token, Permission.ADMIN))
+            return Responder.respondForbidden();
+
         try {
             Optional<Magazijn> m = magazijnRepository.findById(id);
 
@@ -134,9 +159,7 @@ public class MagazijnController {
             magazijnRepository.delete(m.get());
 
             return Responder.respondNoContent("deleted");
-        } catch (Exception e) {
-            return Responder.respondBadRequest(e.getMessage());
-        }
+        } catch (Exception e) {return Responder.respondBadRequest(e.getMessage());}
     }
 
     private boolean validateMagazijnId (Magazijn m) {
