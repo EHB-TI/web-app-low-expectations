@@ -26,6 +26,7 @@ public class PersoonController {
             @RequestParam (required = false) List<String> voornaam,
             @RequestParam (required = false) List<String> familienaam,
             @RequestParam (required = false) List<String> email,
+            @RequestParam (required = false) List<String> username,
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         List<Persoon> returnValue = new ArrayList<>();
@@ -33,8 +34,8 @@ public class PersoonController {
         //return findAll() if no properties
         if ((voornaam == null || voornaam.isEmpty())
                 && (familienaam == null || familienaam.isEmpty())
-                && (email == null || email.isEmpty())) {
-            APILogger.logRequest("persoon.findAll");
+                && (email == null || email.isEmpty())
+                && (username == null || username.isEmpty())) {
             returnValue = persoonRepository.findAll();
 
             if (returnValue.isEmpty()) return Responder.respondNotFound();
@@ -43,25 +44,30 @@ public class PersoonController {
         }
 
         //add all elements found by the properties to returnValue
-        if (voornaam != null && !voornaam.isEmpty()){
+        if (voornaam != null && !voornaam.isEmpty()) {
             APILogger.logRequest("persoon.findAllByVoornaamIsIn");
             returnValue.addAll(persoonRepository.findAllByVoornaamIsIn(voornaam));
         }
 
-        if (familienaam != null && !familienaam.isEmpty()){
+        if (familienaam != null && !familienaam.isEmpty()) {
             APILogger.logRequest("persoon.findAllByFamilienaamIsIn");
             returnValue.addAll(persoonRepository.findAllByFamilienaamIsIn(familienaam));
         }
 
-        if (email != null && !email.isEmpty()){
+        if (email != null && !email.isEmpty()) {
             APILogger.logRequest("persoon.findAllByEmailIsIn");
             returnValue.addAll(persoonRepository.findAllByEmailIsIn(email));
         }
 
-        if (returnValue.isEmpty()) return Responder.respondNotFound();
+        if (username != null && !username.isEmpty()) {
+            APILogger.logRequest("persoon.findAllByUsernameIsIn");
+            returnValue.addAll(persoonRepository.findAllByUsernameIsIn(username));
+        }
 
         //remove duplicates
         returnValue = RemoveDuplicates.removeDuplicates(returnValue);
+
+        if (returnValue.isEmpty()) return Responder.respondNotFound();
 
         return Responder.respondOk(returnValue);
     }
@@ -72,7 +78,6 @@ public class PersoonController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("persoon.findById", id);
-
         Optional<Persoon> p = persoonRepository.findById(id);
 
         if (p.isEmpty()) return Responder.respondNotFound();
@@ -94,7 +99,6 @@ public class PersoonController {
 
             return Responder.respondCreated(p);
         } catch (Exception e) {
-            APILogger.logException(e.getMessage());
             return Responder.respondBadRequest(e.getMessage());
         }
     }
@@ -106,6 +110,7 @@ public class PersoonController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("persoon.put", id);
+
         try {
             if (!validatePersoonId(persoon))
                 return Responder.respondBadRequest("not valid");
@@ -114,6 +119,7 @@ public class PersoonController {
 
             if (p.isEmpty())
                 return Responder.respondNotFound();
+
 
             persoon.setId(p.get()
                            .getId());
@@ -131,6 +137,7 @@ public class PersoonController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("persoon.delete", id);
+
         try {
             Optional<Persoon> p = persoonRepository.findById(id);
 
@@ -162,6 +169,8 @@ public class PersoonController {
                 && !p.getTelefoon()
                      .isEmpty()
                 && !p.getEmail()
+                     .isEmpty()
+                && !p.getUsername()
                      .isEmpty();
     }
 }

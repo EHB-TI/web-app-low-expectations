@@ -23,4 +23,6 @@ public interface PersoonRepository
     List<Persoon> findAllByTelefoonIsIn (List<String> telefoon);
 
     List<Persoon> findAllByEmailIsIn (List<String> email);
+
+    List<Persoon> findAllByUsernameIsIn (List<String> uesrname);
 }
