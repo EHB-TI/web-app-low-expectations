@@ -47,10 +47,10 @@ public class BeschikbaarItemController {
         if (!OriginChecker.checkOrigin(origin))
             return Responder.respondBadRequest("origin not allowed " + origin);
 
-        if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
+//        if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
 
-        if (!JWTChecker.checkPermission(token, Permission.ADMIN))
-            return Responder.respondForbidden();
+//        if (!JWTChecker.checkPermission(token, Permission.ADMIN))
+//            return Responder.respondForbidden();
 
         List<BeschikbaarItem> returnValue = new ArrayList<>();
 
