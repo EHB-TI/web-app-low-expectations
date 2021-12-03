@@ -133,3 +133,6 @@ De AWS root account is beveiligd met MFA en wordt in principe nooit gebruikt, en
 
 # Deployment
 *Aan te vullen*
+
+# Toegelaten Origins
+https://peahi.be
