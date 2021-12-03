@@ -16,4 +16,10 @@ public interface VerantwoordelijkeMagazijnRepository extends CrudRepository<Vera
     Optional<VerantwoordelijkeMagazijn> findByPersoonId (String id);
 
     List<VerantwoordelijkeMagazijn> findAllByMagazijnId (String id);
+
+    List<VerantwoordelijkeMagazijn> findAllByPersoonIdIsIn (List<String> id);
+
+    List<VerantwoordelijkeMagazijn> findAllByMagazijnIdIsIn (List<String> id);
+
+    Optional<VerantwoordelijkeMagazijn> findByMagazijnIdAndPersoonId (String magazijnId, String persoonId);
 }

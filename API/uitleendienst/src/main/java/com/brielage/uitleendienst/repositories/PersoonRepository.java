@@ -18,9 +18,9 @@ public interface PersoonRepository
 
     List<Persoon> findAllByFamilienaamIsIn (List<String> familienaam);
 
-    List<Persoon> findAllByAdresIsIn (List<String> adres);
-
-    List<Persoon> findAllByTelefoonIsIn (List<String> telefoon);
-
     List<Persoon> findAllByEmailIsIn (List<String> email);
+
+    List<Persoon> findAllByUsernameIsIn (List<String> uesrname);
+
+    List<Persoon> findAllByUsernameIsIn (String username);
 }

@@ -8,16 +8,16 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 @DynamoDBTable (tableName = "verantwoordelijkeMagazijn")
 public class VerantwoordelijkeMagazijn {
     private String   id;
-    private Persoon  persoon;
-    private Magazijn magazijn;
+    private String persoonId;
+    private String magazijnId;
 
     public VerantwoordelijkeMagazijn () {}
 
     public VerantwoordelijkeMagazijn (
-            Persoon persoon,
-            Magazijn magazijn) {
-        this.persoon  = persoon;
-        this.magazijn = magazijn;
+            String persoonId,
+            String magazijnId) {
+        this.persoonId = persoonId;
+        this.magazijnId = magazijnId;
     }
 
     @DynamoDBHashKey
@@ -32,31 +32,31 @@ public class VerantwoordelijkeMagazijn {
     }
 
     @DynamoDBAttribute
-    public Persoon getPersoon () {
-        return persoon;
+    public String getPersoonId() {
+        return persoonId;
     }
 
     @DynamoDBAttribute
-    public void setPersoon (Persoon persoon) {
-        this.persoon = persoon;
+    public void setPersoonId(String persoonId) {
+        this.persoonId = persoonId;
     }
 
     @DynamoDBAttribute
-    public Magazijn getMagazijn () {
-        return magazijn;
+    public String getMagazijnId() {
+        return magazijnId;
     }
 
     @DynamoDBAttribute
-    public void setMagazijn (Magazijn magazijn) {
-        this.magazijn = magazijn;
+    public void setMagazijnId(String magazijnId) {
+        this.magazijnId = magazijnId;
     }
 
     @Override
     public String toString () {
         return "VerantwoordelijkeMagazijn{" +
                 "id='" + id + '\'' +
-                ", persoon=" + persoon +
-                ", magazijn=" + magazijn +
+                ", persoonId=" + persoonId +
+                ", magazijnId=" + magazijnId +
                 '}';
     }
 

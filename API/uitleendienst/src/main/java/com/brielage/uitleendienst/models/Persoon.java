@@ -14,6 +14,7 @@ public class Persoon {
     private String telefoon;
     private String email;
     private String opmerking;
+    private String username;
 
     public Persoon () {}
 
@@ -23,7 +24,8 @@ public class Persoon {
             String adres,
             String telefoon,
             String email,
-            String opmerking) {
+            String opmerking,
+            String username) {
         this.voornaam    = voornaam;
         this.familienaam = familienaam;
         this.adres       = adres;
@@ -95,6 +97,12 @@ public class Persoon {
         this.opmerking = opmerking;
     }
 
+    @DynamoDBAttribute
+    public String getUsername () {return username;}
+
+    @DynamoDBAttribute
+    public void setUsername (final String username) {this.username = username;}
+
     @Override
     public String toString () {
         return "Persoon{" +
@@ -105,14 +113,16 @@ public class Persoon {
                 ", telefoon='" + telefoon + '\'' +
                 ", email='" + email + '\'' +
                 ", opmerking='" + opmerking + '\'' +
+                ", username='" + username + '\'' +
                 '}';
     }
 
     @Override
-    public boolean equals(Object o){
-        if(o instanceof Persoon p){
-            return this.getId().equals(p.getId());
-        }
+    public boolean equals (Object o) {
+        if (o instanceof Persoon p)
+            return this.getId()
+                       .equals(p.getId());
+
         return false;
     }
 }
