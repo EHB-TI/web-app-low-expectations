@@ -80,13 +80,14 @@ public class UitleningItemController {
         if (uitleningId != null && !uitleningId.isEmpty()) {
             APILogger.logRequest("uitleningitem.findAllByUitleningIdIsIn");
 
-            List<Uitlening> uitlenings = uitleningRepository.findAllById(uitleningId);
+            for (String uid : uitleningId) {
+                Optional<Uitlening> optionalUitlening = uitleningRepository.findById(uid);
 
-            if (uitlenings.isEmpty()) return Responder.respondForbidden();
+                if (optionalUitlening.isEmpty()) return Responder.respondForbidden();
 
-            for (Uitlening uitlening : uitlenings) {
                 Optional<Persoon> optionalPersoon =
-                        persoonRepository.findById(uitlening.getPersoonId());
+                        persoonRepository.findById(optionalUitlening.get()
+                                                                    .getPersoonId());
 
                 if (optionalPersoon.isEmpty()
                         || (!JWTChecker.checkUsername(token, optionalPersoon.get()

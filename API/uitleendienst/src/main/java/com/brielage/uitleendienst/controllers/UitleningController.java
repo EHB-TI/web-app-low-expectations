@@ -64,8 +64,13 @@ public class UitleningController {
 
         //add all elements found by the properties to returnValue
         if (persoonId != null && !persoonId.isEmpty()) {
-            List<Persoon> personen = persoonRepository.findAllByUsernameIsIn(
-                    JWTChecker.getUsername(token));
+            String usernameFromToken = JWTChecker.getUsername(token);
+
+            if (usernameFromToken == null || usernameFromToken.isEmpty())
+                return Responder.respondForbidden();
+
+            List<Persoon> personen =
+                    persoonRepository.findAllByUsernameIsIn(List.of(usernameFromToken));
 
             if (personen.isEmpty()) return Responder.respondForbidden();
 
