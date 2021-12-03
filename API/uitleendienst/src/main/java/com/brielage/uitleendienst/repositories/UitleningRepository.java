@@ -16,19 +16,9 @@ public interface UitleningRepository
 
     List<Uitlening> findAllByPersoonId (String id);
 
-    List<Uitlening> findAllByMagazijnId (String id);
-
-    List<Uitlening> findAllByStart (String start);
-
-    List<Uitlening> findAllByEind (String eind);
-
-    List<Uitlening> findAllByTeruggebrachtOp (String teruggebrachtOp);
-
     List<Uitlening> findAllByPersoonIdIsIn (List<String> persoonId);
 
     List<Uitlening> findAllByMagazijnIdIsIn (List<String> magazijnId);
 
-    Optional<Uitlening> findByPersoonIdAndMagazijnId (
-            String organisatieId,
-            String magazijnId);
+    List<Uitlening> findAllById (List<String> ids);
 }
