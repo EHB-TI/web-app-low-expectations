@@ -79,10 +79,10 @@ public class MagazijnController {
         if (!OriginChecker.checkOrigin(origin))
             return Responder.respondBadRequest("origin not allowed " + origin);
 
-        if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
-
-        if (!JWTChecker.checkPermission(token, Permission.ADMIN))
-            return Responder.respondForbidden();
+//        if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
+//
+//        if (!JWTChecker.checkPermission(token, Permission.ADMIN))
+//            return Responder.respondForbidden();
 
         Optional<Magazijn> m = magazijnRepository.findById(id);
 
