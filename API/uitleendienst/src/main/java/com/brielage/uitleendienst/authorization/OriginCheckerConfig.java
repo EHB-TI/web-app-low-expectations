@@ -15,7 +15,7 @@ public class OriginCheckerConfig {
 
     @Bean
     public OriginChecker originChecker () {
-        List<String> allowedOrigins = List.of(origin1, origin2);
+        List<String> allowedOrigins = List.of(origin1/*, origin2*/);
         //noinspection InstantiationOfUtilityClass
         return new OriginChecker(allowedOrigins);
     }
