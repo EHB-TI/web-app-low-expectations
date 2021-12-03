@@ -483,3 +483,10 @@ C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-exp
 C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\Razor\Areas\Admin\Views\Magazijn\Create.cshtml.g.cs
 C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\Razor\Areas\Identity\Views\Order\Index.cshtml.g.cs
 C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\Razor\Areas\Account\Views\Order\Index.cshtml.g.cs
+C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\Razor\Areas\Account\Views\Shared\_Layout.cshtml.g.cs
+C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\Razor\Areas\Account\Views\Account\Index.cshtml.g.cs
+C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\Razor\Areas\Account\Views\_ViewStart.cshtml.g.cs
+C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\Razor\Areas\Admin\Views\_ViewStart.cshtml.g.cs
+C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\Razor\Areas\Account\Views\Account\Manage.cshtml.g.cs
+C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\Razor\Areas\Account\Views\Order\Detail.cshtml.g.cs
+C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\bin\Release\net5.0\Boxed.AspNetCore.TagHelpers.dll

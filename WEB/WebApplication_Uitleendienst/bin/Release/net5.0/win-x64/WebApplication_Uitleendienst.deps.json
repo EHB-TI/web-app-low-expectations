@@ -33,8 +33,10 @@
     ".NETCoreApp,Version=v5.0": {
       "WebApplication_Uitleendienst/1.0.0": {
         "dependencies": {
+          "AWSSDK.CognitoIdentityProvider": "3.7.1.77",
           "AWSSDK.Extensions.NETCore.Setup": "3.7.1",
           "Amazon.Extensions.CognitoAuthentication": "2.2.2",
+          "Boxed.AspNetCore.TagHelpers": "5.1.0",
           "BuildBundlerMinifier": "3.2.449",
           "Microsoft.AspNetCore.Authentication.OpenIdConnect": "5.0.12",
           "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "5.0.11",
@@ -1691,7 +1693,7 @@
       "Amazon.Extensions.CognitoAuthentication/2.2.2": {
         "dependencies": {
           "AWSSDK.CognitoIdentity": "3.7.0.2",
-          "AWSSDK.CognitoIdentityProvider": "3.7.0.2"
+          "AWSSDK.CognitoIdentityProvider": "3.7.1.77"
         },
         "compile": {
           "lib/netstandard2.0/Amazon.Extensions.CognitoAuthentication.dll": {}
@@ -1699,29 +1701,29 @@
       },
       "AWSSDK.CognitoIdentity/3.7.0.2": {
         "dependencies": {
-          "AWSSDK.Core": "3.7.0.43",
+          "AWSSDK.Core": "3.7.5.4",
           "AWSSDK.SecurityToken": "3.7.0.2"
         },
         "compile": {
           "lib/netcoreapp3.1/AWSSDK.CognitoIdentity.dll": {}
         }
       },
-      "AWSSDK.CognitoIdentityProvider/3.7.0.2": {
+      "AWSSDK.CognitoIdentityProvider/3.7.1.77": {
         "dependencies": {
-          "AWSSDK.Core": "3.7.0.43"
+          "AWSSDK.Core": "3.7.5.4"
         },
         "compile": {
           "lib/netcoreapp3.1/AWSSDK.CognitoIdentityProvider.dll": {}
         }
       },
-      "AWSSDK.Core/3.7.0.43": {
+      "AWSSDK.Core/3.7.5.4": {
         "compile": {
           "lib/netcoreapp3.1/AWSSDK.Core.dll": {}
         }
       },
       "AWSSDK.Extensions.NETCore.Setup/3.7.1": {
         "dependencies": {
-          "AWSSDK.Core": "3.7.0.43",
+          "AWSSDK.Core": "3.7.5.4",
           "Microsoft.Extensions.Configuration.Abstractions": "5.0.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "5.0.0",
           "Microsoft.Extensions.Logging.Abstractions": "5.0.0"
@@ -1732,7 +1734,7 @@
       },
       "AWSSDK.SecurityToken/3.7.0.2": {
         "dependencies": {
-          "AWSSDK.Core": "3.7.0.43"
+          "AWSSDK.Core": "3.7.5.4"
         },
         "compile": {
           "lib/netcoreapp3.1/AWSSDK.SecurityToken.dll": {}
@@ -1786,6 +1788,11 @@
         },
         "compile": {
           "lib/netstandard2.0/Azure.Security.KeyVault.Secrets.dll": {}
+        }
+      },
+      "Boxed.AspNetCore.TagHelpers/5.1.0": {
+        "compile": {
+          "lib/net5.0/Boxed.AspNetCore.TagHelpers.dll": {}
         }
       },
       "BuildBundlerMinifier/3.2.449": {},
@@ -2738,8 +2745,10 @@
     ".NETCoreApp,Version=v5.0/win-x64": {
       "WebApplication_Uitleendienst/1.0.0": {
         "dependencies": {
+          "AWSSDK.CognitoIdentityProvider": "3.7.1.77",
           "AWSSDK.Extensions.NETCore.Setup": "3.7.1",
           "Amazon.Extensions.CognitoAuthentication": "2.2.2",
+          "Boxed.AspNetCore.TagHelpers": "5.1.0",
           "BuildBundlerMinifier": "3.2.449",
           "Microsoft.AspNetCore.Authentication.OpenIdConnect": "5.0.12",
           "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "5.0.11",
@@ -3031,7 +3040,7 @@
       "Amazon.Extensions.CognitoAuthentication/2.2.2": {
         "dependencies": {
           "AWSSDK.CognitoIdentity": "3.7.0.2",
-          "AWSSDK.CognitoIdentityProvider": "3.7.0.2"
+          "AWSSDK.CognitoIdentityProvider": "3.7.1.77"
         },
         "runtime": {
           "lib/netstandard2.0/Amazon.Extensions.CognitoAuthentication.dll": {
@@ -3042,7 +3051,7 @@
       },
       "AWSSDK.CognitoIdentity/3.7.0.2": {
         "dependencies": {
-          "AWSSDK.Core": "3.7.0.43",
+          "AWSSDK.Core": "3.7.5.4",
           "AWSSDK.SecurityToken": "3.7.0.2"
         },
         "runtime": {
@@ -3052,28 +3061,28 @@
           }
         }
       },
-      "AWSSDK.CognitoIdentityProvider/3.7.0.2": {
+      "AWSSDK.CognitoIdentityProvider/3.7.1.77": {
         "dependencies": {
-          "AWSSDK.Core": "3.7.0.43"
+          "AWSSDK.Core": "3.7.5.4"
         },
         "runtime": {
           "lib/netcoreapp3.1/AWSSDK.CognitoIdentityProvider.dll": {
             "assemblyVersion": "3.3.0.0",
-            "fileVersion": "3.7.0.2"
+            "fileVersion": "3.7.1.77"
           }
         }
       },
-      "AWSSDK.Core/3.7.0.43": {
+      "AWSSDK.Core/3.7.5.4": {
         "runtime": {
           "lib/netcoreapp3.1/AWSSDK.Core.dll": {
             "assemblyVersion": "3.3.0.0",
-            "fileVersion": "3.7.0.43"
+            "fileVersion": "3.7.5.4"
           }
         }
       },
       "AWSSDK.Extensions.NETCore.Setup/3.7.1": {
         "dependencies": {
-          "AWSSDK.Core": "3.7.0.43",
+          "AWSSDK.Core": "3.7.5.4",
           "Microsoft.Extensions.Configuration.Abstractions": "5.0.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "5.0.0",
           "Microsoft.Extensions.Logging.Abstractions": "5.0.0"
@@ -3087,7 +3096,7 @@
       },
       "AWSSDK.SecurityToken/3.7.0.2": {
         "dependencies": {
-          "AWSSDK.Core": "3.7.0.43"
+          "AWSSDK.Core": "3.7.5.4"
         },
         "runtime": {
           "lib/netcoreapp3.1/AWSSDK.SecurityToken.dll": {
@@ -3155,6 +3164,14 @@
           "lib/netstandard2.0/Azure.Security.KeyVault.Secrets.dll": {
             "assemblyVersion": "4.1.0.0",
             "fileVersion": "4.100.20.41103"
+          }
+        }
+      },
+      "Boxed.AspNetCore.TagHelpers/5.1.0": {
+        "runtime": {
+          "lib/net5.0/Boxed.AspNetCore.TagHelpers.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.1.0.0"
           }
         }
       },
@@ -4483,19 +4500,19 @@
       "path": "awssdk.cognitoidentity/3.7.0.2",
       "hashPath": "awssdk.cognitoidentity.3.7.0.2.nupkg.sha512"
     },
-    "AWSSDK.CognitoIdentityProvider/3.7.0.2": {
+    "AWSSDK.CognitoIdentityProvider/3.7.1.77": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-zM6E7aLVO1FRBn51C0ctxO0hL902vjEziVrjV5yTFbOSeFQRfdIkrVOxL859GBxwuIlR57uHObMPp8Cq+60p5A==",
-      "path": "awssdk.cognitoidentityprovider/3.7.0.2",
-      "hashPath": "awssdk.cognitoidentityprovider.3.7.0.2.nupkg.sha512"
+      "sha512": "sha512-G40UXMn/wZFb8HIftmkDwNF3REzRP7Dapi/NuLkAREE0OR2Cje1Sj8RMNN4Ly+umEcjhGr0AEHg2Pf2oSBllTw==",
+      "path": "awssdk.cognitoidentityprovider/3.7.1.77",
+      "hashPath": "awssdk.cognitoidentityprovider.3.7.1.77.nupkg.sha512"
     },
-    "AWSSDK.Core/3.7.0.43": {
+    "AWSSDK.Core/3.7.5.4": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-QLYFa6U6F9PL1ad0zmy9C6Pug6CqJfZ8bSGmx0hCWPUUEmw0Ma8DERDN8/AHGabIym+tYkH4aB4x7+7aB8+qPg==",
-      "path": "awssdk.core/3.7.0.43",
-      "hashPath": "awssdk.core.3.7.0.43.nupkg.sha512"
+      "sha512": "sha512-uuHIEDIYhJVUVKM/IoHXkyvZ3tJPUUCXIWLN4NhfkE0f2d8cGVRK2wLH28PCpaMM74tNQGcnAEFx45mr9asxjw==",
+      "path": "awssdk.core/3.7.5.4",
+      "hashPath": "awssdk.core.3.7.5.4.nupkg.sha512"
     },
     "AWSSDK.Extensions.NETCore.Setup/3.7.1": {
       "type": "package",
@@ -4538,6 +4555,13 @@
       "sha512": "sha512-SK4XTPEaXI5UTdtSkr8TN4ZKnvazNHhybnnkxHgOyRAhV9ObcIjbrNlhS4ZeR8XtI+HidL+v/WIIVfR1+jKB8Q==",
       "path": "azure.security.keyvault.secrets/4.1.0",
       "hashPath": "azure.security.keyvault.secrets.4.1.0.nupkg.sha512"
+    },
+    "Boxed.AspNetCore.TagHelpers/5.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-P7neuDFiGNsPZTY7DAc4xAax15n4g8s8DOzGE9ssI0nkx6vYHzgGMuIPZ+m1exfzKD3iQd4QMuBo/pcyke430w==",
+      "path": "boxed.aspnetcore.taghelpers/5.1.0",
+      "hashPath": "boxed.aspnetcore.taghelpers.5.1.0.nupkg.sha512"
     },
     "BuildBundlerMinifier/3.2.449": {
       "type": "package",

@@ -44,7 +44,7 @@ namespace WebApplication_Uitleendienst.Models.ViewModels.Identity {
 
         public bool IsAdmin {
             get {
-                return httpContextAccessor.User?.Claims.FirstOrDefault(s => s.Type.Equals("cognito:groups")).Value == "Admins-WebApplication";
+                return (bool) httpContextAccessor.User?.Claims.Where(s => s.Type.Equals("cognito:groups")).Any(s => s.Value.Equals("Admins-WebApplication"));
             }
         }
         public string Email {

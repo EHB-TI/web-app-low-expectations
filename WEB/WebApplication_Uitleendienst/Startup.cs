@@ -19,6 +19,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApplication_Uitleendienst.Data;
+using WebApplication_Uitleendienst.Models.Appsettings;
 using WebApplication_Uitleendienst.Services;
 using WebApplication_Uitleendienst.Services.Interfaces;
 using WebApplication_Uitleendienst.Utilities;
@@ -57,6 +58,10 @@ namespace WebApplication_Uitleendienst {
             services.AddTransient<IBaseService<UitleningItem>, BaseService<UitleningItem>>();
             services.AddTransient<IBaseService<Persoon>, BaseService<Persoon>>();
 
+            var cognitoConfig = Configuration.GetSection("Cognito").Get<Cognito>();
+
+            services.AddSingleton(cognitoConfig);
+
             services.AddAuthentication(options => {
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -73,6 +78,7 @@ namespace WebApplication_Uitleendienst {
                 options.Scope.Add("profile");
                 options.Scope.Add("openid");
                 options.Scope.Add("email");
+                options.Scope.Add("aws.cognito.signin.user.admin");
             });
 
             services.AddMvc().AddJsonOptions(options =>
@@ -122,7 +128,7 @@ namespace WebApplication_Uitleendienst {
                 endpoints.MapAreaControllerRoute(
                     name: "Account",
                     areaName: "Account",
-                    pattern: "Account/{controller=Order}/{action=Index}/{id?}");
+                    pattern: "Account/{controller=Account}/{action=Index}/{id?}");
 
 
                 endpoints.MapControllerRoute(

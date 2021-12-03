@@ -1,5 +1,56 @@
-﻿
+﻿@model WebApplication_Uitleendienst.Areas.Account.Models.ViewModels.OrderViewModel
+
 @{
-    ViewData["Title"] = "Create";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Account";
+    Layout = "~/Areas/Account/Views/Shared/_Layout.cshtml";
 }
+<div class="container uitleningen">
+    @if (Model.Uitleningen != null) {
+        <div class="row headers">
+            <div class="col-4">
+                #
+            </div>
+            <div class="col-3">
+                Magazijn
+            </div>
+            <div class="col-2">
+                Startdatum
+            </div>
+            <div class="col-2">
+                Einddatum
+            </div>
+            <div class="col-1">
+                
+            </div>
+        </div>
+        @foreach (var uitlening in Model.Uitleningen) {
+            <div class="row content">
+                <div class="col-4">
+                    @uitlening.Id
+                </div>
+                <div class="col-3">
+                    @uitlening.Magazijn.Naam
+                </div>
+                <div class="col-2">
+                    @uitlening.Start
+                </div>
+                <div class="col-2">
+                    @uitlening.TeruggebrachtOp
+                </div>
+                <div class="col-1">
+                    <a asp-area="Account" asp-controller="Order" asp-action="Detail" asp-route-id="@uitlening.Id">
+                        <i class="fa-solid fa-eye"></i>                   
+                    </a>
+                </div>
+            </div>
+        }
+    } else {
+        <div class="row">
+            <div class="col-12 d-flex justify-content-center">
+                <h4>Je hebt nog geen uitleningen.</h4>
+            </div>
+        </div>
+    }
+</div>
+
+

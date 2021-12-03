@@ -10,7 +10,7 @@
 <ul class="navbar-nav d-flex align-items-center">
     @if (User.Identity.IsAuthenticated) {
     <li class="nav-item">
-            <a class="nav-link btn btn-light px-2 py-1" asp-area="Account" asp-controller="Order" asp-action="Index" title="Manage">
+            <a class="nav-link btn btn-light px-2 py-1" asp-area="Account" asp-controller="Account" asp-action="Index" title="Manage">
                 <i class="fa-solid fa-user"></i>
                 @Model.UserInfo.Name
             </a>

@@ -12,6 +12,9 @@ namespace WebApplication_Uitleendienst {
         private string teruggebrachtOp;
         private string opmerking;
 
+        [JsonIgnore]
+        public Magazijn Magazijn { get; set; }
+
         public Uitlening() {
         }
 

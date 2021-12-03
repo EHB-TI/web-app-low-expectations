@@ -8,7 +8,7 @@
 
     @await Component.InvokeAsync("Message", @Model)
 
-    @if (Model.BeschikbareItems != null) {<div class="wrapper row detail">
+    @if (Model.Product != null) {<div class="wrapper row detail">
             <input type="hidden" value="@Model.Product.Id" class="product-id" />
             <div class="hidden info-text alert alert-warning">
                 <label type="text"></label>
@@ -34,14 +34,20 @@
             <div class="details col-md-6">
                 <h3 class="product-title">@Model.Product.Naam</h3>
                 <div class="stock">
-                    <h6><span class="font-weight-bold">Totale stock: </span> @Model.TotalStock</h6>
-                    <h6 class="font-weight-bold">Kies een magazijn: </h6>
-                    @foreach (var magazijn in Model.Magazijnen) {
-                        <label class="w-100">
-                            <input type="radio" @(count == 0 ? "checked='checked'" : "") name="magazijn" value="@magazijn.Id" />
-                            @magazijn.Naam : @(Model.BeschikbareItems.Where(s => s.MagazijnId == magazijn.Id).FirstOrDefault().AantalBeschikbaar > 0 ? Html.Raw("<span class='beschikbaar'>Beschikbaar</span>") : Html.Raw("<span class='niet-beschikbaar'Niet beschikaar</span>"))
-                        </label>
-                        count++;
+                    @if (Model.BeschikbareItems != null) {
+                        <h6><span class="font-weight-bold">Totale stock: </span> @Model.TotalStock</h6>
+                        <h6 class="font-weight-bold">Kies een magazijn: </h6>
+                        @foreach (var magazijn in Model.Magazijnen) {
+                            @if (magazijn != null) {
+                                <label class="w-100">
+                                    <input type="radio" @(count == 0 ? "checked='checked'" : "") name="magazijn" value="@magazijn.Id" />
+                                    @magazijn.Naam : @(Model.BeschikbareItems.Where(s => s.MagazijnId == magazijn.Id).FirstOrDefault().AantalBeschikbaar > 0 ? Html.Raw("<span class='beschikbaar'>Beschikbaar</span>") : Html.Raw("<span class='niet-beschikbaar'Niet beschikaar</span>"))
+                                </label>
+                                count++;
+                            }
+                        }
+                    } else {
+                        <h6><span class="font-weight-bold">Dit item is momenteel niet op stock.</span></h6>
                     }
                     <div class="amount">
                         <h6 class="font-weight-bold">Aantal: </h6>
@@ -57,8 +63,8 @@
                 <p class="product-description">Suspendisse quos? Tempus cras iure temporibus? Eu laudantium cubilia sem sem! Repudiandae et! Massa senectus enim minim sociosqu delectus posuere.</p>
                 <h4 class="price">Prijs: <span>€@Model.Product.Prijs</span></h4>
                 <div class="action">
-                    <a href="#!" class="add-to-cart m-0 btn btn-dark" onclick="AddToCart($(this), '@Url.Action("AddToCart", "Catalogue")')">Toevoegen aan winkelmandje</a>
-                    <button class="like btn btn-dark" type="button"><span class="fa fa-heart"></span></button>
+                    <a href="#!" @(Model.BeschikbareItems == null ? "disabled" : "") class="add-to-cart m-0 btn btn-dark @(Model.BeschikbareItems == null ? "disabled" : "")" onclick="AddToCart($(this), '@Url.Action("AddToCart", "Catalogue")')">Toevoegen aan winkelmandje</a>
+                    <button @(Model.BeschikbareItems == null ? "disabled" : "") class="like btn btn-dark @(Model.BeschikbareItems == null ? "disabled" : "")" type="button"><span class="fa fa-heart"></span></button>
                 </div>
             </div>
         </div>

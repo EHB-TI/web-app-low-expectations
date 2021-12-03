@@ -31,29 +31,38 @@ namespace WebApplication_Uitleendienst.Controllers {
             var model = new CatalogueDetailViewModel();
             model.Product = item;
             model.Magazijnen = new List<Magazijn>();
-            model.BeschikbareItems = _beschikbaarItemService.GetAll("uitleenbaarItemId", item.Id);
-            if (model.BeschikbareItems == null) {
-                model.Message = "Er is geen product gevonden";
-                model.Level = Models.ViewModels.InfoLevel.danger;
-            } else {
+            model.BeschikbareItems = _beschikbaarItemService.GetAll("uitleenbaarItemId", item.Id, token: UserInfo.Token);
+            if (model.BeschikbareItems != null) {
                 model.BeschikbareItems.ToList().ForEach(s => {
                     model.TotalStock += (int)s.AantalTotaal;
-                    model.Magazijnen.Add(_magazijnService.Get(propertyValue: s.MagazijnId));
+                    model.Magazijnen.Add(_magazijnService.Get(propertyValue: s.MagazijnId, token: UserInfo.Token));
                 });
             }
-
             return View(model);
         }
-        public IActionResult Catalogue(string categoryId) {
+        public IActionResult Catalogue(string categories) {
+
             var model = new CatalogueViewModel();
-            if (categoryId != null) {
-                var items = _uitleenbaarItemService.GetAll("categorieId", categoryId);
-                if (items == null)
+            model.SelectedCategories = new List<Categorie>();
+
+            if (!string.IsNullOrEmpty(categories)) {
+                var items = new List<UitleenbaarItem>();
+                var values = new List<string>();
+
+                // add the items based on the specified range of categories
+                var catItems = _uitleenbaarItemService.GetAll("categorieId", categories)?.ToList();
+                // add the categories to a list of known selected ones
+                model.SelectedCategories.Add(_categorieService.Get(propertyValue: categories, token: UserInfo.Token));
+
+                if (catItems == null) {
+                    model.Message = "Geen items teruggevonden voor geselecteerde categorie(s). Je krijgt een overzicht van alle items :";
+                    model.Level = Models.ViewModels.InfoLevel.info;
                     model.Products = _uitleenbaarItemService.GetAll();
-                else
-                    model.Products = items;
+                } else
+                    model.Products = catItems;
             } else
                 model.Products = _uitleenbaarItemService.GetAll();
+
             model.Categories = _categorieService.GetAll();
             return View(model);
         }
@@ -87,7 +96,7 @@ namespace WebApplication_Uitleendienst.Controllers {
                 }
                 cart.Add(cartItem);
 
-                HttpContext.Response.Cookies.Append("Cart", JsonConvert.SerializeObject(cart));
+                HttpContext.Response.Cookies.Append("Cart", JsonConvert.SerializeObject(cart), new CookieOptions { HttpOnly = true, SameSite = SameSiteMode.Lax });
 
                 return "success";
             } catch (Exception ex) {

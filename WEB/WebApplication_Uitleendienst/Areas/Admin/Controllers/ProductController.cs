@@ -8,6 +8,7 @@ using WebApplication_Uitleendienst.Models.ViewModels.Product;
 using WebApplication_Uitleendienst.Services.Interfaces;
 
 namespace WebApplication_Uitleendienst.Areas.Admin.Controllers {
+
     [Area("Admin")]
     public class ProductController : BaseAdminController {
         private readonly IBaseService<Categorie> _categoryService;
@@ -20,38 +21,77 @@ namespace WebApplication_Uitleendienst.Areas.Admin.Controllers {
             _beschikbaarItemService = beschikbaarItemService;
             _magazijnItemService = magazijnItemService;
         }
-        public IActionResult Index() {
-            var model = new ProductViewModel();
+        public IActionResult Index(ProductViewModel model = null) {
+            if (model == null)
+                model = new ProductViewModel();
             model.Products = _uitleenbaarItemService.GetAll();
             return View(model);
         }
 
         public IActionResult CreateUitleenbaarItem() {
-            return View();
+            var model = new UitleenbaarItem {
+                Categories = _categoryService.GetAll()
+            };
+            return View(model);
         }
 
-        public IActionResult CreateBeschikbaarItem() {
+        public IActionResult CreateBeschikbaarItem(string id) {
             var model = new ProductViewModel();
-            model.Products = _uitleenbaarItemService.GetAll();
-            model.Magazijnen = _magazijnItemService.GetAll();
+            model.Product = _uitleenbaarItemService.Get(propertyValue: id);
+            model.Magazijnen = _magazijnItemService.GetAll(token: UserInfo.Token);
             return View(model);
         }
 
         public IActionResult Detail(string Id) {
-            var category = _uitleenbaarItemService.Get(propertyValue: Id);
-            return View(category);
+            var prod = _uitleenbaarItemService.Get(propertyValue: Id);
+            return View(prod);
+        }
+
+        public IActionResult Edit(string Id) {
+            var prod = _uitleenbaarItemService.Get(propertyValue: Id);
+            return View(prod);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditPost(UitleenbaarItem prod) {
+            var model = new ProductViewModel();
+            var item = await _uitleenbaarItemService.Update(prod, token: UserInfo.Token);
+            if (item == null) {
+                model.Message = "Item kon niet worden geupdated.";
+                model.Level = Models.ViewModels.InfoLevel.danger;
+            } else {
+                model.Message = "Item is succesvol geupdated.";
+                model.Level = Models.ViewModels.InfoLevel.success;
+            }
+            return RedirectToAction("Index", model);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreatePost(UitleenbaarItem prod) {
-            var entity = await _uitleenbaarItemService.Save(prod);
-            return RedirectToAction("index");
+            var model = new ProductViewModel();
+            var entity = await _uitleenbaarItemService.Save(prod, token: UserInfo.Token);
+            if (entity == null) {
+                model.Message = "Item kon niet worden opgeslagen.";
+                model.Level = Models.ViewModels.InfoLevel.danger;
+            }
+             else {
+                model.Message = "Item is succesvol opgeslagen.";
+                model.Level = Models.ViewModels.InfoLevel.success;
+            }
+            return RedirectToAction("Index", model);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreatePostBeschikbaar(ProductViewModel model) {
-            var entity = await _beschikbaarItemService.Save(model.BeschikbaarItem);
-            return RedirectToAction("index");
+            var entity = await _beschikbaarItemService.Save(model.BeschikbaarItem, token: UserInfo.Token);
+            if (entity == null) {
+                model.Message = "Beschikbaarheid kon niet worden opgeslagen.";
+                model.Level = Models.ViewModels.InfoLevel.danger;
+            } else {
+                model.Message = "Beschikbaarheid is succesvol opgeslagen.";
+                model.Level = Models.ViewModels.InfoLevel.success;
+            }
+            return RedirectToAction("Index", model);
         }
     }
 }

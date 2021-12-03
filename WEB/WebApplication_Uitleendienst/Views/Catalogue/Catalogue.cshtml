@@ -4,8 +4,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@await Component.InvokeAsync("Message", @Model)
 
-<div class="container">
+
+<div class="container catalogue-wrapper">
     <div class="row catalogue">
         <div class="col-12 col-md-2 filter">
             <!-- Filters -->
@@ -16,7 +18,7 @@
                 @if (Model.Categories != null) {
                     @foreach (var cat in Model.Categories) {
                         <p>
-                            <input type="checkbox" name="@cat.Naam" onclick="reloadPartial(" />
+                            <input @(Model.SelectedCategories.Any(c => c.Id == cat.Id) ? "checked=checked" : "")  type="checkbox" value="@cat.Id" name="categorie" />
                             @cat.Naam
                         </p>
                     }
@@ -31,11 +33,12 @@
                         @await Component.InvokeAsync("Catalogue", new { uitleenbaarItem = product });
                     }
                 } else {
-                <h6>Er zijn geen producten gevonden.</h6>
-            }
+                    <h6>Er zijn geen producten gevonden.</h6>
+                }
             </div>
 
         </div>
     </div>
 
 </div>
+

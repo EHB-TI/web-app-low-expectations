@@ -5,6 +5,6 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <_PublishTargetUrl>C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\bin\Release\net5.0\publish\</_PublishTargetUrl>
-    <History>True|2021-11-29T11:51:46.0411732Z;True|2021-11-29T12:42:30.9220866+01:00;True|2021-11-27T18:42:05.0050131+01:00;</History>
+    <History>True|2021-12-03T16:48:56.1847435Z;True|2021-12-03T17:43:38.2241533+01:00;True|2021-12-03T17:39:24.4232403+01:00;True|2021-12-03T17:22:00.7225701+01:00;True|2021-12-03T16:53:21.1166393+01:00;True|2021-12-03T16:46:39.2938698+01:00;True|2021-11-29T12:51:46.0411732+01:00;True|2021-11-29T12:42:30.9220866+01:00;True|2021-11-27T18:42:05.0050131+01:00;</History>
   </PropertyGroup>
 </Project>

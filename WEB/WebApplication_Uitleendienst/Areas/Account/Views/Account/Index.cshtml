@@ -1,0 +1,13 @@
+﻿@model WebApplication_Uitleendienst.Areas.Account.Models.ViewModels.AccountViewModel
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Account/Views/Shared/_Layout.cshtml";
+}
+
+@await Component.InvokeAsync("Message", @Model)
+
+<div class="row">
+    <div class="col-12 d-flex justify-content-center">
+        <img src="~/images/account/banner.png" />
+    </div>
+</div>

@@ -35,8 +35,8 @@ namespace WebApplication_Uitleendienst.Controllers {
                 var cart = JsonConvert.DeserializeObject<List<CartItem>>(cartSession);
                 // populate cart data with actual product and magazijn info
                 cart.ForEach(c => {
-                    c.Product = _uitleenbaarItemService.Get(propertyValue: c.ProductId);
-                    c.Magazijn = _magazijnService.Get(propertyValue: c.MagazijnId);
+                    c.Product = _uitleenbaarItemService.Get(propertyValue: c.ProductId, token: UserInfo.Token);
+                    c.Magazijn = _magazijnService.Get(propertyValue: c.MagazijnId, token: UserInfo.Token);
                 });
 
                 model.Cart = cart;
@@ -64,7 +64,7 @@ namespace WebApplication_Uitleendienst.Controllers {
 
                     var person = new Persoon();
                     // First check if person doesn't exist in api based on username from identity
-                    person = _persoonService.GetAll(propertyName: "username", propertyValue: userInfo.Username)?.FirstOrDefault();
+                    person = _persoonService.GetAll(propertyName: "username", propertyValue: userInfo.Username, token: UserInfo.Token)?.FirstOrDefault();
 
                     // if not =>
                     // create persoon based on User Identity information
@@ -76,7 +76,7 @@ namespace WebApplication_Uitleendienst.Controllers {
                             Familienaam = userInfo.FamilyName,
                             Voornaam = userInfo.Name,
                             Telefoon = userInfo.Telephone
-                        });
+                        }, token: UserInfo.Token);
                     }
 
                     // create uitlening 
@@ -88,7 +88,7 @@ namespace WebApplication_Uitleendienst.Controllers {
                             PersoonId = person.Id
                         };
 
-                        uitlening = await _uitleningService.Save(uitlening);
+                        uitlening = await _uitleningService.Save(uitlening, token: UserInfo.Token);
 
                         if (uitlening != null) {
                             // create uitleningitems for each cartitem with the received uitleningId
@@ -101,7 +101,7 @@ namespace WebApplication_Uitleendienst.Controllers {
                                 });
                             });
 
-                            uitleningItems = await _uitleningItemService.SaveAll(uitleningItems);
+                            uitleningItems = await _uitleningItemService.SaveAll(uitleningItems, token: UserInfo.Token);
                             if (uitleningItems != null) {
                                 model.Message = "De ontlening is succesvol. Ga naar 'mijn ontleningen' om een overzicht te krijgen.";
                                 model.Level = Models.ViewModels.InfoLevel.success;

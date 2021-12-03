@@ -47,6 +47,10 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "dependencies": {
+            "AWSSDK.CognitoIdentityProvider": {
+              "target": "Package",
+              "version": "[3.7.1.77, )"
+            },
             "AWSSDK.Extensions.NETCore.Setup": {
               "target": "Package",
               "version": "[3.7.1, )"
@@ -54,6 +58,10 @@
             "Amazon.Extensions.CognitoAuthentication": {
               "target": "Package",
               "version": "[2.2.2, )"
+            },
+            "Boxed.AspNetCore.TagHelpers": {
+              "target": "Package",
+              "version": "[5.1.0, )"
             },
             "BuildBundlerMinifier": {
               "target": "Package",

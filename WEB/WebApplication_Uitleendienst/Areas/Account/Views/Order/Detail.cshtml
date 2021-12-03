@@ -1,0 +1,64 @@
+﻿@model WebApplication_Uitleendienst.Areas.Account.Models.ViewModels.OrderViewModel
+
+@{
+    ViewData["Title"] = "Account";
+    Layout = "~/Areas/Account/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container uitleningen">
+    <div class="row">
+        <div>
+            <a asp-area="Account" asp-controller="Order" asp-action="Index">Back</a>
+        </div>
+    </div>
+    @if (Model.UitleningItems != null) {
+        <div class="row headers">
+            <div class="col-4">
+                Product
+            </div>
+            <div class="col-3">
+                Naam
+            </div>
+            <div class="col-2">
+                Aantal
+            </div>
+            <div class="col-2">
+                Prijs
+            </div>
+            <div class="col-1">
+
+            </div>
+        </div>
+        @foreach (var item in Model.UitleningItems) {
+            <div class="row content">
+                <div class="col-4">
+                    <img src="~/images/default.png" />
+                </div>
+                <div class="col-3">
+                    @item.UitleenbaarItem.Naam
+                </div>
+                <div class="col-2">
+                    @item.aantal
+                </div>
+                <div class="col-2">
+                    @item.Total
+                </div>
+                <div class="col-1">
+                    <a href="/Catalogue/Detail?Id=@item.UitleenbaarItem.Id">
+                        <i class="fa-solid fa-eye"></i>
+                    </a>
+                </div>
+            </div>
+        }
+    } else {
+        <div class="row">
+            <div class="col-12 d-flex justify-content-center">
+                <h4>Er zijn geen items teruggevonden op deze uitlening.</h4>
+            </div>
+        </div>
+    }
+</div>
+
+
+
+

@@ -13,10 +13,10 @@ namespace WebApplication_Uitleendienst.AuthorizeAttributes {
 
         public GroupAuthorize(string groupName) => GroupName = groupName;
         public void OnAuthorization(AuthorizationFilterContext context) {
-            var userGroups = context.HttpContext.User?.Claims.FirstOrDefault(s => s.Type.Equals("cognito:groups"));
+            var userGroups = context.HttpContext.User?.Claims.Where(s => s.Type.Equals("cognito:groups"));
             if(userGroups != null) {
                 // check wether the group matches the request
-                if(userGroups.Value == GroupName)
+                if(userGroups.Any(s => s.Value == GroupName))
                     return;
             }
 

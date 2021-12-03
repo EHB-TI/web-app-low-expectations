@@ -7,7 +7,7 @@
 @model CategoryViewModel
 
 
-
+@await Component.InvokeAsync("Message", @Model)
 
 <div class="category-wrapper">
     <ul class="navbar-nav d-flex align-items-center float-left">

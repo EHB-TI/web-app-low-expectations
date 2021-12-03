@@ -1,0 +1,64 @@
+﻿@model WebApplication_Uitleendienst.Areas.Account.Models.ViewModels.AccountViewModel
+
+@{
+    ViewData["Title"] = "Account";
+    Layout = "~/Areas/Account/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<h4>Account</h4>
+<hr />
+
+@await Component.InvokeAsync("Message", @Model)
+<form asp-action="ManagePost" method="post">
+    <div class="row">
+        <div class="col-md-6">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="User.UserId" />
+            <div class="form-group">
+                <label asp-for="User.EmailAddress" class="control-label"></label>
+                <input asp-for="User.EmailAddress" class="form-control" />
+                <span asp-validation-for="User.EmailAddress" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="User.Name" class="control-label"></label>
+                <input asp-for="User.Name" class="form-control" />
+                <span asp-validation-for="User.Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="User.FamilyName" class="control-label"></label>
+                <input asp-for="User.FamilyName" class="form-control" />
+                <span asp-validation-for="User.FamilyName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="User.PhoneNumber" class="control-label"></label>
+                <input asp-for="User.PhoneNumber" class="form-control" />
+                <span asp-validation-for="User.PhoneNumber" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="User.Address" class="control-label"></label>
+                <input asp-for="User.Address" class="form-control" />
+                <span asp-validation-for="User.Address" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+
+        </div>
+    </div>
+</form>
+<div>
+    <a asp-area="Account" asp-action="Index">Back</a>
+</div>
+

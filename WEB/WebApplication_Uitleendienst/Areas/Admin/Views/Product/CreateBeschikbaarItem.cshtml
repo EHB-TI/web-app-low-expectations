@@ -16,9 +16,7 @@
             <div class="form-group">
                 <label asp-for="BeschikbaarItem.UitleenbaarItemId" class="control-label"></label>
                 <select asp-for="BeschikbaarItem.UitleenbaarItemId">
-                    @foreach (var value in Model.Products) {
-                        <option value="@value.Id">@value.Naam - @value.Id</option>
-                    }
+                        <option value="@Model.Product.Id">@Model.Product.Naam - @Model.Product.Id</option>
                 </select>
                 <span asp-validation-for="BeschikbaarItem.UitleenbaarItemId" class="text-danger"></span>
             </div>

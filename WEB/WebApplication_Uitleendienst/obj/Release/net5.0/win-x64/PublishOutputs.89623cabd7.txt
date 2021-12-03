@@ -26,6 +26,7 @@ C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-exp
 C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\win-x64\PubTmp\Out\wwwroot\bundles\js\assets.min.js
 C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\win-x64\PubTmp\Out\wwwroot\css\site.css
 C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\win-x64\PubTmp\Out\wwwroot\favicon.ico
+C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\win-x64\PubTmp\Out\wwwroot\images\account\banner.png
 C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\win-x64\PubTmp\Out\wwwroot\images\categories\Geluid.jpg
 C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\win-x64\PubTmp\Out\wwwroot\images\categories\kabels.jpg
 C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\win-x64\PubTmp\Out\wwwroot\images\categories\licht.jpg
@@ -83,6 +84,7 @@ C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-exp
 C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\win-x64\PubTmp\Out\Azure.Identity.dll
 C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\win-x64\PubTmp\Out\Azure.Security.KeyVault.Certificates.dll
 C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\win-x64\PubTmp\Out\Azure.Security.KeyVault.Secrets.dll
+C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\win-x64\PubTmp\Out\Boxed.AspNetCore.TagHelpers.dll
 C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\win-x64\PubTmp\Out\Humanizer.dll
 C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\win-x64\PubTmp\Out\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\michael.bracke\Documents\Personal\EHB\Software_Security\web-app-low-expectations\WEB\WebApplication_Uitleendienst\obj\Release\net5.0\win-x64\PubTmp\Out\Microsoft.AspNetCore.Authentication.OpenIdConnect.dll

@@ -25,7 +25,7 @@ namespace WebApplication_Uitleendienst.Controllers {
         }
 
         public IActionResult Index() {
-            var model = new HomeViewModel(HttpContext);
+         var model = new HomeViewModel(HttpContext);
             var userInfo = new UserInfoPageModel(HttpContext);
             model.Categories = _categorieService.GetAll(cache: false, token: userInfo.Token);
 

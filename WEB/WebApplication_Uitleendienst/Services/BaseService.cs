@@ -27,8 +27,8 @@ namespace WebApplication_Uitleendienst.Services {
         public BaseService(IMemoryCache cache) {
             _cache = cache;
         }
-        public void Delete<TEntity1>(int id, string token = null) {
-            throw new NotImplementedException();
+        public void Delete<TEntity>(int id, string token = null) {
+
         }
 
         public bool DeleteByProperty(Expression<Func<TEntity, bool>> predicate, string token = null) {
@@ -83,8 +83,6 @@ namespace WebApplication_Uitleendienst.Services {
                 url += $"?{propertyName}={propertyValue}";
 
             var key = typeof(TEntity).Name + "_GetAll_" + DateTime.Now.ToString("yy-MM-dd");
-
-
 
             if (!_cache.TryGetValue(key, out IEnumerable<TEntity> items) || !cache) {
                 try {

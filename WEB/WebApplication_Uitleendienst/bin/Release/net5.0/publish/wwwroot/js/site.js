@@ -24,6 +24,7 @@ function AddToCart($elem, $url) {
             var $infoText = $detailParent.find(".info-text");
             if (data == "not_authenticated") {
                 $infoText.removeClass("hidden");
+
                 $infoText.find("label").text("Gelieve je aan te melden/registreren om producten toe te voegen aan het winkelmandje.");
                 $infoText.append("<a href='/Home/Login' class='btn btn-dark'>Inloggen</a>");
             } else if (data == "success") {
@@ -40,6 +41,28 @@ function AddToCart($elem, $url) {
 };
 
 function UpdateCart() {
-   
+
+}
+
+
+
+function reloadCatalogue() {
+
+    var $catArray = [];
+    $.each($("input[name='categorie']:checked"), function (K, V) {
+        $catArray.push(V.value);
+    });
+
+    $.ajax({
+        url: '/Catalogue/Catalogue',
+        type: 'GET',
+        data: { categories: JSON.stringify($catArray)},
+        success: function (data) {
+           $('.catalogue-wrapper').replaceAll(data);
+        },
+        error: function () {
+            alert("error");
+        }
+    });
 }
 

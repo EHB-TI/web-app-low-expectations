@@ -8,20 +8,13 @@
 @model WebApplication_Uitleendienst.Models.ViewModels.Product.ProductViewModel
 
 
-
+@await Component.InvokeAsync("Message", @Model)
 
 <div class="category-wrapper">
     <ul class="navbar-nav d-flex align-items-center float-left">
         <li>
             <a class="nav-link btn btn-dark px-2 py-1" asp-area="Admin" asp-controller="Product" asp-action="CreateUitleenbaarItem" title="Product">
                 UitleenbaarItem
-                <i class="fa-solid fa-plus"></i>
-                <i class="fa-solid fa-sitemap"></i>
-            </a>
-        </li>
-        <li>
-            <a class="nav-link btn btn-dark px-2 py-1" asp-area="Admin" asp-controller="Product" asp-action="CreateBeschikbaarItem" title="Product">
-                BeschikbaarItem
                 <i class="fa-solid fa-plus"></i>
                 <i class="fa-solid fa-sitemap"></i>
             </a>
@@ -33,6 +26,7 @@
             <tr>
                 <th scope="col">Naam</th>
                 <th scope="col">Detail</th>
+                <th scope="col">Beschikbaarheid</th>
             </tr>
         </thead>
         <tbody>
@@ -44,6 +38,12 @@
                             <a class="nav-link btn btn-light px-2 py-1" asp-area="Admin" asp-controller="Product" asp-action="Detail" asp-route-id="@prod.Id" title="Product">
 
                                 <i class="fa-solid fa-eye"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a class="nav-link btn btn-dark px-2 py-1" asp-area="Admin" asp-controller="Product" asp-action="CreateBeschikbaarItem" asp-route-id="@prod.Id" title="Product">
+                                Voeg beschikbaarheid toe
+                                <i class="fa-solid fa-plus"></i>
                             </a>
                         </td>
                     </tr>
