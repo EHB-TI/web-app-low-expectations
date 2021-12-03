@@ -1,5 +1,6 @@
 package com.brielage.uitleendienst.controllers;
 
+import com.brielage.uitleendienst.authorization.OriginChecker;
 import com.brielage.uitleendienst.models.ContactMagazijn;
 import com.brielage.uitleendienst.models.Magazijn;
 import com.brielage.uitleendienst.models.Persoon;
@@ -24,10 +25,12 @@ public class ContactMagazijnController {
     @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
     @Autowired
     private ContactMagazijnRepository contactMagazijnRepository;
+    @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
     @Autowired
-    private PersoonRepository persoonRepository;
+    private PersoonRepository         persoonRepository;
+    @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
     @Autowired
-    private MagazijnRepository magazijnRepository;
+    private MagazijnRepository        magazijnRepository;
 
     @GetMapping (value = { "/", "" })
     public ResponseEntity findByProperties (
@@ -35,6 +38,10 @@ public class ContactMagazijnController {
             @RequestParam (required = false) List<String> magazijnId,
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
+        APILogger.logRequest("contactMagazijn.get*");
+
+        if (!OriginChecker.checkOrigin(origin))
+            return Responder.respondBadRequest("origin not allowed " + origin);
 
         if ((persoondId == null || persoondId.isEmpty())
                 && (magazijnId == null || magazijnId.isEmpty())) {
@@ -48,12 +55,12 @@ public class ContactMagazijnController {
 
         List<ContactMagazijn> contactMagazijnen = new ArrayList<>();
 
-        if (persoondId != null && !persoondId.isEmpty()){
+        if (persoondId != null && !persoondId.isEmpty()) {
             APILogger.logRequest("contactmagazijn.findAllByPersoonIdIsIn");
             contactMagazijnen.addAll(contactMagazijnRepository.findAllByPersoonIdIsIn(persoondId));
         }
 
-        if (magazijnId != null && !magazijnId.isEmpty()){
+        if (magazijnId != null && !magazijnId.isEmpty()) {
             APILogger.logRequest("contactmagazijn.findAllByMagazijnIdIsIn");
             contactMagazijnen.addAll(contactMagazijnRepository.findAllByMagazijnIdIsIn(magazijnId));
         }
@@ -74,6 +81,9 @@ public class ContactMagazijnController {
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("contactmagazijn.findById", id);
 
+        if (!OriginChecker.checkOrigin(origin))
+            return Responder.respondBadRequest("origin not allowed " + origin);
+
         Optional<ContactMagazijn> c = contactMagazijnRepository.findById(id);
 
         if (c.isEmpty()) return Responder.respondNotFound();
@@ -87,6 +97,9 @@ public class ContactMagazijnController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("contactMagazijn.create", contactMagazijn.toString());
+
+        if (!OriginChecker.checkOrigin(origin))
+            return Responder.respondBadRequest("origin not allowed " + origin);
 
         try {
             if (!validateContactMagazijn(contactMagazijn))
@@ -118,6 +131,9 @@ public class ContactMagazijnController {
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("contactMagazijn.put", id);
 
+        if (!OriginChecker.checkOrigin(origin))
+            return Responder.respondBadRequest("origin not allowed " + origin);
+
         try {
             if (!validateContactMagazijnId(contactMagazijn))
                 return Responder.respondBadRequest("not valid");
@@ -143,6 +159,9 @@ public class ContactMagazijnController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("uitleenbaarItem.delete", id);
+
+        if (!OriginChecker.checkOrigin(origin))
+            return Responder.respondBadRequest("origin not allowed " + origin);
 
         try {
             Optional<ContactMagazijn> c = contactMagazijnRepository.findById(id);

@@ -1,6 +1,7 @@
 package com.brielage.uitleendienst.controllers;
 
 import com.brielage.uitleendienst.authorization.JWTChecker;
+import com.brielage.uitleendienst.authorization.OriginChecker;
 import com.brielage.uitleendienst.authorization.Permission;
 import com.brielage.uitleendienst.models.Persoon;
 import com.brielage.uitleendienst.repositories.PersoonRepository;
@@ -32,6 +33,9 @@ public class PersoonController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("persoon.get*");
+
+        if (!OriginChecker.checkOrigin(origin))
+            return Responder.respondBadRequest("origin not allowed " + origin);
 
         if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
 
@@ -112,6 +116,9 @@ public class PersoonController {
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("persoon.findById", id);
 
+        if (!OriginChecker.checkOrigin(origin))
+            return Responder.respondBadRequest("origin not allowed " + origin);
+
         Optional<Persoon> p = persoonRepository.findById(id);
 
         if (p.isPresent())
@@ -134,6 +141,9 @@ public class PersoonController {
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("persoon.create", persoon.toString());
 
+        if (!OriginChecker.checkOrigin(origin))
+            return Responder.respondBadRequest("origin not allowed " + origin);
+
         if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
 
         try {
@@ -153,6 +163,9 @@ public class PersoonController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("persoon.put", id);
+
+        if (!OriginChecker.checkOrigin(origin))
+            return Responder.respondBadRequest("origin not allowed " + origin);
 
         if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
 
@@ -180,6 +193,9 @@ public class PersoonController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("persoon.delete", id);
+
+        if (!OriginChecker.checkOrigin(origin))
+            return Responder.respondBadRequest("origin not allowed " + origin);
 
         if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
 

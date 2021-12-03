@@ -1,6 +1,7 @@
 package com.brielage.uitleendienst.controllers;
 
 import com.brielage.uitleendienst.authorization.JWTChecker;
+import com.brielage.uitleendienst.authorization.OriginChecker;
 import com.brielage.uitleendienst.authorization.Permission;
 import com.brielage.uitleendienst.models.Magazijn;
 import com.brielage.uitleendienst.models.Persoon;
@@ -40,6 +41,9 @@ public class UitleningController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("uitlening.get*");
+
+        if (!OriginChecker.checkOrigin(origin))
+            return Responder.respondBadRequest("origin not allowed " + origin);
 
         if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
 
@@ -97,6 +101,9 @@ public class UitleningController {
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("uitlening.findById", id);
 
+        if (!OriginChecker.checkOrigin(origin))
+            return Responder.respondBadRequest("origin not allowed " + origin);
+
         if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
 
         Optional<Uitlening> u = uitleningRepository.findById(id);
@@ -128,6 +135,9 @@ public class UitleningController {
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("uitlening.create", uitlening.toString());
 
+        if (!OriginChecker.checkOrigin(origin))
+            return Responder.respondBadRequest("origin not allowed " + origin);
+
         if (uitlening.getPersoonId() != null && !uitlening.getPersoonId()
                                                           .isEmpty()) {
             Optional<Persoon> optionalPersoon =
@@ -158,6 +168,9 @@ public class UitleningController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("uitlening.put", id);
+
+        if (!OriginChecker.checkOrigin(origin))
+            return Responder.respondBadRequest("origin not allowed " + origin);
 
         if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
 
@@ -193,6 +206,9 @@ public class UitleningController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("uitlening.delete", id);
+
+        if (!OriginChecker.checkOrigin(origin))
+            return Responder.respondBadRequest("origin not allowed " + origin);
 
         if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
 

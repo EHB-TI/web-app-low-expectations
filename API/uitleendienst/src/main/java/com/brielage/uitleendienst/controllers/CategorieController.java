@@ -1,6 +1,7 @@
 package com.brielage.uitleendienst.controllers;
 
 import com.brielage.uitleendienst.authorization.JWTChecker;
+import com.brielage.uitleendienst.authorization.OriginChecker;
 import com.brielage.uitleendienst.authorization.Permission;
 import com.brielage.uitleendienst.models.Categorie;
 import com.brielage.uitleendienst.repositories.CategorieRepository;
@@ -26,6 +27,11 @@ public class CategorieController {
             @RequestParam (required = false) List<String> naam,
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
+        APILogger.logRequest("categorie.get*");
+
+        if (!OriginChecker.checkOrigin(origin))
+            return Responder.respondBadRequest("origin not allowed " + origin);
+
         if (naam == null || naam.isEmpty()) {
             APILogger.logRequest("categorie.findAll");
             List<Categorie> ret = categorieRepository.findAll();
@@ -50,6 +56,9 @@ public class CategorieController {
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("categorie.findById", id);
 
+        if (!OriginChecker.checkOrigin(origin))
+            return Responder.respondBadRequest("origin not allowed " + origin);
+
         Optional<Categorie> c = categorieRepository.findById(id);
 
         if (c.isEmpty()) return Responder.respondNotFound();
@@ -63,6 +72,9 @@ public class CategorieController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("categorie.create", categorie.toString());
+
+        if (!OriginChecker.checkOrigin(origin))
+            return Responder.respondBadRequest("origin not allowed " + origin);
 
         if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
 
@@ -90,6 +102,9 @@ public class CategorieController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("categorie.put", id);
+
+        if (!OriginChecker.checkOrigin(origin))
+            return Responder.respondBadRequest("origin not allowed " + origin);
 
         if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
 
@@ -122,6 +137,9 @@ public class CategorieController {
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("categorie.delete", id);
 
+        if (!OriginChecker.checkOrigin(origin))
+            return Responder.respondBadRequest("origin not allowed " + origin);
+
         if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
 
         if (!JWTChecker.checkPermission(token, Permission.ADMIN))
@@ -152,4 +170,5 @@ public class CategorieController {
         return !c.getNaam()
                  .isEmpty();
     }
+
 }

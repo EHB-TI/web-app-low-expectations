@@ -1,5 +1,6 @@
 package com.brielage.uitleendienst.controllers;
 
+import com.brielage.uitleendienst.authorization.OriginChecker;
 import com.brielage.uitleendienst.models.Magazijn;
 import com.brielage.uitleendienst.models.Persoon;
 import com.brielage.uitleendienst.models.VerantwoordelijkeMagazijn;
@@ -24,8 +25,10 @@ public class VerantwoordelijkeMagazijnController {
     @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
     @Autowired
     private VerantwoordelijkeMagazijnRepository verantwoordelijkeMagazijnRepository;
+    @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
     @Autowired
     private PersoonRepository                   persoonRepository;
+    @SuppressWarnings ("SpringJavaAutowiredFieldsWarningInspection")
     @Autowired
     private MagazijnRepository                  magazijnRepository;
 
@@ -36,6 +39,9 @@ public class VerantwoordelijkeMagazijnController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         List<VerantwoordelijkeMagazijn> returnValue = new ArrayList<>();
+
+        if (!OriginChecker.checkOrigin(origin))
+            return Responder.respondBadRequest("origin not allowed " + origin);
 
         //return findAll() if no properties
         if ((persoondId == null || persoondId.isEmpty())
@@ -49,13 +55,13 @@ public class VerantwoordelijkeMagazijnController {
         }
 
         //add all elements found by the properties to returnValue
-        if (persoondId != null && !persoondId.isEmpty()){
+        if (persoondId != null && !persoondId.isEmpty()) {
             APILogger.logRequest("verantwoordelijkemagazijn.findAllByPersoonIdIsIn");
             returnValue.addAll(
                     verantwoordelijkeMagazijnRepository.findAllByPersoonIdIsIn(persoondId));
         }
 
-        if (magazijnId != null && !magazijnId.isEmpty()){
+        if (magazijnId != null && !magazijnId.isEmpty()) {
             APILogger.logRequest("verantwoordelijkemagazijn.findAllByMagazijnIdIsIn");
             returnValue.addAll(
                     verantwoordelijkeMagazijnRepository.findAllByMagazijnIdIsIn(magazijnId));
@@ -75,6 +81,10 @@ public class VerantwoordelijkeMagazijnController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("verantwoordelijkeMagazijn.findById", id);
+
+        if (!OriginChecker.checkOrigin(origin))
+            return Responder.respondBadRequest("origin not allowed " + origin);
+
         Optional<VerantwoordelijkeMagazijn> vm = verantwoordelijkeMagazijnRepository.findById(id);
 
         if (vm.isEmpty()) return Responder.respondNotFound();
@@ -89,6 +99,10 @@ public class VerantwoordelijkeMagazijnController {
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("verantwoordelijkeMagazijn.create",
                              verantwoordelijkeMagazijn.toString());
+
+        if (!OriginChecker.checkOrigin(origin))
+            return Responder.respondBadRequest("origin not allowed " + origin);
+
         try {
             if (!validateVerantwoordelijkeMagazijn(verantwoordelijkeMagazijn))
                 return Responder.respondBadRequest("not valid");
@@ -107,10 +121,7 @@ public class VerantwoordelijkeMagazijnController {
                     verantwoordelijkeMagazijn);
 
             return Responder.respondCreated(vm);
-        } catch (Exception e) {
-            APILogger.logException(e.getMessage());
-            return Responder.respondBadRequest(e.getMessage());
-        }
+        } catch (Exception e) {return Responder.respondBadRequest(e.getMessage());}
     }
 
     @PutMapping (value = "/{id}")
@@ -120,6 +131,10 @@ public class VerantwoordelijkeMagazijnController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("verantwoordelijkeMagazijn.put", id);
+
+        if (!OriginChecker.checkOrigin(origin))
+            return Responder.respondBadRequest("origin not allowed " + origin);
+
         try {
             if (!validateVerantwoordelijkeMagazijnId(verantwoordelijkeMagazijn))
                 return Responder.respondBadRequest("not valid");
@@ -146,6 +161,10 @@ public class VerantwoordelijkeMagazijnController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("verantwoordelijkeMagazijn.delete", id);
+
+        if (!OriginChecker.checkOrigin(origin))
+            return Responder.respondBadRequest("origin not allowed " + origin);
+
         try {
             Optional<VerantwoordelijkeMagazijn> vm = verantwoordelijkeMagazijnRepository.findById(
                     id);

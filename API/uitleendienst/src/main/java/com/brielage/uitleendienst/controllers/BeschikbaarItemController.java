@@ -1,6 +1,7 @@
 package com.brielage.uitleendienst.controllers;
 
 import com.brielage.uitleendienst.authorization.JWTChecker;
+import com.brielage.uitleendienst.authorization.OriginChecker;
 import com.brielage.uitleendienst.authorization.Permission;
 import com.brielage.uitleendienst.models.BeschikbaarItem;
 import com.brielage.uitleendienst.models.Magazijn;
@@ -42,6 +43,9 @@ public class BeschikbaarItemController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("beschikbaarItem.get*");
+
+        if (!OriginChecker.checkOrigin(origin))
+            return Responder.respondBadRequest("origin not allowed " + origin);
 
         if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
 
@@ -101,6 +105,9 @@ public class BeschikbaarItemController {
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("beschikbaaritem.findById", id);
 
+        if (!OriginChecker.checkOrigin(origin))
+            return Responder.respondBadRequest("origin not allowed " + origin);
+
         if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
 
         if (!JWTChecker.checkPermission(token, Permission.ADMIN))
@@ -119,6 +126,9 @@ public class BeschikbaarItemController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("beschikbaarItem.create", beschikbaarItem.toString());
+
+        if (!OriginChecker.checkOrigin(origin))
+            return Responder.respondBadRequest("origin not allowed " + origin);
 
         if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
 
@@ -152,6 +162,9 @@ public class BeschikbaarItemController {
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("beschikbaarItem.put", id);
 
+        if (!OriginChecker.checkOrigin(origin))
+            return Responder.respondBadRequest("origin not allowed " + origin);
+
         if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
 
         if (!JWTChecker.checkPermission(token, Permission.ADMIN))
@@ -180,6 +193,9 @@ public class BeschikbaarItemController {
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
         APILogger.logRequest("beschikbaarItem.delete", id);
+
+        if (!OriginChecker.checkOrigin(origin))
+            return Responder.respondBadRequest("origin not allowed " + origin);
 
         if (!JWTChecker.checkToken(token)) return Responder.respondUnauthorized();
 
