@@ -25,7 +25,7 @@ Deze criteria werden beschreven in de opdracht zoals te raadplegen op cas.ehb.be
 ### Evaluatiecriteria wachtwoorden en aanmelden
 **X** Wachtwoord kan minder dan 8 tekens bevatten. \
 **X** Geen verificatielink ontvangen om wachtwoord te bevestigen. Dit maakt het onmogelijk om met deze gebruiker de rest van de functionaliteiten van de site uit te proberen. \
-**V** Wachtwoork kan langer dan 64 tekens zijn. \
+**V** Wachtwoord kan langer dan 64 tekens zijn. \
 **V** Verdedigt tegen brute force attacks door middel van tijdsinterval tussen mislukte inlogpogingen te verhogen. \
 **V** De gebruiker kan zich afmelden.\
 **V** De applicatie geeft duidelijk aan dat de gebruiker al dan niet is aangemeld. \
