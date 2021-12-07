@@ -24,12 +24,12 @@ Deze criteria werden beschreven in de opdracht zoals te raadplegen op cas.ehb.be
 
 ### Evaluatiecriteria wachtwoorden en aanmelden
 **X** Wachtwoord kan minder dan 8 tekens bevatten. \
-**X** Geen verificatielink ontvangen om wachtwoord te bevestigen. Dit maakt het onmogelijk om met deze gebruiker de rest van de functionaliteiten van de site uit te proberen. \
+**V** Verificatiecode via mailtrap. \
 **V** Wachtwoord kan langer dan 64 tekens zijn. \
 **V** Verdedigt tegen brute force attacks door middel van tijdsinterval tussen mislukte inlogpogingen te verhogen. \
 **V** De gebruiker kan zich afmelden.\
 **V** De applicatie geeft duidelijk aan dat de gebruiker al dan niet is aangemeld. \
-**X** Na aanmelden kan de gebruikers zijn of haar gegevens opvragen: Niet mogelijk zo lang je de verificatielink niet ontvangen hebt.
+**V** Na aanmelden kan de gebruikers zijn of haar gegevens opvragen
 
 ### Evaluatiecriteria HTTPS
 - Pagina’s enkel beschikbaar over https (301 Moved Permanently).
@@ -46,8 +46,7 @@ Deze criteria werden beschreven in de opdracht zoals te raadplegen op cas.ehb.be
 - Pogingen tot XSS en SQL injectie mislukken. (voorkomen door character escaping of sanitation).
 
 ### Conclusie/Aanbevelingen
-1.	**Het verificatieproces na het registreren van een nieuwe gebruiker is nog niet compleet. Dit moet gebeuren alvorens de applicatie verder kan getest worden**
-2.	**Controle bij de creatie van een nieuw wachtwoord moet aangepast worden zodat dit controlleert op een minimale lenge van 8 karakters.**
+1.	**Controle bij de creatie van een nieuw wachtwoord moet aangepast worden zodat dit controlleert op een minimale lenge van 8 karakters.**
 
 ## DAST: GREY BOX ENUMERATION/TESTS
 In de eerste fase vertrekt deze test vanuit een black box perspectief (de enige beschikbare informatie is de URL ehbdefendersblog.com) en probeert zoveel mogelijk beschikbare informatie te verzamelen die potentieel een gevaar kunnen vormen voor veiligheid van de webapplicatie.
