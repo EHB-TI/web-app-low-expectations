@@ -73,9 +73,6 @@ Hiervoor krijgt het test team de aanmeldgegevens ter beschikking van een gebruik
 -	Open poorten: 80, 443, 8080, 8443
 
 ### Webpage Content Information Leakage	
--	CSRF token zichtbaar in META tags
-<meta name="csrf-token" content="Z77mkVjjIe1BwkSQOif1hFSpgixvLYWK7kqf3Sx8">
-Alsook in de FORMS tag in de login en register forms
 -	Wanneer een aangemelde gebruiker op de workspace link klikt komt een debug pagina tevoorschijn waar een deel van de source code te lezen is. 
 
 ### Application entry points
@@ -100,10 +97,10 @@ https://ehbdefendersblog.com/login
 -	Database: (mogelijk) MySQL of  PostGreSQL 
 
 ### Conclusie/aanbevelingen
-1.	**Waar mogelijk de CSFR token als variabele meegeven, bijvoorbeeld als volgt: <input type="hidden" name="_token" value="{{ csrf_token() }}"/> in plaats van hard coded in de html te plaatsen.**
-2.	**APP_DEBUG op false zodat de debug pagina niet meer zichtbaar is**
-3.	**https://ehbdefendersapp.azurewebsites.net eventueel laten redirecten naar https://ehbdefendersblog.com**
-4.	**Niet gebruikte poorten op de server te sluiten, of open laten mits gebruik van IP whitelisting.**
+1.	**APP_DEBUG op false zodat de debug pagina niet meer zichtbaar is**
+3.	**CSFR token kan eventueel als variabele worden meegeven, bijvoorbeeld als volgt: <input type="hidden" name="_token" value="{{ csrf_token() }}"/> in plaats van hard coded in de html te plaatsen.**
+4.	**https://ehbdefendersapp.azurewebsites.net eventueel laten redirecten naar https://ehbdefendersblog.com**
+5.	**Niet gebruikte poorten op de server te sluiten, of open laten mits gebruik van IP whitelisting.**
 
 ## SCA: SOFTWARE COMPOSITION ANALYSIS
 
