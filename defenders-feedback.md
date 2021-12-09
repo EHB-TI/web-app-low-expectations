@@ -72,7 +72,9 @@ Hiervoor krijgt het test team de aanmeldgegevens ter beschikking van een gebruik
 -	Open poorten: 80, 443, 8080, 8443
 
 ### Webpage Content Information Leakage	
--	Wanneer een aangemelde gebruiker op de workspace link klikt komt een debug pagina tevoorschijn waar een deel van de source code te lezen is. 
+-	Wanneer een aangemelde gebruiker op één van de volgende links klikt komt een debug pagina tevoorschijn waar een deel van de source code te lezen is: \
+		- 'Workspace' in de navigation bar \
+		- 'Find out more' op de home pagina
 
 ### Application entry points
 -	Entry points aanwezig op
@@ -106,6 +108,10 @@ https://ehbdefendersblog.com/login
 ### CVE 
 Een overzicht van de CVE voor Laravel is beschikbaar op https://www.opencve.io/cve?vendor=laravel.
 De laatste (CVE-2021-43617) dateert van 2021-11-18 en heeft een rating van 9.8. Deze vulnerability maakt de applicatie gevoelig voor het opladen van uitvoerbare php content.
+
+https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-43808 \
+Laravel vóór versies 8.75.0, 7.30.6 en 6.20.42 bevat een mogelijke XSS-kwetsbaarheid (cross-site scripting) in de Blade-templating-engine.
+
 
 ### Conclusie/aanbevelingen
 1.	Het framework steeds up to date houden met de laatst stabiele versie
