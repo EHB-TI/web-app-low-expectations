@@ -99,7 +99,7 @@ https://ehbdefendersblog.com/login
 
 ### Conclusie/aanbevelingen
 1.	**APP_DEBUG op false zodat de debug pagina niet meer zichtbaar is**
-3.	**CSFR token kan eventueel als variabele worden meegeven, bijvoorbeeld als volgt: '''html <input type="hidden" name="_token" value="{{ csrf_token() }}"/>''' in plaats van hard coded in de html te plaatsen.**
+3.	**CSFR token kan eventueel als variabele worden meegeven, bijvoorbeeld als volgt: ```html <input type="hidden" name="_token" value="{{ csrf_token() }}"/>``` in plaats van hard coded in de html te plaatsen.**
 4.	**https://ehbdefendersapp.azurewebsites.net eventueel laten redirecten naar https://ehbdefendersblog.com**
 5.	**Niet gebruikte poorten op de server te sluiten, of open laten mits gebruik van IP whitelisting.**
 
