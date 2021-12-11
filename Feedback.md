@@ -30,7 +30,6 @@ Op de web pagina kan ik me registreren als gewone gebruiker en dien ik een formu
 Na sign-up wordt een pin code gevraagd ter bevestiging van de account. De pincode wordt onmiddellijk na registratie gestuurd naar mijn e-mailadres. Ook dat evaluatiecriterium kan afgevinkt worden. Na invoer van de pincode kreeg ik jammer genoeg een foutboodschap. Invoer van de pincode leidt me naar de web pagina van de user account die mijn inziens nog niet afgewerkt is. Zie screenshot hieronder van 9/12/2021:
 ![ErrorAccount](https://user-images.githubusercontent.com/61866984/145692186-d4bd2cae-ec20-4773-be91-6b3f2fa58690.png)
  
-
 Klikken in het menu op Register brengt me op de home pagina en stel ik vast dat ik toch ben ingelogd: een beetje verwarrend, maar gelukkig niet blokkerend.
 In het menu zie ik duidelijk dat ik ten allen tijd ben ingelogd. Mijn naam verschijnt in de rechterbovenhoek. (of op de smartphone bij het openen van het menu).
 Ook afmelden loopt vlot en brengt me terug bij de startpagina.
@@ -49,8 +48,6 @@ Als ik mijn paswoord ben vergeten, kan ik die opnieuw instellen door het ingeven
 Wanneer we dit proberen in te stellen met een eenvoudig paswoord zoals 123456789Aa! lukt dat ook. Zelfs dit eenvoudig paswoord is slechts 7 keer (< 300) gevonden in een data breach volgens Have I Been Pwned (https://haveibeenpwned.com/Passwords). Zie screenshot hieronder van het resultaat van de website van "Have I Been Pwned":
 ![Password7times](https://user-images.githubusercontent.com/61866984/145692354-ef57d848-615a-4143-beae-130ec17796db.png)
  
-
-
 Als ik echter 10 keer snel na elkaar een verkeer paswoord invoer voor eenzelfde user en vervolgens het juiste, kan ik er nog steeds zonder enig probleem in. Inloggen wordt dus niet geblokkeerd door dit verdacht gedrag. De website is niet beschermd tegen brute force of credential stuffing attacks.
 
 Aanbeveling: Een van de services die AWS ook aanbiedt is “AWS WAF” (https://aws.amazon.com/waf/features/bot-control/?did=ft_card&trk=ft_cardWAF). Dit is een web application firewall die je web app of API helpt te beschermen tegen websitemisbruik en bots die de beschikbaarheid en beveiliging kunnen compromitteren. De activatie van deze service zou direct leiden tot de mitigation van potentiële credential stuffing attacks. Standaard is dit bij AWS WAF ingesteld als volgt: “multiple requests in a 5-minute period to an application’s login page is suspicious and indicates a potential brute force or credential-stuffing attack against the application”. Andere threats zoals SQL injection of cross-site scripting worden hiermee ook aangepakt.
@@ -70,7 +67,7 @@ Alle gebruikte cookies hebben voor het SameSite attribuut de waarden “Lax” e
 
 De cookie mbt login gegevens worden gewrapt in een JWT. Deze cookie heeft de SameSite attribuutwaarde "Strict".
 
-## Header Options : X-Frame-Options, X-XSS-Protection en X-Content-Type-Options, Content-Security-Policy
+## Header Options : X-Frame-Options, X-XSS-Protection en X-Content-Type-Options, Content-Security-Policy, Referrer-Policy
 * De X-Frame-Options header is niet ingesteld voor de URL https://peahi.be. Als deze header niet goed is geconfigureerd, kan de web app ingebed worden als een frame in andere websites en kwetsbaar worden voor clickjacking attacks.
 * Ook de Content-Security-Policy header is niet ingesteld. Deze instelling geeft de browser aan welke domains whitelisted zijn om verdere resources zoals scripts, images of stylesheets te downloaden. Dit beschermt je tegen Cross-Site-Scripting attacks.
 * De X-Content-Type-Options header is eveneens niet ingesteld. Deze header option zorgt ervoor dat de browser geen MIME-types probeert te detecteren in downloads (MIME sniffing). Het beschermt je dus tegen aanvallen waarbij malicious files aangeboden worden met een niet-verdachte MIME-type.
@@ -131,7 +128,7 @@ internal static class Sample
 Meer informatie vinden jullie op https://docs.microsoft.com/en-us/iis/configuration/system.webserver/httpprotocol/customheaders/
 
 
-# 4.	Evaluatiecriteria ivm HTTPS
+# 4.	Evaluatie van HTTPS
 
 Alle publiek bereikbare onderdelen zijn enkel over HTTPS beschikbaar. Een voobeeld voor de home pagina:
 -	https://peahi.be/. 
@@ -154,26 +151,36 @@ Aanbeveling: Aangezien alles over https gaat, is het openen van poort 443 voldoe
 -	Controle van SSL Certificate revocation met OCSP (Online Certificate Status Protocol)
 ![OCSP_peahi be_20211211](https://user-images.githubusercontent.com/61866984/145693220-1b485cbf-ee76-4642-8901-2f8a0d2b353f.png)
 
+- OCSP_stapling is niet beschikbaar op web server IIS versie 10.0.
+Aanbeveling: je kan OCSP stapling activeren op IIS door de stappen te volgen beschreven in volgende documentatie: https://docs.microsoft.com/en-us/windows-server/security/tls/tls-registry-settings
 
 ## Analyse van de configuratie van de SSL web server met domein peahi.be op het publieke internet
 In de beschreven architectuur van “Low Expectations” zien we 2 Amazon EC2 voor de website en 2 Amazon EC2 voor de API. Een test naar de score van het domein peahi.be bij SSL Labs geeft de 4 gebruikte containers een A+ score (https://www.ssllabs.com/ssltest/analyze.html?d=peahi.be&latest). Ziehier het resultaat:
- 
+![SSLLabs_20211211_peahi_be_A+](https://user-images.githubusercontent.com/61866984/145693589-1efd966a-dc25-4cac-936a-2a73871e7dde.png)
 
 Op elke Amazon EC2 is HTTP Strict Transport Security (HSTS) geconfigureerd. Dit beschermt tegen “man-in-the-middle attacks” zoals “protocol downgrade attacks” en “cookie hijacking”. Het laat webservers toe om af te dwingen dat web browsers alleen kunnen communiceren met HTTPS connecties. Dat biedt net die belangrijke Transport Layer Security (TLS/SSL) in tegenstelling tot HTTP.
 
-Webserver op Microsoft-IIS 10.0
-De webserver draait op Microsoft-IIS 10.0. De webserver geeft informatie bloot over zichzelf. Dit laat aanvallers toe om te zoeken naar mogelijkheden specifiek voor dit type webserver en deze versie.
+## Webserver on Microsoft-IIS 10.0
+De webserver draait op Microsoft-IIS 10.0. De webserver geeft informatie bloot over zichzelf. Dit laat aanvallers toe om te zoeken naar mogelijkheden specifiek voor dit type webserver van deze versie.
 Aanbeveling: De IIS server zal zijn versie laten zien in HTTP responses. Om dit niet meer te laten zien kan je het volgende doen: 
 -	Activeer “Metabase Compatibility” (https://docs.microsoft.com/en-us/iis/manage/managing-your-configuration-settings/metabase-compatibility-with-iis-7-and-above). 
 -	Installeer UrlScan.
 -	Open vervolgens het UrlScan.ini bestand met notepad. Het bestand zal je in principe vinden in de directory %windir%\system32\inetsrv\UrlScan.
 -	Zoek daar naar de key RemoveServerHeader die by default op 0 staat. Verander dit naar 1 om zo de Server header te verwijderen uit de HTTP response.
 
-HSTS preload list status
-Verficatie van het domein op de HSTS preload list via (https://hstspreload.org/?domain=peahi.be) geeft aan dat het domein de status “pending submission” heeft en dus wacht op toevoeging.
- 
+## HSTS preload list status
+Verficatie van het domein op de HSTS preload list via (https://hstspreload.org/?domain=peahi.be) geeft aan dat het domein de status “pending submission” heeft en dus wacht op toevoeging.\
+![HSTS_PreloadList_peahi_be_20211211](https://user-images.githubusercontent.com/61866984/145693595-5fca7009-6980-4799-a95f-1d30cdeed9a3.png)
 
-Certificate Authority Authorization DNS Resource Records
+## Certificate Authority Authorization DNS Resource Records
 Via Entrust (https://www.entrust.com/resources/certificate-solutions/tools/caa-lookup) komen we te weten dat er een CAA record uitgegeven door Amazon van het type SSL.
-
+![Entrust_CAARecord_peahi_be_20211211](https://user-images.githubusercontent.com/61866984/145693606-86e1c7bc-8d76-4656-bee4-88ba556047bb.png)
  
+# 5. Conclusie
+* Aan de web app zelf dient nog wat gewerkt te worden teneinde al de user stories waarvan sprake in de acceptatiecriteria te kunnen waarmaken. Vooral het kunnen beheren van de gebrukers en hun rollen door de admin is een belangrjk gemis.
+* Security-gewijs zet ik de reeds vermelde aanbevelingen nog een op een rijtje in volgorde van belangrijkheid:
+  1. Instellen van de header options op de IIS web server: X-Frame-Options, X-XSS-Protection en X-Content-Type-Options, Content-Security-Policy en Referrer-Policy. Deze eenvoudige ingreep beschermt onmiddellijk tegen een reeks threats zoals clickjacking attacks, Cross-Site-Scripting attacks, MIME sniffing en data leaks.
+  2. Activatie van de service AWS WAF om brute force of credential stuffing attacks tegen te gaan.
+  3. MFA of dubbele authenticatie activeren binnen de reeds gebruikte service Cognito van AWS. Eventueel kan zelfs gekozen worden voor sign-in via social identity providers zoals Apple, Google, Facebook en Amazon, OIDC of SAML.	
+  4. Type web server en versie afschermen om het risico op gerichte attacks te verkleinen.
+  5. OCSP stapling activeren op IIS om nog veiliger te werken bij de TLS handshake.
