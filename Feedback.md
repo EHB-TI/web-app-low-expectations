@@ -18,7 +18,8 @@ We hebben een login gekregen met de rol van admin. Ook hier hebben we blackbox t
 * een magazijn toevoegen/wijzigen/verwijderen -> toevoegen en aanpassen lukken, maar verwijderen lijkt niet mogelijk. Ik vind geen knoppen om een delete-operatie uit te voeren (bevinding op 11/12/2021).
 * magazijncontacten/verantwoordelijken toevoegen/wijzigen -> Ik vind geen knoppen om deze objecten te beheren (bevinding op 11/12/2021).
 
-Aanbeveling: Om de admin-rol volledig tot zijn recht te laten komen, dienen nog enkele extra pagina’s toegevoegd te worden. Zeker het beheer van gebruikers lijkt hier de prioriteit.
+#### Aanbeveling:
+Om de admin-rol volledig tot zijn recht te laten komen, dienen nog enkele extra pagina’s toegevoegd te worden. Zeker het beheer van gebruikers lijkt hier de prioriteit.
 
 
 # 2.	Evaluatie van sign-up, sign-in en account control
@@ -38,7 +39,7 @@ Ook afmelden loopt vlot en brengt me terug bij de startpagina.
 Opnieuw inloggen werkt, maar ook daar botsen we op dezelfde foutboodschap als hierboven beschreven. Dit is niet blokkerend na klikken op de home pagina.
 MFA of dubbele authenticatie is niet ingesteld. Eenvoudig inloggen met e-mail en paswoord lukt.
 
-Aanbeveling: 
+#### Aanbeveling:
 -	Amazon Cognito biedt ook sign-in via social identity providers zoals Apple, Google, Facebook en Amazon, OIDC of SAML. Van deze extra features wordt echter geen gebruik gemaakt. Misschien een gemiste kans?
 -	MFA of dubbele authenticatie zou je kunnen instellen door bij elke login-poging de verificatiecode te laten sturen naar het e-mailadres van de gebruiker. Vandaag is dit enkel ingesteld bij registratie of opnieuw instellen van het wachtwoord. Andere optie: bij de registratie van een user hebben we een geldig mobiel telefoonnummer ingegeven. De verificatiecode zou kunnen verzonden worden per SMS naar dit mobiel nummer. Deze extra informatie wordt vandaag niet gebruikt in het kader van authenticatie. Andere MFA mogelijkheden worden beschreven in de documentatie van AWS: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa.html.
 
@@ -50,14 +51,36 @@ Wanneer we dit proberen in te stellen met een eenvoudig paswoord zoals 123456789
  
 Als ik echter 10 keer snel na elkaar een verkeer paswoord invoer voor eenzelfde user en vervolgens het juiste, kan ik er nog steeds zonder enig probleem in. Inloggen wordt dus niet geblokkeerd door dit verdacht gedrag. De website is niet beschermd tegen brute force of credential stuffing attacks.
 
-Aanbeveling: Een van de services die AWS ook aanbiedt is “AWS WAF” (https://aws.amazon.com/waf/features/bot-control/?did=ft_card&trk=ft_cardWAF). Dit is een web application firewall die je web app of API helpt te beschermen tegen websitemisbruik en bots die de beschikbaarheid en beveiliging kunnen compromitteren. De activatie van deze service zou direct leiden tot de mitigation van potentiële credential stuffing attacks. Standaard is dit bij AWS WAF ingesteld als volgt: “multiple requests in a 5-minute period to an application’s login page is suspicious and indicates a potential brute force or credential-stuffing attack against the application”. Andere threats zoals SQL injection of cross-site scripting worden hiermee ook aangepakt.
+#### Aanbeveling:
+Een van de services die AWS ook aanbiedt is “AWS WAF” (https://aws.amazon.com/waf/features/bot-control/?did=ft_card&trk=ft_cardWAF). Dit is een web application firewall die je web app of API helpt te beschermen tegen websitemisbruik en bots die de beschikbaarheid en beveiliging kunnen compromitteren. De activatie van deze service zou direct leiden tot de mitigation van potentiële credential stuffing attacks. Standaard is dit bij AWS WAF ingesteld als volgt: “multiple requests in a 5-minute period to an application’s login page is suspicious and indicates a potential brute force or credential-stuffing attack against the application”. Andere threats zoals SQL injection of cross-site scripting worden hiermee ook aangepakt.
 
 Op basis van een black box test kan ik niet uitmaken of paswoorden in plaintext worden opgeslagen of opgeslagen worden na toepassing van een hash algoritme zoals Argon2 of bcrypt. Na white box analyse blijkt dat paswoorden niet worden gehasht door de code geschreven door het team “Low Expectations”. Wachtwoordbeheer wordt gedaan door AWS Cognito. Spijtig genoeg (of gelukkig) deelt AWS Cognito niet welke algoritmes zij toepassen bij de bewaring van paswoorden.
 
 # 3.	Evaluatie van beveiliging tegen typische web vulnerabilities
 
 ## Automated DAST scan by “Crashtest Security”
-Naast de manuele analyses, hebben we ook een automatische DAST scan uitgevoerd met de hulp van “Crashtest Security” (https://crashtest.cloud). Een uitgebreid verslag vind je in bijlage. Zoals we ook verder zullen zien, stellen ook zij vast dat de hoogste prioriteit het aanpakken is van de HTTP header options. De ontbrekende header options in de webserver configuratie krijgen de hoogste CVSS score.
+Naast de manuele analyses, hebben we ook een automatische DAST scan uitgevoerd met de hulp van “Crashtest Security” (https://crashtest.cloud). Een uitgebreid verslag vind je in bijlage.\
+
+Deze scan heeft gepolsd naar de volgende threats:
+  * Fingerprinting,
+  * Transport Layer Security (TLS/SSL),
+  * Http Header,
+  * Portscan,
+  * Fuzzer,
+  * Crawler,\
+
+Threats waar de scan niet naar heeft kunnen polsen:
+  * SQL Injection
+  * Cross-Site Scripting (XSS),
+  * File Inclusion,
+  * Deserialization,
+  * XML External Entity (XXE),
+  * Command Injection,
+  * Cross-Site Request Forgery (CSRF),
+  * Privilege Escalation.
+
+Sommige van deze onbehandelde threats komen later nog aan bod.\
+Zoals we ook verder zullen zien, stelt deze automatische scan ook vast dat de hoogste prioriteit moet zijn: het aanpakken van de HTTP header options. De ontbrekende header options in de webserver configuratie krijgen de hoogste CVSS score.
 
 ## Cookies
 Er worden session cookies gebruikt tussen browser en web app. Hieronder vind je een voorbeeld: 
@@ -73,7 +96,8 @@ De cookie mbt login gegevens worden gewrapt in een JWT. Deze cookie heeft de Sam
 * De X-Content-Type-Options header is eveneens niet ingesteld. Deze header option zorgt ervoor dat de browser geen MIME-types probeert te detecteren in downloads (MIME sniffing). Het beschermt je dus tegen aanvallen waarbij malicious files aangeboden worden met een niet-verdachte MIME-type.
 * De Referrer-Policy header is ook niet ingesteld. Deze header option definieert hoeveel informatie over de “referrer” wordt verzonden wanneer de gebruiker op een link klikt. Een verkeerde configuratie van de Referrer-Policy header of het ontbreken ervan kan gevoelige informatie lekken naar de andere website die wordt bezocht door te klikken op deze link.
 
-Aanbeveling: We zien dat jullie werken met een IIS web server geconfigureerd met C# code. Jullie kunnen de configuratie updaten met de volgende header options en overeenkomstige waarden:
+#### Aanbeveling:
+We zien dat jullie werken met een IIS web server geconfigureerd met C# code. Jullie kunnen de configuratie updaten met de volgende header options en overeenkomstige waarden:
 * Strict-Transport-Security in te stellen op "max-age=31536000"
 * X-Frame-Options -> "deny"
 * X-XSS-Protection -> "1; mode=block"
@@ -152,7 +176,8 @@ Aanbeveling: Aangezien alles over https gaat, is het openen van poort 443 voldoe
 ![OCSP_peahi be_20211211](https://user-images.githubusercontent.com/61866984/145693220-1b485cbf-ee76-4642-8901-2f8a0d2b353f.png)
 
 - OCSP_stapling is niet beschikbaar op web server IIS versie 10.0.
-Aanbeveling: je kan OCSP stapling activeren op IIS door de stappen te volgen beschreven in volgende documentatie: https://docs.microsoft.com/en-us/windows-server/security/tls/tls-registry-settings
+#### Aanbeveling:
+je kan OCSP stapling activeren op IIS door de stappen te volgen beschreven in volgende documentatie: https://docs.microsoft.com/en-us/windows-server/security/tls/tls-registry-settings
 
 ## Analyse van de configuratie van de SSL web server met domein peahi.be op het publieke internet
 In de beschreven architectuur van “Low Expectations” zien we 2 Amazon EC2 voor de website en 2 Amazon EC2 voor de API. Een test naar de score van het domein peahi.be bij SSL Labs geeft de 4 gebruikte containers een A+ score (https://www.ssllabs.com/ssltest/analyze.html?d=peahi.be&latest). Ziehier het resultaat:
@@ -160,9 +185,10 @@ In de beschreven architectuur van “Low Expectations” zien we 2 Amazon EC2 vo
 
 Op elke Amazon EC2 is HTTP Strict Transport Security (HSTS) geconfigureerd. Dit beschermt tegen “man-in-the-middle attacks” zoals “protocol downgrade attacks” en “cookie hijacking”. Het laat webservers toe om af te dwingen dat web browsers alleen kunnen communiceren met HTTPS connecties. Dat biedt net die belangrijke Transport Layer Security (TLS/SSL) in tegenstelling tot HTTP.
 
-## Webserver on Microsoft-IIS 10.0
-De webserver draait op Microsoft-IIS 10.0. De webserver geeft informatie bloot over zichzelf. Dit laat aanvallers toe om te zoeken naar mogelijkheden specifiek voor dit type webserver van deze versie.
-Aanbeveling: De IIS server zal zijn versie laten zien in HTTP responses. Om dit niet meer te laten zien kan je het volgende doen: 
+## Webserver Microsoft IIS v10.0
+De webserver draait op Microsoft IIS v10.0. De webserver geeft informatie bloot over zichzelf. Dit laat aanvallers toe om te zoeken naar mogelijkheden specifiek voor dit type webserver van deze versie.
+#### Aanbeveling:
+De IIS server zal zijn versie laten zien in HTTP responses. Om dit niet meer te laten zien kan je het volgende doen: 
 -	Activeer “Metabase Compatibility” (https://docs.microsoft.com/en-us/iis/manage/managing-your-configuration-settings/metabase-compatibility-with-iis-7-and-above). 
 -	Installeer UrlScan.
 -	Open vervolgens het UrlScan.ini bestand met notepad. Het bestand zal je in principe vinden in de directory %windir%\system32\inetsrv\UrlScan.
@@ -182,5 +208,6 @@ Via Entrust (https://www.entrust.com/resources/certificate-solutions/tools/caa-l
   1. Instellen van de header options op de IIS web server: X-Frame-Options, X-XSS-Protection en X-Content-Type-Options, Content-Security-Policy en Referrer-Policy. Deze eenvoudige ingreep beschermt onmiddellijk tegen een reeks threats zoals clickjacking attacks, Cross-Site-Scripting attacks, MIME sniffing en data leaks.
   2. Activatie van de service AWS WAF om brute force of credential stuffing attacks tegen te gaan.
   3. MFA of dubbele authenticatie activeren binnen de reeds gebruikte service Cognito van AWS. Eventueel kan zelfs gekozen worden voor sign-in via social identity providers zoals Apple, Google, Facebook en Amazon, OIDC of SAML.	
-  4. Type web server en versie afschermen om het risico op gerichte attacks te verkleinen.
-  5. OCSP stapling activeren op IIS om nog veiliger te werken bij de TLS handshake.
+  4. Sluiten van poort 80; Enkel poort 443 is noodzakelijk aandgezien alle verkeer langs HTTPS gaat.
+  5. Type web server en versie afschermen om het risico op gerichte attacks te verkleinen.
+  6. OCSP stapling activeren op IIS om nog veiliger te werken bij de TLS handshake.
