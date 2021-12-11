@@ -20,10 +20,11 @@ We hebben een login gekregen met de rol van admin. Ook hier hebben we blackbox t
 
 Aanbeveling: Om de admin-rol volledig tot zijn recht te laten komen, dienen nog enkele extra pagina’s toegevoegd te worden. Zeker het beheer van gebruikers lijkt hier de prioriteit.
 
-# 2.	Evaluatie vansign-up, sign-in en account control
+
+# 2.	Evaluatie van sign-up, sign-in en account control
 Wachtwoord- en toegangsbeheer (“identity management”) is overgelaten aan de AWS service “Amazon Cognito”. De setup van user sign-up, sign-in en authenticatie wordt daarmee vereenvoudigd, maar dankzij deze service wordt de lat ook direct hoog gelegd. 
 
-Account registreren
+## Account registreren
 Op de web pagina kan ik me registreren als gewone gebruiker en dien ik een formulier in te vullen. Eén van de elementen is een wachtwoord. Een wachtwoord moet minstens 8 karakters hebben waarvan minstens een kleine letter, een hoofdletter, een speciaal karakter en een nummer. Aan dit criterium is dus voldaan. Als ik een paswoord wens te kiezen die mijn Google account of Apple account voorstelt, kan ik die eveneens aanvaarden en die is langer dan 64 karakters.
 
 Na sign-up wordt een pin code gevraagd ter bevestiging van de account. De pincode wordt onmiddellijk na registratie gestuurd naar mijn e-mailadres. Ook dat evaluatiecriterium kan afgevinkt worden. Na invoer van de pincode kreeg ik jammer genoeg een foutboodschap. Invoer van de pincode leidt me naar de web pagina van de user account die mijn inziens nog niet afgewerkt is.
@@ -33,7 +34,7 @@ Klikken in het menu op Register, brengt me toch op de home pagina, waarbij ik va
 In het menu zie ik duidelijk dat ik ten allen tijd ben ingelogd. Mijn naam verschijnt in de rechterbovenhoek. (of op de smartphone bij het openen van het menu).
 Ook afmelden loopt vlot en brengt me terug bij de startpagina.
 
-Inloggen met email en wachtwoord
+## Inloggen met email en wachtwoord
 Opnieuw inloggen werkt, maar ook daar botsen we op dezelfde foutboodschap als hierboven beschreven. Dit is niet blokkerend na klikken op de home pagina.
 MFA of dubbele authenticatie is niet ingesteld. Eenvoudige inloggen met e-mail en paswoord lukt.
 Aanbeveling: 
