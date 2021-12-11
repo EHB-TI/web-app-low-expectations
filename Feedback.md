@@ -27,21 +27,23 @@ Wachtwoord- en toegangsbeheer (“identity management”) is overgelaten aan de 
 ## Account registreren
 Op de web pagina kan ik me registreren als gewone gebruiker en dien ik een formulier in te vullen. Eén van de elementen is een wachtwoord. Een wachtwoord moet minstens 8 karakters hebben waarvan minstens een kleine letter, een hoofdletter, een speciaal karakter en een nummer. Aan dit criterium is dus voldaan. Als ik een paswoord wens te kiezen die mijn Google account of Apple account voorstelt, kan ik die eveneens aanvaarden en die is langer dan 64 karakters.
 
-Na sign-up wordt een pin code gevraagd ter bevestiging van de account. De pincode wordt onmiddellijk na registratie gestuurd naar mijn e-mailadres. Ook dat evaluatiecriterium kan afgevinkt worden. Na invoer van de pincode kreeg ik jammer genoeg een foutboodschap. Invoer van de pincode leidt me naar de web pagina van de user account die mijn inziens nog niet afgewerkt is.
-FOTO (datum: 9/12/2020)
+Na sign-up wordt een pin code gevraagd ter bevestiging van de account. De pincode wordt onmiddellijk na registratie gestuurd naar mijn e-mailadres. Ook dat evaluatiecriterium kan afgevinkt worden. Na invoer van de pincode kreeg ik jammer genoeg een foutboodschap. Invoer van de pincode leidt me naar de web pagina van de user account die mijn inziens nog niet afgewerkt is. Zie screenshot hieronder van 9/12/2021:
+![ErrorAccount](https://user-images.githubusercontent.com/61866984/145692186-d4bd2cae-ec20-4773-be91-6b3f2fa58690.png)
  
-Klikken in het menu op Register, brengt me toch op de home pagina, waarbij ik vaststel dat ik dus toch ben ingelogd: een beetje verwarrend, maar gelukkig niet blokkerend.
+
+Klikken in het menu op Register brengt me op de home pagina en stel ik vast dat ik toch ben ingelogd: een beetje verwarrend, maar gelukkig niet blokkerend.
 In het menu zie ik duidelijk dat ik ten allen tijd ben ingelogd. Mijn naam verschijnt in de rechterbovenhoek. (of op de smartphone bij het openen van het menu).
 Ook afmelden loopt vlot en brengt me terug bij de startpagina.
 
 ## Inloggen met email en wachtwoord
 Opnieuw inloggen werkt, maar ook daar botsen we op dezelfde foutboodschap als hierboven beschreven. Dit is niet blokkerend na klikken op de home pagina.
-MFA of dubbele authenticatie is niet ingesteld. Eenvoudige inloggen met e-mail en paswoord lukt.
+MFA of dubbele authenticatie is niet ingesteld. Eenvoudig inloggen met e-mail en paswoord lukt.
+
 Aanbeveling: 
 -	Amazon Cognito biedt ook sign-in via social identity providers zoals Apple, Google, Facebook en Amazon, OIDC of SAML. Van deze extra features wordt echter geen gebruik gemaakt. Misschien een gemiste kans?
--	MFA of dubbele authenticatie zou je kunnen instellen door bij elke poging om in te loggen de verificatiecode te laten sturen naar het e-mailadres van de gebruiker. Vandaag is dit enkel ingesteld bij registratie of opnieuw instellen van het wachtwoord. Andere optie: bij de registratie van een user hebben we een geldig mobiel telefoonnummer ingegeven. De verificatiecode zou kunnen verzonden worden per SMS naar dit mobiel nummer. Deze extra informatie wordt vandaag niet gebruikt in het kader van authenticatie. Andere MFA mogelijkheden worden beschreven in de documentatie van AWS: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa.html.
+-	MFA of dubbele authenticatie zou je kunnen instellen door bij elke login-poging de verificatiecode te laten sturen naar het e-mailadres van de gebruiker. Vandaag is dit enkel ingesteld bij registratie of opnieuw instellen van het wachtwoord. Andere optie: bij de registratie van een user hebben we een geldig mobiel telefoonnummer ingegeven. De verificatiecode zou kunnen verzonden worden per SMS naar dit mobiel nummer. Deze extra informatie wordt vandaag niet gebruikt in het kader van authenticatie. Andere MFA mogelijkheden worden beschreven in de documentatie van AWS: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa.html.
 
-Mijn wachtwoord opnieuw instellen
+## Mijn wachtwoord opnieuw instellen
 Als ik mijn paswoord ben vergeten, kan ik die opnieuw instellen door het ingeven van het betrokken e-mailadres. Ik ontvang een pincode en kan hiermee een nieuw paswoord instellen. Dat loopt vlot. 
 
 Wanneer we dit proberen in te stellen met een eenvoudig paswoord zoals 123456789Aa! lukt dat ook. Zelfs dit eenvoudig paswoord is slechts 7 keer (< 300) gevonden in een data breach volgens Have I Been Pwned (https://haveibeenpwned.com/Passwords). 
