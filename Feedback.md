@@ -64,7 +64,8 @@ Naast de manuele analyses, hebben we ook een automatische DAST scan uitgevoerd m
 
 ## Cookies
 Er worden session cookies gebruikt tussen browser en web app. Hieronder vind je een voorbeeld: 
- 
+![Cookies_SameSite_peahi be_20211211](https://user-images.githubusercontent.com/61866984/145693236-f31924af-3117-4a76-9783-801f4110d2cb.png)
+
 Alle gebruikte cookies hebben voor het SameSite attribuut de waarden “Lax” en zelfs “Strict”. Nooit hebben ze de waarden “None”. SameSite weerhoudt de browser ervan om de cookie bij een cross-site request mee te sturen. Alle formulieren bevatten een CSRF-token dat enkel server-side wordt gecontroleerd. Het hoofddoel is om het risico op cross-origin informatielekken te beperken. Het biedt ook een mate van bescherming tegen aanvallen op basis van cross-site request forgery (CSRF).
 
 De cookie mbt login gegevens worden gewrapt in een JWT. Deze cookie heeft de SameSite attribuutwaarde "Strict".
@@ -148,8 +149,11 @@ Aanbeveling: Aangezien alles over https gaat, is het openen van poort 443 voldoe
 ## Controle op de geldigheid van X.509 digitale certificaten 
 
 -	Controle van SSL Certificate revocation met CRL (Certificate Revocation Lists)
-  
+![CRLDistributionPoints_peahi be_20211211](https://user-images.githubusercontent.com/61866984/145693213-0c17218f-fe8e-4a26-b26c-4b3f7b256df2.png)
+
 -	Controle van SSL Certificate revocation met OCSP (Online Certificate Status Protocol)
+![OCSP_peahi be_20211211](https://user-images.githubusercontent.com/61866984/145693220-1b485cbf-ee76-4642-8901-2f8a0d2b353f.png)
+
 
 ## Analyse van de configuratie van de SSL web server met domein peahi.be op het publieke internet
 In de beschreven architectuur van “Low Expectations” zien we 2 Amazon EC2 voor de website en 2 Amazon EC2 voor de API. Een test naar de score van het domein peahi.be bij SSL Labs geeft de 4 gebruikte containers een A+ score (https://www.ssllabs.com/ssltest/analyze.html?d=peahi.be&latest). Ziehier het resultaat:
