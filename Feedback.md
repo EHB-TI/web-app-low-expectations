@@ -59,7 +59,7 @@ Op basis van een black box test kan ik niet uitmaken of paswoorden in plaintext 
 # 3.	Evaluatie van beveiliging tegen typische web vulnerabilities
 
 ## Automated DAST scan by “Crashtest Security”
-Naast de manuele analyses, hebben we ook een automatische DAST scan uitgevoerd met de hulp van “Crashtest Security” (https://crashtest.cloud). Een uitgebreid verslag vind je in bijlage.\
+Naast de manuele analyses, hebben we ook een automatische DAST scan uitgevoerd met de hulp van “Crashtest Security” (https://crashtest.cloud). Een uitgebreid verslag vind je in bijlage "CTS_Report_20211211_peahi_be.pdf".\
 
 Deze scan heeft gepolsd naar de volgende threats:
   * Fingerprinting,
@@ -181,7 +181,12 @@ je kan OCSP stapling activeren op IIS door de stappen te volgen beschreven in vo
 
 ## Analyse van de configuratie van de SSL web server met domein peahi.be op het publieke internet
 In de beschreven architectuur van “Low Expectations” zien we 2 Amazon EC2 voor de website en 2 Amazon EC2 voor de API. Een test naar de score van het domein peahi.be bij SSL Labs geeft de 4 gebruikte containers een A+ score (https://www.ssllabs.com/ssltest/analyze.html?d=peahi.be&latest). Ziehier het resultaat:
-![SSLLabs_20211211_peahi_be_A+](https://user-images.githubusercontent.com/61866984/145693589-1efd966a-dc25-4cac-936a-2a73871e7dde.png)
+![SSLLabs_20211211_peahi_be_A+](https://user-images.githubusercontent.com/61866984/145693589-1efd966a-dc25-4cac-936a-2a73871e7dde.png)\
+Een gedetailleerd verslag voor elk van de IP adressen vinden jullie in volgende bijlagen:
+* SSL Server Test_ peahi.be (Powered by Qualys SSL Labs)_IP 65.8.158.18.pdf
+* SSL Server Test_ peahi.be (Powered by Qualys SSL Labs)_IP 65.8.158.22.pdf
+* SSL Server Test_ peahi.be (Powered by Qualys SSL Labs)_IP 65.8.158.51.pdf
+* SSL Server Test_ peahi.be (Powered by Qualys SSL Labs)_IP 65.8.158.121.pdf
 
 Op elke Amazon EC2 is HTTP Strict Transport Security (HSTS) geconfigureerd. Dit beschermt tegen “man-in-the-middle attacks” zoals “protocol downgrade attacks” en “cookie hijacking”. Het laat webservers toe om af te dwingen dat web browsers alleen kunnen communiceren met HTTPS connecties. Dat biedt net die belangrijke Transport Layer Security (TLS/SSL) in tegenstelling tot HTTP.
 
