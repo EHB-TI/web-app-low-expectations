@@ -36,7 +36,7 @@ Deze criteria werden beschreven in de opdracht zoals te raadplegen op cas.ehb.be
 - Rechtstreekse toegang via IP (104.21.9.158) niet mogelijk.
 - ssl labs report grade: A.
 - CAA record is beschikbaar.
-- Domein staat op hsts preload list.\
+- Domein staat op hsts preload list.
 
 ### Evaluatiecriteria ivm beveiliging tegen typische web vulnerabilities
 - Sessiecookies zijn SameSite: Lax.
@@ -111,6 +111,17 @@ De laatste (CVE-2021-43617) dateert van 2021-11-18 en heeft een rating van 9.8. 
 
 https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-43808 \
 Laravel vóór versies 8.75.0, 7.30.6 en 6.20.42 bevat een mogelijke XSS-kwetsbaarheid (cross-site scripting) in de Blade-templating-engine.
+
+## Certificate Authority Authorization
+
+Via Entrust (https://www.entrust.com/resources/certificate-solutions/tools/caa-lookup) zien we dat het domein **ehbdefendersblog.com** verschillende CA's heeft van Digicert, Comodoca en letsencrypt.org. \
+![image](https://user-images.githubusercontent.com/74409879/145718998-51fa879b-a829-4674-a776-479871c6ead0.png)
+
+Het CAA record type is SSL. \
+![image](https://user-images.githubusercontent.com/74409879/145719549-ca5df437-9e54-4312-adaa-8dc1fef840e2.png)
+
+
+
 
 
 ### Conclusie/aanbevelingen
