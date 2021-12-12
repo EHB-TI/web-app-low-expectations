@@ -216,10 +216,10 @@ Via Entrust (https://www.entrust.com/resources/certificate-solutions/tools/caa-l
  
 # 5. Conclusie
 * Aan de web app zelf dient nog wat gewerkt te worden teneinde al de user stories waarvan sprake in de acceptatiecriteria te kunnen waarmaken. Vooral het kunnen beheren van de gebrukers en hun rollen door de admin is een belangrjk gemis.
-* Security-gewijs zet ik de reeds vermelde aanbevelingen nog een op een rijtje in volgorde van belangrijkheid:
+* Security-gewijs zet ik de reeds vermelde aanbevelingen nog eens op een rijtje in volgorde van belangrijkheid:
   1. Instellen van de header options op de IIS web server: X-Frame-Options, X-XSS-Protection en X-Content-Type-Options, Content-Security-Policy en Referrer-Policy. Deze eenvoudige ingreep beschermt onmiddellijk tegen een reeks threats zoals clickjacking attacks, Cross-Site-Scripting attacks, MIME sniffing en data leaks.
   2. Activatie van de service AWS WAF om brute force of credential stuffing attacks tegen te gaan.
   3. MFA of dubbele authenticatie activeren binnen de reeds gebruikte service Cognito van AWS. Eventueel kan zelfs gekozen worden voor sign-in via social identity providers zoals Apple, Google, Facebook en Amazon, OIDC of SAML.	
-  4. Sluiten van poort 80; Enkel poort 443 is noodzakelijk aandgezien alle verkeer langs HTTPS gaat.
+  4. Sluiten van poort 80; enkel poort 443 is noodzakelijk aangezien alle verkeer langs HTTPS gaat.
   5. Type web server en versie afschermen om het risico op gerichte attacks te verkleinen.
   6. OCSP stapling activeren op IIS om nog veiliger te werken bij de TLS handshake.
