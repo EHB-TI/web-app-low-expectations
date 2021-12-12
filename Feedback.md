@@ -171,7 +171,8 @@ Alle publiek bereikbare onderdelen zijn enkel over HTTPS beschikbaar. Een voobee
 
 ## Opengestelde poorten
 Poorten 80 en 443 zijn opengesteld. 
-Aanbeveling: Aangezien alles over https gaat, is het openen van poort 443 voldoende. Sluit gerust poort 80.
+#### Aanbeveling:
+Aangezien alles over https gaat, is het openen van poort 443 voldoende. Sluit gerust poort 80.
 
 ## Controle op de geldigheid van X.509 digitale certificaten 
 
