@@ -1,3 +1,9 @@
+# Inhoudstafel
+1. [Evaluatie van business logica](#1evaluatie-van-business-logica)
+2. [Evaluatie van sign-up, sign-in en account control](#2evaluatie-van-sign-up-sign-in-en-account-control)
+3. [Evaluatie van beveiliging tegen typische web vulnerabilities](#3evaluatie-van-beveiliging-tegen-typische-web-vulnerabilities)
+4. [Evaluatie van HTTPS](#4evaluatie-van-https)
+5. [Conclusie](#5-conclusie)
 
 # 1.	Evaluatie van business logica
 ### Als gewone gebruiker
