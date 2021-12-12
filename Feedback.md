@@ -59,15 +59,15 @@ Op basis van een black box test kan ik niet uitmaken of paswoorden in plaintext 
 # 3.	Evaluatie van beveiliging tegen typische web vulnerabilities
 
 ## Automated DAST scan by “Crashtest Security”
-Naast de manuele analyses, hebben we ook een automatische DAST scan uitgevoerd met de hulp van “Crashtest Security” (https://crashtest.cloud). Een uitgebreid verslag vind je in bijlage "CTS_Report_20211211_peahi_be.pdf".\
+Naast de manuele analyses, hebben we ook een automatische DAST scan uitgevoerd met de hulp van “Crashtest Security” (https://crashtest.cloud). Een uitgebreid verslag vind je in bijlage "[CTS_Report_20211211_peahi_be.pdf](https://github.com/olivierthas/web-app-low-expectations/blob/patch-1/CTS_Report_20211211_peahi_be.pdf)".
 
-Deze scan heeft gepolsd naar de volgende threats:
+Deze scan heeft gepolsd naar de volgende elementen:
   * Fingerprinting,
   * Transport Layer Security (TLS/SSL),
   * Http Header,
   * Portscan,
   * Fuzzer,
-  * Crawler,\
+  * Crawler,
 
 Threats waar de scan niet naar heeft kunnen polsen:
   * SQL Injection
