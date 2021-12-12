@@ -169,10 +169,10 @@ Aanbeveling: Aangezien alles over https gaat, is het openen van poort 443 voldoe
 
 ## Controle op de geldigheid van X.509 digitale certificaten 
 
--	Controle van SSL Certificate revocation met CRL (Certificate Revocation Lists)
+-	Controle van SSL Certificate revocation met CRL (Certificate Revocation Lists)\
 ![CRLDistributionPoints_peahi be_20211211](https://user-images.githubusercontent.com/61866984/145693213-0c17218f-fe8e-4a26-b26c-4b3f7b256df2.png)
 
--	Controle van SSL Certificate revocation met OCSP (Online Certificate Status Protocol)
+-	Controle van SSL Certificate revocation met OCSP (Online Certificate Status Protocol)\
 ![OCSP_peahi be_20211211](https://user-images.githubusercontent.com/61866984/145693220-1b485cbf-ee76-4642-8901-2f8a0d2b353f.png)
 
 - OCSP_stapling is niet beschikbaar op web server IIS versie 10.0.
