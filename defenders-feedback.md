@@ -17,6 +17,7 @@
     - Conclusie/aanbevelingen
 3.	SCA (software composition analysis
     - CVE
+    - Certificate Authority Authorization
     - Conclusie/Aanbevelingen
 	
 ## EVALUATIECRITERIA
