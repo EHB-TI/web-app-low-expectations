@@ -34,7 +34,7 @@ public class ContactMagazijnController {
 
     @GetMapping (value = { "/", "" })
     public ResponseEntity findByProperties (
-            @RequestParam (required = false) List<String> persoondId,
+            @RequestParam (required = false) List<String> persoonId,
             @RequestParam (required = false) List<String> magazijnId,
             @RequestHeader ("Authorization") String token,
             @RequestHeader ("Origin") String origin) {
@@ -43,7 +43,7 @@ public class ContactMagazijnController {
         if (!OriginChecker.checkOrigin(origin))
             return Responder.respondBadRequest("origin not allowed " + origin);
 
-        if ((persoondId == null || persoondId.isEmpty())
+        if ((persoonId == null || persoonId.isEmpty())
                 && (magazijnId == null || magazijnId.isEmpty())) {
             APILogger.logRequest("contactmagazijn.findAll");
             List<ContactMagazijn> contactMagazijnen = contactMagazijnRepository.findAll();
@@ -55,9 +55,9 @@ public class ContactMagazijnController {
 
         List<ContactMagazijn> contactMagazijnen = new ArrayList<>();
 
-        if (persoondId != null && !persoondId.isEmpty()) {
+        if (persoonId != null && !persoonId.isEmpty()) {
             APILogger.logRequest("contactmagazijn.findAllByPersoonIdIsIn");
-            contactMagazijnen.addAll(contactMagazijnRepository.findAllByPersoonIdIsIn(persoondId));
+            contactMagazijnen.addAll(contactMagazijnRepository.findAllByPersoonIdIsIn(persoonId));
         }
 
         if (magazijnId != null && !magazijnId.isEmpty()) {
@@ -186,8 +186,7 @@ public class ContactMagazijnController {
 
     private boolean validateContactMagazijn (ContactMagazijn c) {
         return validatePersoonId(c.getPersoonId())
-                && validateMagazijnId(c.getMagazijnId())
-                && validateOpmerking(c.getOpmerking());
+                && validateMagazijnId(c.getMagazijnId());
     }
 
     private boolean validatePersoonId (String persoonId) {
@@ -202,7 +201,4 @@ public class ContactMagazijnController {
         return m.isPresent();
     }
 
-    private boolean validateOpmerking (String opmerking) {
-        return opmerking != null && !opmerking.isEmpty();
-    }
 }
