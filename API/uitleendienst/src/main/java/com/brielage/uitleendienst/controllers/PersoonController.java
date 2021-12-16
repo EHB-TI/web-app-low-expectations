@@ -91,7 +91,7 @@ public class PersoonController {
 
             if (username.size() == 1) {
                 if (!JWTChecker.checkUsername(token, username.get(0))
-                        || !JWTChecker.checkPermission(token, Permission.ADMIN))
+                        && !JWTChecker.checkPermission(token, Permission.ADMIN))
                     return Responder.respondForbidden();
             } else {
                 if (!JWTChecker.checkPermission(token, Permission.ADMIN))
