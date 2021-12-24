@@ -1,0 +1,19 @@
+﻿@model WebApplication_Uitleendienst.Models.ViewModels.HomeViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="admin-wrapper">
+    <ul>
+        <li>
+            <a class="nav-link btn btn-light px-2 py-1" asp-area="MagazijnContact" asp-controller="Magazijn" asp-action="Index" title="Magazijn">
+                <i class="fa-solid fa-boxes-stacked"></i>
+                <p>Magazijn manager</p>
+            </a>
+        </li>
+    </ul>
+</div>
+
