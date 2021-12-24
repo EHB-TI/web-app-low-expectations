@@ -31,9 +31,10 @@ namespace WebApplication_Uitleendienst.Areas.Account {
             if (persoon != null) {
                 // retrieve uitleningen for user
                 model.Uitleningen = _uitleningService.GetAll("persoonId", persoon.Id, token: UserInfo.Token)?.ToList();
-                model.Uitleningen.ForEach(u => {
-                    u.Magazijn = _magazijnService.Get(propertyValue: u.MagazijnId, token: UserInfo.Token);
-                });
+                if (model.Uitleningen != null)
+                    model.Uitleningen.ForEach(u => {
+                        u.Magazijn = _magazijnService.Get(propertyValue: u.MagazijnId, token: UserInfo.Token);
+                    });
 
             } else {
                 model.Message = "Geen informatie van gebruiker gevonden";
