@@ -342,3 +342,207 @@ p.card-text {
     border-bottom: 1px solid black;
     padding: 15px 0px;
 }
+
+
+
+.user-management .headers {
+    background: aliceblue;
+    margin: 15px 0;
+    padding: 15px;
+    font-weight: 700;
+}
+
+    .user-management .headers > div {
+        text-transform: uppercase;
+    }
+
+.user-management .bodycontent {
+    margin: 15px 0;
+    padding: 15px;
+}
+
+
+/* SLIDER AND INPUT ( TOGGLED ) */
+
+@keyframes progress {
+    0% {
+        stroke-dasharray: 0 100;
+    }
+}
+
+@-webkit-keyframes rotating /* Safari and Chrome */ {
+    from {
+        -webkit-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    to {
+        -webkit-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes rotating {
+    from {
+        -ms-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    to {
+        -ms-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+.rotating, .loading > i {
+    /*display: inline-block !important;*/
+    -webkit-animation: rotating 2s linear infinite;
+    -moz-animation: rotating 2s linear infinite;
+    -ms-animation: rotating 2s linear infinite;
+    -o-animation: rotating 2s linear infinite;
+    animation: rotating 2s linear infinite;
+}
+
+    /*.loading::before { content: '\f1ce'; animation: rotation 2s infinite linear; transform: rotate(34deg); }*/
+    .loading > i::before {
+        content: '\f1ce';
+    }
+
+.loading {
+    position: relative;
+}
+
+    .loading::before {
+        background: #dee2e6;
+        opacity: 0.5;
+        content: "";
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        z-index: 50;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+    .loading::after {
+        content: "\f1ce";
+        font-family: "Font Awesome 5 Pro";
+        font-weight: 900;
+        font-size: 30px;
+        position: absolute;
+        left: calc(50% - 15px);
+        top: calc(50% - 22px);
+        -webkit-animation: rotating 2s linear infinite;
+        -moz-animation: rotating 2s linear infinite;
+        -ms-animation: rotating 2s linear infinite;
+        -o-animation: rotating 2s linear infinite;
+        animation: rotating 2s linear infinite;
+    }
+
+    .loading.loading-no-after::after {
+        content: '';
+    }
+
+#pre-loader {
+    background-color: #FFF;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    z-index: 999999;
+}
+
+.switch {
+    position: relative;
+    width: 50px;
+    height: 25px;
+    margin-bottom: 0;
+    float: right;
+}
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+input + .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #fff;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+    input + .slider:before {
+        position: absolute;
+        content: "";
+        height: 23px;
+        width: 23px;
+        left: 0px;
+        bottom: 0px;
+        background-color: #fff;
+        -webkit-transition: .4s;
+        transition: .4s;
+        border: 2px solid #d3d3d3;
+    }
+
+input:checked + .slider {
+    background-color: var(--main-light);
+}
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+input:focus {
+    outline: none;
+}
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #ccc;
+    }
+
+.slider.round {
+    border-radius: 34px;
+    border: 1px solid #d3d3d3;
+}
+
+    .slider.round:before {
+        border-radius: 50%;
+        border: 1px solid #d3d3d3;
+    }
+
+.table .delete {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.delete i { color: black; }
+
+.admin-wrapper ul li {
+    margin: 0 5px;
+    border-radius: 10px;
+    padding: 35px;
+    box-shadow: rgb(50 50 93 / 25%) 0px 2px 5px -1px, rgb(0 0 0 / 30%) 0px 1px 3px -1px;
+}
+.admin-wrapper ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+}
