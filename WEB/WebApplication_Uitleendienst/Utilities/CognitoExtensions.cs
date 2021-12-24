@@ -29,15 +29,63 @@ namespace WebApplication_Uitleendienst.Utilities {
 
         private async Task<ListUsersResponse> FindUsersByEmailAddress(string emailAddress) {
 
-            ListUsersRequest listUsersRequest = new ListUsersRequest {
+            var listUsersRequest = new ListUsersRequest {
                 UserPoolId = _cognitoConfig.UserPoolId,
                 Filter = $"email=\"{emailAddress}\""
             };
             return await _provider.ListUsersAsync(listUsersRequest);
         }
 
+        public async Task<List<Amazon.CognitoIdentityProvider.Model.UserType>> GetAllUsersAsync() {
 
+            var listUsersRequest = new ListUsersRequest {
+                UserPoolId = _cognitoConfig.UserPoolId
+            };
 
+            var response = await _provider.ListUsersAsync(listUsersRequest);
+            return response.Users;
+        }
+
+        public async Task<List<GroupType>> GetGroupsForUserAsync(string username) {
+
+            var request = new AdminListGroupsForUserRequest {
+                UserPoolId = _cognitoConfig.UserPoolId,
+                Username = username
+            };
+            var response = await _provider.AdminListGroupsForUserAsync(request);
+
+            return response.Groups;
+        }
+
+        public async Task<AdminAddUserToGroupResponse> AddUserToGroupAsync(string username, string groupname) {
+
+            var request = new AdminAddUserToGroupRequest {
+                UserPoolId = _cognitoConfig.UserPoolId,
+                Username = username,
+                GroupName = groupname
+            };
+            return await _provider.AdminAddUserToGroupAsync(request);
+        }
+
+        public async Task<AdminRemoveUserFromGroupResponse> RemoveUserFromGroupAsync(string username, string groupname) {
+
+            var request = new AdminRemoveUserFromGroupRequest {
+                UserPoolId = _cognitoConfig.UserPoolId,
+                Username = username,
+                GroupName = groupname
+            };
+            return await _provider.AdminRemoveUserFromGroupAsync(request);
+        }
+
+        public async Task<List<GroupType>> GetAllGroupsAsync() {
+
+            var request = new ListGroupsRequest {
+                UserPoolId = _cognitoConfig.UserPoolId
+            };
+            var response = await _provider.ListGroupsAsync(request);
+
+            return response.Groups;
+        }
 
         public async Task<UserProfileResponse> GetUserAsync(string emailAddress) {
             // Find for users by emailAddress

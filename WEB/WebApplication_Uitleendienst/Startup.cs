@@ -1,3 +1,5 @@
+using DinkToPdf;
+using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -16,7 +18,10 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.Loader;
 using System.Threading.Tasks;
 using WebApplication_Uitleendienst.Data;
 using WebApplication_Uitleendienst.Models.Appsettings;
@@ -26,6 +31,18 @@ using WebApplication_Uitleendienst.Utilities;
 using WebApplication_Uitleendienst.ViewComponents;
 
 namespace WebApplication_Uitleendienst {
+    internal class CustomAssemblyLoadContext : AssemblyLoadContext {
+        public IntPtr LoadUnmanagedLibrary(string absolutePath) {
+            return LoadUnmanagedDll(absolutePath);
+        }
+        protected override IntPtr LoadUnmanagedDll(string unmanagedDllName) {
+            return LoadUnmanagedDllFromPath(unmanagedDllName);
+        }
+
+        protected override Assembly Load(AssemblyName assemblyName) {
+            throw new NotImplementedException();
+        }
+    }
     public class Startup {
         public Startup(IConfiguration configuration) {
             Configuration = configuration;
@@ -35,6 +52,8 @@ namespace WebApplication_Uitleendienst {
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
+
+
 
             ConfigurationHelper.Initialize(Configuration);
 
@@ -57,6 +76,7 @@ namespace WebApplication_Uitleendienst {
             services.AddTransient<IBaseService<Uitlening>, BaseService<Uitlening>>();
             services.AddTransient<IBaseService<UitleningItem>, BaseService<UitleningItem>>();
             services.AddTransient<IBaseService<Persoon>, BaseService<Persoon>>();
+            services.AddTransient<IBaseService<ContactMagazijn>, BaseService<ContactMagazijn>>();
 
             var cognitoConfig = Configuration.GetSection("Cognito").Get<Cognito>();
 
@@ -91,6 +111,12 @@ namespace WebApplication_Uitleendienst {
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
+
+            services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+
+            var context = new CustomAssemblyLoadContext();
+            context.LoadUnmanagedLibrary(Path.Combine(Directory.GetCurrentDirectory(), "libwkhtmltox.dll"));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -119,6 +145,11 @@ namespace WebApplication_Uitleendienst {
             });
 
             app.UseEndpoints(endpoints => {
+
+                endpoints.MapAreaControllerRoute(
+                    name: "MagazijnContact",
+                    areaName: "MagazijnContact",
+                    pattern: "MagazijnContact/{controller=Home}/{action=Index}/{id?}");
 
                 endpoints.MapAreaControllerRoute(
                     name: "Admin",

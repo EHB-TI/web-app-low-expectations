@@ -12,7 +12,7 @@ namespace WebApplication_Uitleendienst.Services.Interfaces {
         public Task<TEntity> Save(TEntity item, string customEntity = null, string token = null);
         public Task<List<TEntity>> SaveAll(List<TEntity> Items, string customEntity = null, string token = null);
         public TEntity Get(string propertyName = null, string propertyValue = null, bool cache = false, string token = null);
-        public void Delete<TEntity>(int id, string token = null);
+        public void Delete(string id, string token = null);
         public bool DeleteByProperty(Expression<Func<TEntity, bool>> predicate, string token = null);
         public IEnumerable<TEntity> GetAll(string propertyName = null, string propertyValue = null, bool cache = false, string token = null);
 

@@ -14,12 +14,14 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using WebApplication_Uitleendienst.Services.Interfaces;
 
 namespace WebApplication_Uitleendienst.Models.ViewModels.Identity {
     [Authorize]
     public class UserInfoPageModel : PageModel {
 
         private HttpContext httpContextAccessor;
+
         public UserInfoPageModel(HttpContext httpContextAccessor) {
             this.httpContextAccessor = httpContextAccessor;
             var x = httpContextAccessor.Request.Query["request_uri"];
@@ -44,9 +46,27 @@ namespace WebApplication_Uitleendienst.Models.ViewModels.Identity {
 
         public bool IsAdmin {
             get {
-                return (bool) httpContextAccessor.User?.Claims.Where(s => s.Type.Equals("cognito:groups")).Any(s => s.Value.Equals("Admins-WebApplication"));
+                return (bool)httpContextAccessor.User?.Claims.Where(s => s.Type.Equals("cognito:groups")).Any(s => s.Value.Equals("Admins-WebApplication"));
             }
         }
+
+        public bool IsMagazijnVerantwoordelijke {
+            get {
+                var dependencyScope = httpContextAccessor.RequestServices;
+                var persoonService = dependencyScope.GetService(typeof(IBaseService<Persoon>)) as IBaseService<Persoon>;
+                var contactMagService = dependencyScope.GetService(typeof(IBaseService<ContactMagazijn>)) as IBaseService<ContactMagazijn>;
+                try {
+                    var persoon = persoonService.GetAll(propertyName: "username", propertyValue: Username, token: Token)?.FirstOrDefault();
+                    if (persoon != null) {
+                        return contactMagService.GetAll(propertyName: "persoonId", propertyValue: persoon.Id, token: Token)?.FirstOrDefault() != null ? true : false;
+                    }
+                } catch (Exception ex) {
+                    //Return based on logic
+                }
+                return false;
+            }
+        }
+
         public string Email {
             get {
                 return httpContextAccessor.User?.Claims.FirstOrDefault(c => c.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"))?.Value;

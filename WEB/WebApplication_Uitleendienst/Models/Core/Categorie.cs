@@ -25,7 +25,7 @@ namespace WebApplication_Uitleendienst {
                 this.image = value;
             }
         }
-
+        [JsonProperty("id")]
         public virtual string Id {
             get {
                 return id;

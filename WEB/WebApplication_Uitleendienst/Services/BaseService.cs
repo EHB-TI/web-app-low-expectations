@@ -27,8 +27,36 @@ namespace WebApplication_Uitleendienst.Services {
         public BaseService(IMemoryCache cache) {
             _cache = cache;
         }
-        public void Delete<TEntity>(int id, string token = null) {
+        public void Delete(string id, string token = null) {
 
+            var url = BaseUrl;
+            url += $"{typeof(TEntity).Name.ToLower()}/{id}";
+
+            var request = WebRequest.Create(url);
+            request.Method = "DELETE";
+            if (!string.IsNullOrEmpty(token))
+                request.Headers.Add("Authorization", token);
+            else
+                request.Headers.Add("Authorization", "");
+            request.Headers.Add("Origin", Website.HOST_NAME);
+
+
+            var requestWriter = new StreamWriter(request.GetRequestStream(), System.Text.Encoding.ASCII);
+
+            requestWriter.Close();
+
+            try {
+                var webResponse = request.GetResponse();
+                var webStream = webResponse.GetResponseStream();
+                var responseReader = new StreamReader(webStream);
+                var response = responseReader.ReadToEnd();
+                if (response == null)
+                    throw new HttpRequestException("Bad response");
+                responseReader.Close();
+
+            } catch (Exception ex) {
+                throw new HttpRequestException(ex.Message);
+            }
         }
 
         public bool DeleteByProperty(Expression<Func<TEntity, bool>> predicate, string token = null) {
@@ -66,7 +94,7 @@ namespace WebApplication_Uitleendienst.Services {
                         _cache.Set(key, JsonConvert.DeserializeObject<TEntity>(responseFromServer));
                     }
                 } catch (Exception ex) {
-                    return null;
+                    throw new HttpRequestException(ex.Message);
                 }
             }
 
@@ -103,7 +131,10 @@ namespace WebApplication_Uitleendienst.Services {
                         _cache.Set(key, JsonConvert.DeserializeObject<IEnumerable<TEntity>>(responseFromServer));
                     }
                 } catch (Exception ex) {
-                    return null;
+                    if (ex.Message.Contains("404"))
+                        return null;
+                    else
+                        throw;
                 }
             }
 
@@ -151,7 +182,7 @@ namespace WebApplication_Uitleendienst.Services {
         }
 
         public async Task<List<TEntity>> SaveAll(List<TEntity> Items, string customEntity = null, string token = null) {
-             var url = BaseUrl;
+            var url = BaseUrl;
             if (customEntity == null)
                 url += typeof(TEntity).Name.ToLower();
             else
@@ -195,20 +226,43 @@ namespace WebApplication_Uitleendienst.Services {
         }
 
         public async Task<TEntity> Update(TEntity item, string customEntity = null, string token = null) {
-            var url = BaseUrl;
-            if (customEntity == null)
-                url += typeof(TEntity).Name.ToLower();
+
+            var url = BaseUrl + typeof(TEntity).Name.ToLower();
+
+            if (customEntity != null)
+                url += $"/{customEntity}";
+
+
+            var request = WebRequest.Create(url);
+            request.Method = "PUT";
+            if (!string.IsNullOrEmpty(token))
+                request.Headers.Add("Authorization", token);
             else
-                url += customEntity;
+                request.Headers.Add("Authorization", "");
+            request.Headers.Add("Origin", Website.HOST_NAME);
+            request.ContentType = "application/json";
+
 
             var JsonData = JsonConvert.SerializeObject(item);
 
-            using (var client = new HttpClient()) {
-                var response = await client.PutAsync(url, new StringContent(JsonData, Encoding.UTF8, "application/json"));
-                var data = await response.Content.ReadAsStringAsync();
-                if (data != null)
-                    return JsonConvert.DeserializeObject<TEntity>(data);
+
+            var requestWriter = new StreamWriter(request.GetRequestStream(), System.Text.Encoding.ASCII);
+            requestWriter.Write(JsonData);
+            requestWriter.Close();
+
+            try {
+                var webResponse = request.GetResponse();
+                var webStream = webResponse.GetResponseStream();
+                var responseReader = new StreamReader(webStream);
+                var response = responseReader.ReadToEnd();
+                if (response != null)
+                    return JsonConvert.DeserializeObject<TEntity>(response);
+                responseReader.Close();
+
+            } catch (Exception ex) {
+                throw new Exception(ex.Message);
             }
+
             return null;
         }
 
