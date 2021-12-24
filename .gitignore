@@ -1,3 +1,5 @@
 
 API/uitleendienst/src/test/
 API/uitleendienst/src/main/resources/application.properties
+WEB/WebApplication_Uitleendienst/appsettings.json
+WEB/WebApplication_Uitleendienst/appsettings.Development.json
