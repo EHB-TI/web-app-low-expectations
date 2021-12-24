@@ -3,9 +3,32 @@
 <div class="row message-wrapper">
     <div class="col-12">
         @if (!string.IsNullOrEmpty(Model.Message)) {
-            <div class="alert alert-@(Model.Level.ToString())">
-                @Model.Message
-            </div>
+        <div class="alert alert-@(Model.Level.ToString())">
+            @{
+                // define switch strings to have more control about the generated errors
+                var switchStrings = new[] { "400", "401", "402", "403", "404" , "405"};
+            }
+            @switch (switchStrings.FirstOrDefault(s => Model.Message.Contains(s))) {
+                case "401":
+                    @("Er is geen geldige authenticationheader aanwezig")
+                    break;
+                case "400":
+                    @("Gelieve alle parameters na te kijken van je request")
+                    break;
+                case "403":
+                    @("De aanvrager beschikt niet over de correcte rechten")
+                    break;
+                case "404":
+                    @("aanvraag kon niet worden verwerkt")
+                    break;
+                case "405":
+                    @("De methode dat gebruikt werd tijdens de aanvraag werd als niet geldig ontvangen")
+                    break;
+                default:
+                    @Html.Raw(Model.Message)
+                    break;
+            }
+        </div>
         }
     </div>
 </div>
