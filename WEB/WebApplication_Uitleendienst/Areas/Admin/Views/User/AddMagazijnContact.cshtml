@@ -1,0 +1,40 @@
+﻿@model WebApplication_Uitleendienst.Models.ViewModels.User.UserViewModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Magazijnverantwoordelijke toevoegen</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddMagazijnContactPost" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Username" class="control-label"></label>
+                <select asp-for="Username">
+                        <option value="@Model.Username">@Model.Username</option>
+                </select>
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Magazijnen" class="control-label"></label>
+                <select asp-for="MagazijnId">
+                    @foreach (var value in Model.Magazijnen) {
+                        <option value="@value.Id">@value.Naam</option>
+                    }
+                </select>
+                <span asp-validation-for="Groupname" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Voeg toe als magazijnverantwoordelijke" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

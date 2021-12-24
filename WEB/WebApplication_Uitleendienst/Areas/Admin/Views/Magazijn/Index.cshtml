@@ -25,6 +25,7 @@
             <tr>
                 <th scope="col">Naam</th>
                 <th scope="col">Detail</th>
+                <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
@@ -36,6 +37,11 @@
                             <a class="nav-link btn btn-light px-2 py-1" asp-area="Admin" asp-controller="Magazijn" asp-action="Detail" asp-route-id="@mag.Id" title="Magazijn">
 
                                 <i class="fa-solid fa-eye"></i>
+                            </a>
+                        </td>
+                        <td class="delete">
+                            <a asp-area="Admin" asp-controller="Magazijn" asp-action="Delete" asp-route-id="@mag.Id">
+                                <i class="fas fa-trash"></i>
                             </a>
                         </td>
                     </tr>

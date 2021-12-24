@@ -43,8 +43,22 @@ namespace WebApplication_Uitleendienst.Areas.Admin.Controllers {
 
         [HttpPost]
         public async Task<IActionResult> EditPost(Magazijn mag) {
-            var entity = await _magazijnService.Update(mag, token: UserInfo.Token);
+            var entity = await _magazijnService.Update(mag, customEntity: mag.Id, token: UserInfo.Token);
             return RedirectToAction("index");
+        }
+
+        public async Task<IActionResult> Delete(string id) {
+            var model = new MagazijnViewModel();
+            try {
+                _magazijnService.Delete(id, token: UserInfo.Token);
+                model.Message = "Item is succesvol verwijderd.";
+                model.Level = Models.ViewModels.InfoLevel.success;
+
+            } catch (Exception ex) {
+                model.Message = ex.Message;
+                model.Level = Models.ViewModels.InfoLevel.danger;
+            }
+            return RedirectToAction("Index", model);
         }
 
     }

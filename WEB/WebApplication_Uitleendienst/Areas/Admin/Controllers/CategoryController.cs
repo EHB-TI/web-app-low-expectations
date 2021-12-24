@@ -38,7 +38,7 @@ namespace WebApplication_Uitleendienst.Areas.Admin.Controllers {
 
         [HttpPost]
         public async Task<IActionResult> EditPost(Categorie cat) {
-            var entity = await _categoryService.Update(cat);
+            var entity = await _categoryService.Update(cat, customEntity: cat.Id, token: UserInfo.Token);
             return RedirectToAction("index");
         }
         public IActionResult Detail(string Id) {
@@ -48,8 +48,22 @@ namespace WebApplication_Uitleendienst.Areas.Admin.Controllers {
 
         [HttpPost]
         public async Task<IActionResult> CreatePost(Categorie cat) {
-            var entity = await _categoryService.Save(cat);
+            var entity = await _categoryService.Save(item: cat, token: UserInfo.Token);
             return RedirectToAction("index");
+        }
+
+        public async Task<IActionResult> Delete(string id) {
+            var model = new CategoryViewModel();
+            try {
+                _categoryService.Delete(id, token: UserInfo.Token);
+                model.Message = "Item is succesvol verwijderd.";
+                model.Level = Models.ViewModels.InfoLevel.success;
+
+            } catch (Exception ex) {
+                model.Message = ex.Message;
+                model.Level = Models.ViewModels.InfoLevel.danger;
+            }
+            return RedirectToAction("Index", model);
         }
     }
 }

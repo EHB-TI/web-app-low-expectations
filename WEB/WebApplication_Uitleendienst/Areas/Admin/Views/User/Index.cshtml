@@ -1,0 +1,110 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model WebApplication_Uitleendienst.Models.ViewModels.User.UserViewModel
+
+
+@await Component.InvokeAsync("Message", @Model)
+
+
+
+<div class="container user-management">
+    <div class="row">
+        <ul class="navbar-nav d-flex align-items-center float-left">
+            <li>
+
+            </li>
+        </ul>
+    </div>
+    @if (Model.Users != null) {
+        @foreach (var user in Model.Users) {
+
+            <div class="row">
+                <div class="col-6 headers">
+                    <!-- headers -->
+                    @foreach (var attr in user.Key.UserType.Attributes) {
+                        <div class="row">
+                            <div class="col-12">
+                                @attr.Name
+                            </div>
+                        </div>
+                    }
+                    <div class="row">
+                        <div class="col-12">
+                            Rollen
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 bodycontent">
+                    <!-- body content -->
+
+                    @foreach (var attr in user.Key.UserType.Attributes) {
+                        <div class="row">
+                            <div class="col-12">
+                                @attr.Value
+                            </div>
+                        </div>
+                    }
+                    <div class="row">
+                        <div class="col-12">
+                            @foreach (var group in user.Value) {
+                                <p class="d-flex align-items-center">
+                                    @(group.GroupName + " ")
+                                    <a class="nav-link btn btn-dark px-2 py-1" asp-area="Admin" asp-route-username="@user.Key.UserType.Username" asp-route-groupname="@group.GroupName" asp-controller="User" asp-action="RemoveRole" title="EditRoles">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </a>
+                                </p>
+                            }
+                            <a class="nav-link btn btn-dark px-2 py-1" asp-area="Admin" asp-controller="User" asp-route-username="@user.Key.UserType.Username" asp-action="AddRole" title="EditRoles">
+                                Rollen toevoegen
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </a>
+                            @{
+                                if (!user.Key.IsMagazijnContact) {
+                                    <a class="nav-link btn btn-dark px-2 py-1" asp-area="Admin" asp-controller="User" asp-route-username="@user.Key.UserType.Username" asp-action="AddMagazijnContact" title="AddMagazijnContact">
+                                        Stel als magazijnverantwoordelijke in
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                } else {
+                                    <p class="d-flex align-items-center">
+                                        Is magazijn contact voor filiaal: <span class="btn btn-dark">@user.Key.ContactMagazijnInfo.Magazijn.Naam</span>
+                                        <a class="nav-link btn btn-dark px-2 py-1" asp-area="Admin" asp-controller="User" asp-route-contactMagazijnId="@user.Key.ContactMagazijnInfo.ContactMagazijn.id" asp-action="RemoveMagazijnContact" title="AddMagazijnContact">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </a>
+                                        <a class="nav-link btn btn-dark px-2 py-1" asp-area="Admin" asp-controller="User" asp-route-contactMagazijnId="@user.Key.ContactMagazijnInfo.ContactMagazijn.id"  asp-action="EditMagazijnContact" title="EditMagazijnContact">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </a>
+                                    </p>
+                                }
+                            }
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        }
+    }
+
+</div>
+
+<script type="text/javascript">
+    function SubmitUpdate($link, $data, $method, $returnLink) {
+        $.ajax({
+            method: $method,
+            url: $link,
+            data: $data,
+            success: function (data) {
+                locatation.href = $returnLink;
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(xhr.status);
+                console.log(thrownError);
+            }
+        });
+    }
+</script>
+
+

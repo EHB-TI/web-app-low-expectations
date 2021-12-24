@@ -6,23 +6,29 @@
 
 
 <div class="admin-wrapper">
-    <ul class="navbar-nav d-flex align-items-center">
+    <ul>
         <li>
             <a class="nav-link btn btn-light px-2 py-1" asp-area="Admin" asp-controller="Category" asp-action="Index" title="Category">
                 <i class="fa-solid fa-sitemap"></i>
-                Category manager
+                <p>Category manager</p> 
             </a>
         </li>
         <li>
             <a class="nav-link btn btn-light px-2 py-1" asp-area="Admin" asp-controller="Product" asp-action="Index" title="Product">
-                <i class="fa-solid fa-sitemap"></i>
-                Product manager
+                <i class="fa-solid fa-tag"></i>
+                <p>Product manager</p>
             </a>
         </li>
         <li>
             <a class="nav-link btn btn-light px-2 py-1" asp-area="Admin" asp-controller="Magazijn" asp-action="Index" title="Magazijn">
-                <i class="fa-solid fa-sitemap"></i>
-                Magazijn manager
+                <i class="fa-solid fa-boxes-stacked"></i>
+                <p>Magazijn manager</p>
+            </a>
+        </li>
+        <li>
+            <a class="nav-link btn btn-light px-2 py-1" asp-area="Admin" asp-controller="User" asp-action="Index" title="User">
+                <i class="fa-solid fa-users"></i>
+                <p>User manager</p>
             </a>
         </li>
     </ul>

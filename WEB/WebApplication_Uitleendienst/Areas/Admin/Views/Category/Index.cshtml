@@ -24,6 +24,7 @@
             <tr>
                 <th scope="col">Naam</th>
                 <th scope="col">Detail</th>
+                <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
@@ -35,6 +36,11 @@
                             <a class="nav-link btn btn-light px-2 py-1" asp-area="Admin" asp-controller="Category" asp-action="Detail" asp-route-id="@cat.Id" title="Category">
 
                                 <i class="fa-solid fa-eye"></i>
+                            </a>
+                        </td>
+                        <td class="delete">
+                            <a asp-area="Admin" asp-controller="Category" asp-action="Delete" asp-route-id="@cat.Id">
+                                <i class="fas fa-trash"></i>
                             </a>
                         </td>
                     </tr>
