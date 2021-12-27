@@ -130,9 +130,5 @@ Cloudwatch monitort het resource gebruik van de EC2 instanties. Deze stuurt een 
 De AWS root account is beveiligd met MFA en wordt in principe nooit gebruikt, enkel User Accounts worden gebruikt om AWS services te beheren. 
 
 
-
-# Deployment
-*Aan te vullen*
-
 # Toegelaten Origins
 https://peahi.be
